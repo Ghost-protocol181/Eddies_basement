@@ -5,377 +5,36 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Eddie's Basement</title>
 <meta name="description" content="A visual finder for free multiplayer games.">
-<meta name="theme-color" content="#05070d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#05070d;--ink:#f8fbff;--soft:#c8d1e7;--muted:#909bb3;--panel:#0b1220;--panel2:#101a2e;
-  --line:rgba(255,255,255,.13);--cyan:#2de3ff;--green:#91ff37;--orange:#ff7b1a;--yellow:#ffd15f;
-  --red:#ff395d;--max:1540px;--header:92px;--radius:26px
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;min-height:100vh;color:var(--ink);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
-  background:
-    radial-gradient(circle at 6% -4%,rgba(45,227,255,.24),transparent 26%),
-    radial-gradient(circle at 94% 4%,rgba(255,123,26,.27),transparent 30%),
-    radial-gradient(circle at 50% 18%,rgba(145,255,55,.10),transparent 22%),
-    linear-gradient(180deg,#05070d 0%,#080e19 44%,#05070d 100%);
-}
-body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;opacity:.09;mix-blend-mode:screen;
-  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:100% 3px;
-}
-a{color:inherit;text-decoration:none}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-img{max-width:100%}
-.wrap{width:min(var(--max),calc(100% - 28px));margin:auto}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-
-header{
-  position:sticky;top:0;z-index:80;background:rgba(5,7,13,.94);border-bottom:1px solid var(--line);
-  backdrop-filter:blur(18px)
-}
-.nav{min-height:var(--header);display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
-.brand{display:flex;align-items:center;min-width:0}
-.brand img{
-  height:84px;width:min(610px,48vw);object-fit:contain;object-position:left center;
-  filter:drop-shadow(0 0 18px rgba(255,123,26,.36))
-}
-.brandText{display:none;font-family:Orbitron,sans-serif;font-size:28px;font-weight:900;line-height:.9;text-transform:uppercase}
-.brandText span{color:var(--green)}
-.navBtns{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
-.pill,.navBtns a,.navBtns button{
-  border:1px solid var(--line);background:rgba(255,255,255,.065);color:#eef3ff;border-radius:999px;
-  padding:10px 14px;font-weight:900;font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)
-}
-.pill:hover,.pill:focus-visible,.pill.active{border-color:rgba(255,123,26,.8);background:rgba(255,123,26,.16);outline:none}
-
-.hero{padding:22px 0 12px}
-.command{
-  display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:stretch;
-}
-.heroCopy,.quickPanel{
-  border:1px solid var(--line);border-radius:var(--radius);
-  background:linear-gradient(135deg,rgba(255,255,255,.085),rgba(255,255,255,.025));
-  box-shadow:0 30px 90px rgba(0,0,0,.38);
-}
-.heroCopy{padding:26px}
-.kicker{
-  font-family:Orbitron,sans-serif;color:var(--orange);font-size:12px;text-transform:uppercase;
-  letter-spacing:.16em;font-weight:900;margin-bottom:10px
-}
-h1{
-  margin:0;font-size:clamp(38px,5vw,74px);line-height:.94;letter-spacing:-.058em;font-weight:900;
-  text-shadow:0 0 26px rgba(45,227,255,.12)
-}
-.lead{max-width:860px;margin:14px 0 0;color:#d3dbea;font-size:18px;line-height:1.5}
-.quickPanel{padding:18px;display:grid;align-content:center;gap:10px}
-.statGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.statBox{
-  border:1px solid rgba(255,255,255,.11);background:rgba(0,0,0,.27);border-radius:18px;padding:14px 12px;
-}
-.statBox b{display:block;font-family:Orbitron,sans-serif;font-size:26px;color:var(--green)}
-.statBox span{display:block;margin-top:2px;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
-.randomCard{
-  border:1px solid rgba(255,123,26,.30);border-radius:18px;padding:15px;background:rgba(255,123,26,.08);
-  display:flex;align-items:center;justify-content:space-between;gap:12px
-}
-.randomCard strong{display:block;font-size:16px}
-.randomCard span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
-
-.controlDock{
-  position:sticky;top:var(--header);z-index:70;background:linear-gradient(180deg,rgba(5,7,13,.985),rgba(5,7,13,.90));
-  border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid var(--line);backdrop-filter:blur(18px);padding:13px 0
-}
-.controls{display:grid;grid-template-columns:minmax(280px,1fr) 190px 165px 150px auto;gap:10px;align-items:center}
-input,select,textarea{
-  width:100%;min-width:0;border:1px solid var(--line);background:rgba(255,255,255,.078);color:#fff;
-  border-radius:15px;padding:14px 15px;outline:none
-}
-select option{background:#101626}
-input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(45,227,255,.13)}
-.primary{
-  border:0;border-radius:15px;padding:14px 16px;background:linear-gradient(135deg,var(--orange),var(--yellow));
-  color:#130900;font-weight:900
-}
-.chips{display:flex;gap:8px;overflow:auto;padding-top:10px;scrollbar-width:thin}
-.chip{
-  white-space:nowrap;border:1px solid var(--line);background:rgba(255,255,255,.055);color:#e6ecfb;border-radius:999px;
-  padding:9px 12px;font-size:13px;font-weight:900
-}
-.chip.active{border:0;background:linear-gradient(135deg,var(--green),#e6ff7a);color:#081003}
-
-.section{padding:24px 0}
-.sectionHead{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}
-h2{
-  margin:0;font-size:clamp(26px,3.2vw,42px);line-height:1;letter-spacing:-.055em;font-weight:900
-}
-.sub{margin:6px 0 0;color:var(--muted);line-height:1.45}
-.count{color:var(--orange);font-weight:900}
-.viewBtns{display:flex;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);flex-shrink:0}
-.viewBtns button{border:0;background:transparent;color:var(--muted);padding:11px 14px;font-weight:900}
-.viewBtns button.active{background:rgba(255,123,26,.18);color:var(--orange)}
-
-.rail{
-  display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,330px);gap:14px;overflow-x:auto;
-  padding:2px 0 16px;scroll-snap-type:x mandatory;scrollbar-width:thin
-}
-.rail .card{scroll-snap-align:start}
-.games{display:grid;gap:16px}
-.games.grid{grid-template-columns:repeat(auto-fill,minmax(274px,1fr))}
-.games.big{grid-template-columns:repeat(auto-fill,minmax(370px,1fr))}
-.games.list{grid-template-columns:1fr}
-.card{
-  position:relative;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.078),rgba(255,255,255,.025));
-  overflow:hidden;box-shadow:0 22px 58px rgba(0,0,0,.34);transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;cursor:pointer
-}
-.card:hover,.card:focus-within{transform:translateY(-5px);border-color:rgba(255,123,26,.76);box-shadow:0 30px 78px rgba(0,0,0,.50)}
-.games.list .card{display:grid;grid-template-columns:280px 1fr}
-.art{position:relative;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#0b1020,#111827)}
-.games.list .art{height:100%;min-height:168px;aspect-ratio:auto}
-.art img{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#080c15;
-  transition:transform .28s ease,filter .28s ease;filter:saturate(1.08) contrast(1.05)
-}
-.art img.eb-cover{object-position:center}
-.card:hover .art img{transform:scale(1.045)}
-.art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.82));z-index:1;pointer-events:none}
-.art.no-img:before{
-  content:"EB";position:absolute;inset:0;display:grid;place-items:center;font-family:Orbitron,sans-serif;font-size:56px;color:var(--green);
-  background:radial-gradient(circle at center,rgba(255,123,26,.20),transparent 42%),linear-gradient(135deg,#10172a,#05070d)
-}
-.badges{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap;z-index:3}
-.badge{
-  border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.58);backdrop-filter:blur(10px);border-radius:999px;
-  color:#fff;padding:5px 7px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.03em
-}
-.badge.easy{border:0;background:linear-gradient(135deg,var(--green),#e2ff73);color:#091200}
-.badge.hot{border:0;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#160800}
-.posterTitle{position:absolute;left:12px;right:12px;bottom:10px;z-index:3}
-.posterTitle h3{line-height:1;margin:0;font-size:20px;letter-spacing:-.04em;font-weight:900;text-shadow:0 4px 18px #000}
-.posterTitle p{margin:7px 0 0;color:#e4eaff;font-size:12px;font-weight:900}
-.body{padding:14px}
-.body p{margin:0 0 12px;color:#c4cede;font-size:13px;line-height:1.35}
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}
-.fact{border:1px solid rgba(255,255,255,.10);border-radius:13px;background:rgba(0,0,0,.23);padding:8px}
-.fact b{display:block;font-size:11px;color:#fff}
-.fact span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;border-radius:12px;padding:9px 11px;font-size:12px;font-weight:900}
-.btn.play{border:0;background:linear-gradient(135deg,var(--cyan),#5cffc6);color:#031014}
-.btn:hover{filter:brightness(1.08)}
-.empty{display:none;border:1px dashed rgba(255,255,255,.22);border-radius:24px;padding:36px;text-align:center;color:var(--muted);background:rgba(255,255,255,.035)}
-
-.panel{border:1px solid var(--line);border-radius:24px;background:rgba(255,255,255,.045);padding:18px}
-.huntGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.hunt{display:block;border:1px solid var(--line);border-radius:18px;background:rgba(0,0,0,.24);padding:15px;font-weight:900}
-.hunt:hover{border-color:rgba(255,123,26,.7);background:rgba(255,123,26,.10)}
-.hunt span{display:block;color:var(--muted);font-size:12px;margin-top:5px;font-weight:700}
-.saveMsg{display:none;color:var(--green);font-weight:900}
-.saveMsg.show{display:block}
-.modal{
-  position:fixed;inset:0;display:none;place-items:center;z-index:100;background:rgba(0,0,0,.76);backdrop-filter:blur(14px);padding:18px
-}
-.modal.open{display:grid}
-.modalCard{
-  width:min(1040px,100%);max-height:92vh;overflow:auto;border:1px solid var(--line);border-radius:28px;
-  background:linear-gradient(180deg,#11192b,#070a12);box-shadow:0 35px 120px rgba(0,0,0,.68)
-}
-.modalArt{height:360px;position:relative;overflow:hidden;background:#090d18}
-.modalArt img{width:100%;height:100%;object-fit:cover}
-.modalArt:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),#11192b)}
-.modalInner{padding:22px;display:grid;gap:14px}
-.modalTitle{display:flex;justify-content:space-between;gap:14px}
-.modalTitle h2{font-size:34px;line-height:1;margin:0}
-.close{border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;border-radius:12px;padding:9px 12px;font-weight:900;height:max-content}
-.submitGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-textarea{min-height:92px;resize:vertical}
-.wide{grid-column:1/-1}
-footer{margin-top:30px;border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:13px}
-.betaLine{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.betaLine b{color:#fff}
-
-@media(max-width:1120px){
-  .command{grid-template-columns:1fr}
-  .heroStats{min-width:0}
-  .controls{grid-template-columns:1fr 1fr}
-  .games.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-}
-@media(max-width:680px){
-  :root{--header:0px}
-  .wrap{width:min(100% - 18px,var(--max))}
-  header{position:relative}
-  .nav{grid-template-columns:1fr;gap:9px;padding:10px 0;min-height:0}
-  .brand{justify-content:center}
-  .brand img{height:auto;width:100%;max-height:76px;max-width:100%;object-position:center}
-  .navBtns{justify-content:center;gap:8px}
-  .pill,.navBtns a,.navBtns button{padding:9px 11px;font-size:12px}
-  .hero{padding:12px 0 8px}
-  .heroCopy,.quickPanel{border-radius:22px}
-  .heroCopy{padding:17px}
-  .kicker{font-size:10px}
-  h1{font-size:32px;letter-spacing:-.045em}
-  .lead{font-size:14px;margin-top:10px}
-  .quickPanel{padding:12px}
-  .statGrid{gap:7px}
-  .statBox{padding:10px;border-radius:14px}
-  .statBox b{font-size:19px}
-  .statBox span{font-size:9px}
-  .randomCard{display:none}
-  .controlDock{top:0;padding:10px 0}
-  .controls{grid-template-columns:1fr}
-  .chips{padding-top:8px}
-  .section{padding:18px 0}
-  .sectionHead{align-items:flex-start;flex-direction:column}
-  .viewBtns{width:100%}
-  .viewBtns button{flex:1}
-  .rail{grid-auto-columns:minmax(230px,76vw)}
-  .games.grid,.games.big{grid-template-columns:1fr 1fr;gap:10px}
-  .games.list .card{display:block}
-  .games.list .art{height:auto;aspect-ratio:16/9}
-  .body{display:none}
-  .posterTitle{left:9px;right:9px;bottom:8px}
-  .posterTitle h3{font-size:14px}
-  .posterTitle p{font-size:10px}
-  .badge{font-size:9px;padding:4px 6px}
-  .submitGrid{grid-template-columns:1fr}
-  .modal{padding:10px;align-items:end}
-  .modalCard{border-radius:24px 24px 0 0;max-height:88vh}
-  .modalArt{height:220px}
-  .modalInner{padding:16px}
-  .modalTitle h2{font-size:26px}
-}
-@media(max-width:380px){
-  .games.grid,.games.big{grid-template-columns:1fr}
-  .statGrid{grid-template-columns:1fr}
-}
+:root{--bg:#05070d;--panel:#0c1220;--panel2:#121a2c;--line:rgba(255,255,255,.13);--line2:rgba(255,255,255,.22);--text:#f8fbff;--muted:#a9b4c8;--soft:#d8e0ef;--cyan:#2de3ff;--green:#91ff37;--orange:#ff7b1a;--yellow:#ffd15f;--red:#ff395d;--max:1560px;--header:88px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% -10%,rgba(45,227,255,.22),transparent 24%),radial-gradient(circle at 88% 0%,rgba(255,123,26,.28),transparent 28%),radial-gradient(circle at 50% 20%,rgba(145,255,55,.10),transparent 24%),linear-gradient(180deg,#05070d,#080d18 46%,#05070d);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.095;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:100% 3px;mix-blend-mode:screen}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}.wrap{width:min(var(--max),calc(100% - 28px));margin:auto}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+header{position:sticky;top:0;z-index:80;background:rgba(5,7,13,.93);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.nav{min-height:var(--header);display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}.brand{display:flex;align-items:center;min-width:0}.brand img{height:78px;width:min(560px,47vw);object-fit:contain;object-position:left center;filter:drop-shadow(0 0 18px rgba(255,123,26,.36))}.brandText{display:none;font-family:Orbitron,sans-serif;font-size:28px;font-weight:900;line-height:.9;text-transform:uppercase}.brandText span{color:var(--green)}.navBtns{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}.pill{border:1px solid var(--line);background:rgba(255,255,255,.06);color:#eaf0ff;border-radius:999px;padding:10px 14px;font-weight:900;font-size:13px}.pill:hover,.pill:focus-visible,.pill.active{border-color:rgba(255,123,26,.8);background:rgba(255,123,26,.16);outline:none}.pill.primaryNav{border:0;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#160800}
+.hero{padding:20px 0 10px}.heroBox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;border:1px solid var(--line);border-radius:30px;padding:24px;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.028));box-shadow:0 32px 100px rgba(0,0,0,.42);position:relative;overflow:hidden}.heroBox:after{content:"";position:absolute;right:-120px;top:-90px;width:330px;height:330px;background:radial-gradient(circle,rgba(255,123,26,.18),transparent 67%);pointer-events:none}.kicker{font-family:Orbitron,sans-serif;color:var(--orange);font-size:12px;text-transform:uppercase;letter-spacing:.16em;font-weight:900;margin-bottom:8px}h1{font-family:Orbitron,sans-serif;font-size:clamp(34px,5vw,72px);line-height:.92;margin:0;text-transform:uppercase;letter-spacing:-.065em;text-shadow:0 0 24px rgba(45,227,255,.12)}.lead{color:#cbd4e8;font-size:17px;line-height:1.45;margin:12px 0 0;max-width:890px}.heroActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.heroStats{display:grid;grid-template-columns:repeat(3,minmax(118px,1fr));gap:10px;min-width:430px;position:relative;z-index:1}.statBox{border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);border-radius:18px;padding:14px}.statBox b{display:block;font-family:Orbitron,sans-serif;font-size:28px;color:var(--green)}.statBox span{display:block;color:var(--muted);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.controlDock{position:sticky;top:var(--header);z-index:75;background:linear-gradient(180deg,rgba(5,7,13,.99),rgba(5,7,13,.91));border-bottom:1px solid var(--line);backdrop-filter:blur(18px);padding:13px 0}.controls{display:grid;grid-template-columns:minmax(250px,1fr) 180px 160px 150px auto;gap:10px;align-items:center}input,select,textarea{border:1px solid var(--line);background:rgba(255,255,255,.075);color:#fff;border-radius:14px;padding:13px 14px;outline:none;min-width:0}select option{background:#101626}input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(45,227,255,.12)}.primary{border:0;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#130900;border-radius:14px;padding:13px 16px;font-weight:900}.secondary{border:1px solid var(--line2);background:rgba(255,255,255,.075);color:#fff;border-radius:14px;padding:13px 16px;font-weight:900}.secondary.active{border:0;background:linear-gradient(135deg,var(--green),#e6ff7a);color:#081003}.chips{display:flex;gap:8px;overflow:auto;padding-top:10px;scrollbar-width:thin}.chip{white-space:nowrap;border:1px solid var(--line);background:rgba(255,255,255,.055);color:#e3e9f8;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:900}.chip.active{border:0;background:linear-gradient(135deg,var(--green),#e6ff7a);color:#081003}
+.section{padding:24px 0}.sectionHead{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}h2{font-family:Orbitron,sans-serif;margin:0;font-size:clamp(24px,3vw,40px);text-transform:uppercase;letter-spacing:-.045em}.sub{margin:5px 0 0;color:var(--muted);line-height:1.45}.count{color:var(--orange);font-weight:900}.viewBtns{display:flex;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);flex-shrink:0}.viewBtns button{border:0;background:transparent;color:var(--muted);padding:11px 14px;font-weight:900}.viewBtns button.active{background:rgba(255,123,26,.18);color:var(--orange)}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,360px);gap:16px;overflow:auto;padding:4px 0 12px;scroll-snap-type:x mandatory;scrollbar-width:thin}.rail .card{scroll-snap-align:start}.games{display:grid;gap:16px}.games.grid{grid-template-columns:repeat(auto-fill,minmax(266px,1fr))}.games.big{grid-template-columns:repeat(auto-fill,minmax(350px,1fr))}.games.list{grid-template-columns:1fr}.card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.026));overflow:hidden;box-shadow:0 20px 55px rgba(0,0,0,.32);transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;cursor:pointer}.card:hover,.card:focus-within{transform:translateY(-5px);border-color:rgba(255,123,26,.75);box-shadow:0 30px 75px rgba(0,0,0,.48)}.games.list .card{display:grid;grid-template-columns:260px 1fr}.art{position:relative;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#0b1020,#111827)}.games.list .art{height:100%;min-height:160px;aspect-ratio:auto}.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#080c15;transition:transform .28s ease,filter .28s ease;filter:saturate(1.08) contrast(1.05)}.art img.eb-cover{object-position:center}.card:hover .art img{transform:scale(1.045)}.art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 34%,rgba(0,0,0,.80));z-index:1;pointer-events:none}.art.no-img:before{content:"EB";position:absolute;inset:0;display:grid;place-items:center;font-family:Orbitron,sans-serif;font-size:56px;color:var(--green);background:radial-gradient(circle at center,rgba(255,123,26,.20),transparent 42%),linear-gradient(135deg,#10172a,#05070d)}.badges{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap;z-index:3}.badge{border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.58);backdrop-filter:blur(10px);border-radius:999px;color:#fff;padding:5px 7px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.03em}.badge.easy{border:0;background:linear-gradient(135deg,var(--green),#e2ff73);color:#091200}.badge.hot{border:0;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#160800}.badge.blue{border:0;background:linear-gradient(135deg,var(--cyan),#7afcff);color:#031014}.posterTitle{position:absolute;left:12px;right:12px;bottom:10px;z-index:3}.posterTitle h3{font-family:Orbitron,sans-serif;line-height:1;margin:0;font-size:20px;letter-spacing:-.04em;text-transform:uppercase;text-shadow:0 4px 18px #000}.posterTitle p{margin:7px 0 0;color:#e4eaff;font-size:12px;font-weight:900}.body{padding:13px}.body p{margin:0 0 11px;color:#c4cede;font-size:13px;line-height:1.35}.facts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}.fact{border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(0,0,0,.23);padding:8px}.fact b{display:block;font-size:11px;color:#fff}.fact span{display:block;color:var(--muted);font-size:11px;margin-top:2px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;border-radius:12px;padding:9px 11px;font-size:12px;font-weight:900}.btn.play{border:0;background:linear-gradient(135deg,var(--cyan),#5cffc6);color:#031014}.btn:hover{filter:brightness(1.08)}.empty{display:none;border:1px dashed rgba(255,255,255,.22);border-radius:24px;padding:36px;text-align:center;color:var(--muted);background:rgba(255,255,255,.035)}.panel{border:1px solid var(--line);border-radius:24px;background:rgba(255,255,255,.045);padding:18px}.huntGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.hunt{display:block;border:1px solid var(--line);border-radius:18px;background:rgba(0,0,0,.24);padding:15px;font-weight:900}.hunt:hover{border-color:rgba(255,123,26,.7);background:rgba(255,123,26,.10)}.hunt span{display:block;color:var(--muted);font-size:12px;margin-top:5px;font-weight:700}.saveMsg{display:none;color:var(--green);font-weight:900}.saveMsg.show{display:block}
+.modal{position:fixed;inset:0;display:none;place-items:center;z-index:110;background:rgba(0,0,0,.76);backdrop-filter:blur(14px);padding:18px}.modal.open{display:grid}.modalCard{width:min(1040px,100%);max-height:92vh;overflow:auto;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#11192b,#070a12);box-shadow:0 35px 120px rgba(0,0,0,.68)}.modalArt{height:360px;position:relative;overflow:hidden;background:#090d18}.modalArt img{width:100%;height:100%;object-fit:cover}.modalArt:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),#11192b)}.modalInner{padding:22px;display:grid;gap:14px}.modalTitle{display:flex;justify-content:space-between;gap:14px}.modalTitle h2{font-size:34px;line-height:1}.close{border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;border-radius:12px;padding:9px 12px;font-weight:900;height:max-content}.feedbackBox{display:none;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.045);padding:12px}.feedbackBox.show{display:grid;gap:10px}.submitGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}textarea{min-height:92px;resize:vertical}.wide{grid-column:1/-1}footer{margin-top:30px;border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:13px}.betaLine{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.betaLine b{color:#fff}
+@media(max-width:1050px){.heroBox{grid-template-columns:1fr}.heroStats{min-width:0}.controls{grid-template-columns:1fr 1fr}.games.big{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}}
+@media(max-width:680px){:root{--header:0px}.wrap{width:min(100% - 18px,var(--max))}header{position:relative}.nav{grid-template-columns:1fr;gap:10px;padding:10px 0;min-height:0}.brand img{height:auto;width:100%;max-height:74px;max-width:100%;object-position:center}.navBtns{justify-content:center;gap:8px}.pill{padding:9px 11px;font-size:12px}.hero{padding:14px 0 8px}.heroBox{padding:16px;border-radius:22px}.kicker{font-size:10px}.lead{font-size:14px}.heroActions .secondary,.heroActions .primary{width:100%}.controlDock{top:0;padding:10px 0}.controls{grid-template-columns:1fr}.heroStats{grid-template-columns:repeat(3,1fr);gap:7px}.statBox{padding:10px;border-radius:14px}.statBox b{font-size:19px}.statBox span{font-size:9px}.sectionHead{align-items:flex-start;flex-direction:column}.viewBtns{width:100%}.viewBtns button{flex:1}.rail{grid-auto-columns:minmax(236px,82vw);gap:12px}.games.grid,.games.big{grid-template-columns:1fr 1fr;gap:10px}.games.list .card{display:block}.games.list .art{height:auto;aspect-ratio:16/9}.body{display:none}.posterTitle{left:9px;right:9px;bottom:8px}.posterTitle h3{font-size:14px}.posterTitle p{font-size:10px}.badge{font-size:9px;padding:4px 6px}.submitGrid{grid-template-columns:1fr}h1{font-size:34px}.modal{padding:10px;align-items:end}.modalCard{border-radius:24px 24px 0 0;max-height:88vh}.modalArt{height:220px}.modalInner{padding:16px}.modalTitle h2{font-size:26px}}
+@media(max-width:380px){.games.grid,.games.big{grid-template-columns:1fr}.heroStats{grid-template-columns:1fr}.brand img{max-height:66px}}
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap nav">
-    <a class="brand" href="#top" aria-label="Eddie's Basement home">
-      <img id="brandImg" src="https://www.dropbox.com/scl/fi/88ty9ki7jhpoc8r007azi/logo.png?rlkey=vd0azp3hernzljv3b5xs67zap&st=taarphia&raw=1" alt="Eddie's Basement logo">
-      <span id="brandText" class="brandText">Eddie's <span>Basement</span></span>
-    </a>
-    <nav class="navBtns" aria-label="Main navigation">
-      <a class="pill" href="#games">Game Wall</a>
-      <a class="pill" href="#webhunt">Web Hunt</a>
-      <a class="pill" href="#submit">Submit</a>
-      <button class="pill" id="randomBtn" type="button">Random</button>
-    </nav>
-  </div>
-</header>
-
+<header><div class="wrap nav"><a class="brand" href="#top" aria-label="Eddie's Basement home"><img id="brandImg" src="https://www.dropbox.com/scl/fi/88ty9ki7jhpoc8r007azi/logo.png?rlkey=vd0azp3hernzljv3b5xs67zap&st=taarphia&raw=1" alt="Eddie's Basement logo"><span id="brandText" class="brandText">Eddie's <span>Basement</span></span></a><nav class="navBtns" aria-label="Main navigation"><a class="pill" href="#games">Game Wall</a><a class="pill" href="#webhunt">Web Hunt</a><a class="pill" href="#submit">Submit</a><button class="pill primaryNav" id="randomBtn" type="button">Random</button></nav></div></header>
 <main id="top">
-  <section class="hero wrap">
-    <div class="command">
-      <div class="heroCopy">
-        <div class="kicker">Free multiplayer game finder</div>
-        <h1>What are we playing?</h1>
-        <p class="lead">Find something the whole squad can jump into. Search by game, platform, setup, genre, or how many friends are playing.</p>
-      </div>
-      <aside class="quickPanel" aria-label="Game vault stats">
-        <div class="statGrid">
-          <div class="statBox"><b id="totalGames">0</b><span>games</span></div>
-          <div class="statBox"><b id="featuredCount">0</b><span>featured</span></div>
-          <div class="statBox"><b id="browserCount">0</b><span>browser</span></div>
-        </div>
-        <button class="randomCard" id="randomCard" type="button">
-          <span><strong>Can’t choose?</strong><span>Pull a random pick from the current filters.</span></span>
-          <span class="primary">Go</span>
-        </button>
-      </aside>
-    </div>
-  </section>
-
-  <div class="controlDock">
-    <div class="wrap">
-      <div class="controls">
-        <label class="sr-only" for="search">Search games</label>
-        <input id="search" type="search" placeholder="Search Fortnite, Roblox, co-op, browser, shooter, mobile..." autocomplete="off">
-        <label class="sr-only" for="platform">Platform</label>
-        <select id="platform"><option value="">Any platform</option></select>
-        <label class="sr-only" for="setup">Setup</label>
-        <select id="setup"><option value="">Any setup</option><option>No download</option><option>Download</option><option>Account</option><option>Search</option></select>
-        <label class="sr-only" for="sort">Sort</label>
-        <select id="sort"><option value="featured">Best wall</option><option value="visual">Featured first</option><option value="az">A-Z</option><option value="browser">Browser first</option><option value="quick">Quick starts</option></select>
-        <button class="primary" id="clearBtn" type="button">Clear</button>
-      </div>
-      <div class="chips" id="chips" aria-label="Quick filters"></div>
-    </div>
-  </div>
-
-  <section class="section wrap" id="spotlight">
-    <div class="sectionHead">
-      <div><h2>Tonight’s Picks</h2><p class="sub">Visual picks that are easy to scan before you dive into the full wall.</p></div>
-    </div>
-    <div id="spotlightRail" class="rail"></div>
-  </section>
-
-  <section class="section wrap" id="games">
-    <div class="sectionHead">
-      <div><h2>Game Wall</h2><p class="sub">Tap a card for setup details, then jump to the game page.</p></div>
-      <div>
-        <div class="count" id="count">0 showing</div>
-        <div class="viewBtns" aria-label="View options">
-          <button type="button" data-view="grid" class="active">Wall</button>
-          <button type="button" data-view="big">Big</button>
-          <button type="button" data-view="list">List</button>
-        </div>
-      </div>
-    </div>
-    <div id="gamesGrid" class="games grid"></div>
-    <div id="empty" class="empty">Nothing matched that search. Clear a filter or search by platform.</div>
-  </section>
-
-  <section class="section wrap" id="webhunt">
-    <div class="sectionHead">
-      <div><h2>Web Hunt</h2><p class="sub">Find more candidates to add to the wall.</p></div>
-    </div>
-    <div class="huntGrid">
-      <a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=best+free+multiplayer+browser+games">Browser multiplayer<span>No download picks for quick sessions.</span></a>
-      <a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+party+games+to+play+with+friends+online">Party games<span>Good for groups, calls, and living rooms.</span></a>
-      <a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+co-op+games+PC+console+mobile">Co-op games<span>Work together instead of sweating ranked.</span></a>
-      <a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+crossplay+multiplayer+games">Crossplay games<span>Useful when everyone owns different hardware.</span></a>
-    </div>
-  </section>
-
-  <section class="section wrap" id="submit">
-    <div class="sectionHead">
-      <div><h2>Submit a Game</h2><p class="sub">Drop a game idea here. Saved suggestions stay in this browser for now.</p></div>
-    </div>
-    <form class="panel" id="submitForm">
-      <div class="submitGrid">
-        <input required name="title" placeholder="Game name">
-        <input required name="url" placeholder="Official URL">
-        <input name="genre" placeholder="Genre">
-        <input name="platforms" placeholder="Platforms">
-        <textarea class="wide" name="notes" placeholder="Why should it be in Eddie's Basement?"></textarea>
-      </div>
-      <br>
-      <button class="primary" type="submit">Save Suggestion</button>
-      <p id="saveMsg" class="saveMsg">Saved.</p>
-    </form>
-  </section>
+<section class="hero wrap"><div class="heroBox"><div><div class="kicker">Free multiplayer game finder</div><h1>What are we playing?</h1><p class="lead">Find something the whole squad can jump into. Search by game, platform, setup, genre, and friend count.</p><div class="heroActions"><button class="primary" id="startNowBtn" type="button">Start Right Now</button><button class="secondary" id="partyBtn" type="button">Party Mode</button></div></div><div class="heroStats"><div class="statBox"><b id="totalGames">0</b><span>games loaded</span></div><div class="statBox"><b id="featuredCount">0</b><span>featured picks</span></div><div class="statBox"><b id="quickCount">0</b><span>quick starts</span></div></div></div></section>
+<div class="controlDock"><div class="wrap"><div class="controls"><label class="sr-only" for="search">Search games</label><input id="search" type="search" placeholder="Search Fortnite, Roblox, co-op, browser, shooter, mobile..." autocomplete="off"><label class="sr-only" for="platform">Platform</label><select id="platform"><option value="">Any platform</option></select><label class="sr-only" for="setup">Setup</label><select id="setup"><option value="">Any setup</option><option>No download</option><option>Download</option><option>Account</option><option>Search</option></select><label class="sr-only" for="sort">Sort</label><select id="sort"><option value="featured">Best wall</option><option value="visual">Real art first</option><option value="az">A-Z</option><option value="browser">Browser first</option><option value="quick">Quick starts</option></select><button class="primary" id="clearBtn" type="button">Clear</button></div><div class="chips" id="chips" aria-label="Quick filters"></div></div></div>
+<section class="section wrap" id="picks"><div class="sectionHead"><div><h2>Tonight's Picks</h2><p class="sub">A tighter shelf of games people are most likely to recognize or jump into fast.</p></div></div><div id="featuredRail" class="rail"></div></section>
+<section class="section wrap" id="quick"><div class="sectionHead"><div><h2>Start Now</h2><p class="sub">Low-friction picks for when nobody wants to install a monster update.</p></div></div><div id="quickRail" class="rail"></div></section>
+<section class="section wrap" id="games"><div class="sectionHead"><div><h2>Game Wall</h2><p class="sub">Tap a card for setup details, then jump to the game page.</p></div><div><div class="count" id="count">0 showing</div><div class="viewBtns" aria-label="View options"><button type="button" data-view="grid" class="active">Grid</button><button type="button" data-view="big">Big</button><button type="button" data-view="list">List</button></div></div></div><div id="gamesGrid" class="games grid"></div><div id="empty" class="empty">Nothing matched that search. Try clearing a filter or searching by platform.</div></section>
+<section class="section wrap" id="webhunt"><div class="sectionHead"><div><h2>Web Hunt</h2><p class="sub">Find more games to add to the wall.</p></div></div><div class="huntGrid"><a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=best+free+multiplayer+browser+games">Browser multiplayer<span>No download picks for quick sessions.</span></a><a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+party+games+to+play+with+friends+online">Party games<span>Good for groups, calls, and living rooms.</span></a><a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+co-op+games+PC+console+mobile">Co-op games<span>Work together instead of sweating ranked.</span></a><a class="hunt" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+crossplay+multiplayer+games">Crossplay games<span>Useful when everyone owns different hardware.</span></a></div></section>
+<section class="section wrap" id="submit"><div class="sectionHead"><div><h2>Submit a Game</h2><p class="sub">Drop a game idea here. Saved suggestions stay in this browser for now.</p></div></div><form class="panel" id="submitForm"><div class="submitGrid"><input required name="title" placeholder="Game name"><input required name="url" placeholder="Official URL"><input name="genre" placeholder="Genre"><input name="platforms" placeholder="Platforms"><textarea class="wide" name="notes" placeholder="Why should it be in Eddie's Basement?"></textarea></div><br><button class="primary" type="submit">Save Suggestion</button><p id="saveMsg" class="saveMsg">Saved.</p></form></section>
 </main>
-
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Game details">
-  <div class="modalCard">
-    <div class="modalArt"><img id="modalImg" alt=""></div>
-    <div class="modalInner" id="modalInner"></div>
-  </div>
-</div>
-
-<footer>
-  <div class="wrap betaLine"><b>Eddie's Basement beta.</b><span>Game availability, platform support, and free-to-play details can change. Check official pages before downloading, creating accounts, or spending money.</span></div>
-</footer>
-
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Game details"><div class="modalCard"><div class="modalArt"><img id="modalImg" alt=""></div><div class="modalInner" id="modalInner"></div></div></div>
+<footer><div class="wrap betaLine"><b>Eddie's Basement beta.</b><span>Listings should be checked against official pages before downloading, creating an account, or spending money. Free-to-play status and platform support can change.</span></div></footer>
 <script src="vault-data.js"></script>
 <script src="previews.js"></script>
 <script>
@@ -383,149 +42,33 @@ const FALLBACK_COVER='https://www.dropbox.com/scl/fi/p7jsg38fzmdnqbeayd6b9/Cover
 const PREVIEWS=window.EDDIE_PREVIEWS||{};
 const URLS=window.EDDIE_URLS||{};
 const CHIP_OPTIONS=['browser','no download','quick group','party','co-op','shooter','mobile','racing','cards','mmo','local','strategy','battle royale'];
-const state={q:'',platform:'',setup:'',sort:'featured',view:'grid',tags:new Set()};
+const FEATURED_TITLES=['Fortnite','Roblox','Rocket League','Valorant','Marvel Rivals','Apex Legends','Overwatch 2','Brawlhalla','Fall Guys','Warframe','The Finals','Stumble Guys','Gartic Phone','Skribbl.io','Codenames Online','Krunker'];
+const state={q:'',platform:'',setup:'',sort:'featured',view:'grid',tags:new Set(),startNow:false,party:false};
 const $=s=>document.querySelector(s);
-const els={
-  search:$('#search'),platform:$('#platform'),setup:$('#setup'),sort:$('#sort'),clear:$('#clearBtn'),
-  chips:$('#chips'),grid:$('#gamesGrid'),rail:$('#spotlightRail'),count:$('#count'),empty:$('#empty'),
-  modal:$('#modal'),modalImg:$('#modalImg'),modalInner:$('#modalInner'),random:$('#randomBtn'),randomCard:$('#randomCard'),
-  total:$('#totalGames'),featured:$('#featuredCount'),browser:$('#browserCount'),form:$('#submitForm'),save:$('#saveMsg'),
-  brand:$('#brandImg'),brandText:$('#brandText')
-};
+const els={search:$('#search'),platform:$('#platform'),setup:$('#setup'),sort:$('#sort'),clear:$('#clearBtn'),chips:$('#chips'),grid:$('#gamesGrid'),featuredRail:$('#featuredRail'),quickRail:$('#quickRail'),count:$('#count'),empty:$('#empty'),modal:$('#modal'),modalImg:$('#modalImg'),modalInner:$('#modalInner'),random:$('#randomBtn'),total:$('#totalGames'),featured:$('#featuredCount'),quick:$('#quickCount'),form:$('#submitForm'),save:$('#saveMsg'),brand:$('#brandImg'),brandText:$('#brandText'),startNow:$('#startNowBtn'),party:$('#partyBtn')};
 function esc(v){return String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
 function attr(v){return esc(v).replace(/`/g,'&#96;')}
-function nice(v){return String(v).replace(/\b\w/g,m=>m.toUpperCase())}
-function parseGames(){
-  const raw=window.EDDIE_RAW||'';
-  return raw.split('|').filter(Boolean).map((row,idx)=>{
-    const [title,genre,platforms,mode,setup,players,tags]=row.split('~');
-    const platformList=String(platforms||'').split(/\s+/).filter(Boolean);
-    const tagList=String(tags||'').toLowerCase().split(/\s+/).filter(Boolean);
-    const hasPreview=Boolean(PREVIEWS[title]);
-    return {
-      id:idx,title:title||'Untitled',genre:genre||'Game',platforms:platformList,mode:mode||'Multiplayer',
-      setup:setup||'Check',players:players||'Varies',tags:tagList,hasPreview,
-      image:PREVIEWS[title]||FALLBACK_COVER,
-      url:URLS[title]||`https://www.google.com/search?q=${encodeURIComponent((title||'free multiplayer game')+' official free multiplayer game')}`
-    };
-  });
-}
+function parseGames(){const raw=window.EDDIE_RAW||'';return raw.split('|').filter(Boolean).map((row,idx)=>{const [title,genre,platforms,mode,setup,players,tags]=row.split('~');const platformList=String(platforms||'').split(/\s+/).filter(Boolean);const tagList=String(tags||'').toLowerCase().split(/\s+/).filter(Boolean);const hasPreview=Boolean(PREVIEWS[title]);return {id:idx,title:title||'Untitled',genre:genre||'Game',platforms:platformList,mode:mode||'Multiplayer',setup:setup||'Check',players:players||'Varies',tags:tagList,hasPreview,imageStatus:hasPreview?'store':'fallback',image:PREVIEWS[title]||FALLBACK_COVER,url:URLS[title]||`https://www.google.com/search?q=${encodeURIComponent((title||'free multiplayer game')+' official free multiplayer game')}`}})}
 const games=parseGames();
 function text(g){return [g.title,g.genre,g.platforms.join(' '),g.mode,g.setup,g.players,g.tags.join(' ')].join(' ').toLowerCase()}
 function platforms(){return [...new Set(games.flatMap(g=>g.platforms))].sort((a,b)=>a.localeCompare(b))}
-function setupChips(){
-  els.chips.innerHTML=CHIP_OPTIONS.map(c=>`<button type="button" class="chip ${state.tags.has(c)?'active':''}" data-chip="${attr(c)}">${esc(nice(c))}</button>`).join('');
-  els.chips.querySelectorAll('[data-chip]').forEach(b=>b.addEventListener('click',()=>{const c=b.dataset.chip;state.tags.has(c)?state.tags.delete(c):state.tags.add(c);render()}));
-}
-function setupPlatforms(){
-  els.platform.innerHTML='<option value="">Any platform</option>'+platforms().map(p=>`<option>${esc(p)}</option>`).join('');
-}
-function filtered(){
-  let list=games.filter(g=>{
-    const hay=text(g);
-    return (!state.q||hay.includes(state.q)) &&
-      (!state.platform||g.platforms.includes(state.platform)) &&
-      (!state.setup||g.setup.toLowerCase()===state.setup.toLowerCase()) &&
-      [...state.tags].every(t=>hay.includes(t));
-  });
-  const byTitle=(a,b)=>a.title.localeCompare(b.title);
-  const byPreview=(a,b)=>Number(b.hasPreview)-Number(a.hasPreview)||byTitle(a,b);
-  const byQuick=(a,b)=>Number(a.setup.toLowerCase()==='no download')-Number(b.setup.toLowerCase()==='no download')||byPreview(a,b);
-  if(state.sort==='az')list.sort(byTitle);
-  if(state.sort==='visual')list.sort(byPreview);
-  if(state.sort==='browser')list.sort((a,b)=>Number(text(b).includes('browser'))-Number(text(a).includes('browser'))||byPreview(a,b));
-  if(state.sort==='quick')list.sort(byQuick);
-  if(state.sort==='featured')list.sort((a,b)=>Number(b.hasPreview)-Number(a.hasPreview)||Number(text(b).includes('party'))-Number(text(a).includes('party'))||byTitle(a,b));
-  return list;
-}
-function imgError(img){
-  const art=img.closest('.art');
-  if(img.dataset.fallback==='1'){img.remove();art?.classList.add('no-img');return}
-  img.dataset.fallback='1';
-  img.src=FALLBACK_COVER;
-  img.classList.add('eb-cover');
-}
+function setupChips(){els.chips.innerHTML=CHIP_OPTIONS.map(c=>`<button type="button" class="chip ${state.tags.has(c)?'active':''}" data-chip="${attr(c)}">${esc(c.replace(/\b\w/g,m=>m.toUpperCase()))}</button>`).join('');els.chips.querySelectorAll('[data-chip]').forEach(b=>b.addEventListener('click',()=>{const c=b.dataset.chip;state.tags.has(c)?state.tags.delete(c):state.tags.add(c);state.startNow=false;state.party=false;render()}))}
+function setupPlatforms(){els.platform.innerHTML='<option value="">Any platform</option>'+platforms().map(p=>`<option>${esc(p)}</option>`).join('')}
+function matchesStartNow(g){const t=text(g);return g.setup.toLowerCase()==='no download'||(t.includes('browser')&&(t.includes('party')||t.includes('quick')||t.includes('shooter')||t.includes('strategy')))}
+function matchesParty(g){const t=text(g);return t.includes('party')||t.includes('social')||t.includes('drawing')||t.includes('word')||t.includes('board')||t.includes('local')}
+function filtered(){let list=games.filter(g=>{const hay=text(g);return (!state.q||hay.includes(state.q))&&(!state.platform||g.platforms.includes(state.platform))&&(!state.setup||g.setup.toLowerCase()===state.setup.toLowerCase())&&[...state.tags].every(t=>hay.includes(t))&&(!state.startNow||matchesStartNow(g))&&(!state.party||matchesParty(g))});const byTitle=(a,b)=>a.title.localeCompare(b.title);const byPreview=(a,b)=>Number(b.hasPreview)-Number(a.hasPreview)||byTitle(a,b);const byQuick=(a,b)=>Number(matchesStartNow(b))-Number(matchesStartNow(a))||byPreview(a,b);if(state.sort==='az')list.sort(byTitle);if(state.sort==='visual')list.sort(byPreview);if(state.sort==='browser')list.sort((a,b)=>Number(text(b).includes('browser'))-Number(text(a).includes('browser'))||byPreview(a,b));if(state.sort==='quick')list.sort(byQuick);if(state.sort==='featured')list.sort((a,b)=>Number(FEATURED_TITLES.includes(b.title))-Number(FEATURED_TITLES.includes(a.title))||Number(b.hasPreview)-Number(a.hasPreview)||Number(matchesParty(b))-Number(matchesParty(a))||byTitle(a,b));return list}
+function imgError(img){const art=img.closest('.art');if(img.dataset.fallback==='1'){img.remove();art?.classList.add('no-img');return}img.dataset.fallback='1';img.src=FALLBACK_COVER;img.classList.add('eb-cover')}
 window.eddieImgError=imgError;
-function setupBadge(setup){return setup.toLowerCase().includes('no')?'easy':'hot'}
-function card(g,i,compact=false){
-  const isCover=!g.hasPreview;
-  return `<article class="card" tabindex="0" data-index="${i}" aria-label="${attr(g.title)} details">
-    <div class="art">
-      <img src="${attr(g.image)}" alt="${attr(g.title)} preview" loading="lazy" decoding="async" class="${isCover?'eb-cover':''}" onerror="eddieImgError(this)">
-      <div class="badges"><span class="badge ${setupBadge(g.setup)}">${esc(g.setup)}</span><span class="badge">${esc(g.platforms[0]||'Game')}</span><span class="badge">${esc(g.players)}</span></div>
-      <div class="posterTitle"><h3>${esc(g.title)}</h3><p>${esc(g.genre)} · ${esc(g.mode)}</p></div>
-    </div>
-    ${compact?'':`<div class="body"><p>${esc(g.mode)} on ${esc(g.platforms.join(', '))}.</p><div class="facts"><div class="fact"><b>${esc(g.players)}</b><span>Players</span></div><div class="fact"><b>${esc(g.setup)}</b><span>Setup</span></div></div><div class="actions"><a class="btn play" href="${attr(g.url)}" target="_blank" rel="noopener">Open</a><button class="btn" type="button" data-details="${i}">Details</button></div></div>`}
-  </article>`;
-}
-function bindCards(root){
-  root.querySelectorAll('[data-details]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openGame(games[Number(b.dataset.details)])}));
-  root.querySelectorAll('.card').forEach(c=>{
-    c.addEventListener('click',e=>{if(e.target.closest('a,button'))return;openGame(games[Number(c.dataset.index)])});
-    c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openGame(games[Number(c.dataset.index)])}});
-  });
-}
-function renderSpotlight(){
-  const picks=games.filter(g=>g.hasPreview).slice(0,12);
-  els.rail.innerHTML=picks.map(g=>card(g,games.indexOf(g),true)).join('');
-  bindCards(els.rail);
-}
-function render(){
-  setupChips();
-  const list=filtered();
-  els.grid.className=`games ${state.view}`;
-  els.grid.innerHTML=list.map(g=>card(g,games.indexOf(g))).join('');
-  els.count.textContent=`${list.length} showing`;
-  els.empty.style.display=list.length?'none':'block';
-  document.querySelectorAll('.viewBtns button').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));
-  bindCards(els.grid);
-}
-function openGame(g){
-  els.modalImg.src=g.image;
-  els.modalImg.alt=`${g.title} preview`;
-  els.modalImg.className=g.hasPreview?'':'eb-cover';
-  els.modalImg.onerror=()=>imgError(els.modalImg);
-  els.modalInner.innerHTML=`<div class="modalTitle"><div><h2>${esc(g.title)}</h2><p class="sub">${esc(g.genre)} · ${esc(g.platforms.join(', '))}</p></div><button class="close" type="button" id="closeModal">Close</button></div>
-  <div class="facts"><div class="fact"><b>${esc(g.players)}</b><span>Players</span></div><div class="fact"><b>${esc(g.setup)}</b><span>Setup</span></div><div class="fact"><b>${esc(g.mode)}</b><span>Mode</span></div><div class="fact"><b>${esc(g.platforms.join(', '))}</b><span>Platforms</span></div></div>
-  <div class="chips">${g.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>
-  <div class="actions"><a class="btn play" href="${attr(g.url)}" target="_blank" rel="noopener">Open Game Page</a><a class="btn" href="https://www.google.com/search?q=${encodeURIComponent(g.title+' free multiplayer game')}" target="_blank" rel="noopener">Search</a></div>`;
-  els.modal.classList.add('open');
-  $('#closeModal').addEventListener('click',closeModal);
-}
+function setupBadge(setup){return setup.toLowerCase().includes('no')?'easy':setup.toLowerCase().includes('account')?'blue':'hot'}
+function card(g,i,compact=false){const isCover=!g.hasPreview;return `<article class="card" tabindex="0" data-index="${i}" aria-label="${attr(g.title)} details"><div class="art"><img src="${attr(g.image)}" alt="${attr(g.title)} preview" loading="lazy" decoding="async" class="${isCover?'eb-cover':''}" onerror="eddieImgError(this)"><div class="badges"><span class="badge ${setupBadge(g.setup)}">${esc(g.setup)}</span><span class="badge">${esc(g.platforms[0]||'Game')}</span><span class="badge">${esc(g.players)}</span></div><div class="posterTitle"><h3>${esc(g.title)}</h3><p>${esc(g.genre)} · ${esc(g.mode)}</p></div></div>${compact?'':`<div class="body"><p>${esc(g.mode)} on ${esc(g.platforms.join(', '))}.</p><div class="facts"><div class="fact"><b>${esc(g.players)}</b><span>Players</span></div><div class="fact"><b>${esc(g.setup)}</b><span>Setup</span></div></div><div class="actions"><a class="btn play" href="${attr(g.url)}" target="_blank" rel="noopener">Open</a><button class="btn" type="button" data-details="${i}">Details</button></div></div>`}</article>`}
+function wireCards(scope=document){scope.querySelectorAll('[data-details]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openGame(games[Number(b.dataset.details)])}));scope.querySelectorAll('.card').forEach(c=>{c.addEventListener('click',e=>{if(e.target.closest('a,button'))return;openGame(games[Number(c.dataset.index)])});c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openGame(games[Number(c.dataset.index)])}})})}
+function renderRails(){const featured=FEATURED_TITLES.map(t=>games.find(g=>g.title===t)).filter(Boolean).slice(0,14);const quick=games.filter(matchesStartNow).sort((a,b)=>Number(b.hasPreview)-Number(a.hasPreview)||a.title.localeCompare(b.title)).slice(0,18);els.featuredRail.innerHTML=featured.map(g=>card(g,games.indexOf(g),true)).join('');els.quickRail.innerHTML=quick.map(g=>card(g,games.indexOf(g),true)).join('');wireCards(els.featuredRail);wireCards(els.quickRail)}
+function render(){setupChips();const list=filtered();els.grid.className=`games ${state.view}`;els.grid.innerHTML=list.map(g=>card(g,games.indexOf(g))).join('');els.count.textContent=`${list.length} showing`;els.empty.style.display=list.length?'none':'block';document.querySelectorAll('.viewBtns button').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));els.startNow.classList.toggle('active',state.startNow);els.party.classList.toggle('active',state.party);wireCards(els.grid)}
+function saveIssue(g,note){const issues=JSON.parse(localStorage.getItem('eddies-basement-feedback')||'[]');issues.push({game:g.title,note,createdAt:new Date().toISOString()});localStorage.setItem('eddies-basement-feedback',JSON.stringify(issues))}
+function openGame(g){els.modalImg.src=g.image;els.modalImg.alt=`${g.title} preview`;els.modalImg.className=g.hasPreview?'':'eb-cover';els.modalImg.onerror=()=>imgError(els.modalImg);els.modalInner.innerHTML=`<div class="modalTitle"><div><h2>${esc(g.title)}</h2><p class="sub">${esc(g.genre)} · ${esc(g.platforms.join(', '))}</p></div><button class="close" type="button" id="closeModal">Close</button></div><div class="facts"><div class="fact"><b>${esc(g.players)}</b><span>Players</span></div><div class="fact"><b>${esc(g.setup)}</b><span>Setup</span></div><div class="fact"><b>${esc(g.mode)}</b><span>Mode</span></div><div class="fact"><b>${esc(g.platforms.join(', '))}</b><span>Platforms</span></div></div><div class="chips">${g.tags.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div><div class="actions"><a class="btn play" href="${attr(g.url)}" target="_blank" rel="noopener">Open Game Page</a><a class="btn" href="https://www.google.com/search?q=${encodeURIComponent(g.title+' free multiplayer game') }" target="_blank" rel="noopener">Search</a><button class="btn" type="button" id="feedbackBtn">Fix Info</button></div><div class="feedbackBox" id="feedbackBox"><textarea id="feedbackNote" placeholder="What should be fixed? Broken link, wrong platform, not free anymore, bad image..."></textarea><button class="primary" type="button" id="saveIssueBtn">Save Feedback</button><p id="feedbackSaved" class="saveMsg">Saved.</p></div>`;els.modal.classList.add('open');$('#closeModal').addEventListener('click',closeModal);$('#feedbackBtn').addEventListener('click',()=>$('#feedbackBox').classList.toggle('show'));$('#saveIssueBtn').addEventListener('click',()=>{saveIssue(g,$('#feedbackNote').value.trim()||'No note');$('#feedbackSaved').classList.add('show');setTimeout(()=>$('#feedbackSaved').classList.remove('show'),2200);$('#feedbackNote').value=''})}
 function closeModal(){els.modal.classList.remove('open')}
-function randomPick(){
-  const list=filtered();
-  if(list.length)openGame(list[Math.floor(Math.random()*list.length)]);
-}
-function init(){
-  setupPlatforms();
-  els.total.textContent=games.length;
-  els.featured.textContent=games.filter(g=>g.hasPreview).length;
-  els.browser.textContent=games.filter(g=>text(g).includes('browser')).length;
-  els.search.addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render()});
-  els.platform.addEventListener('change',e=>{state.platform=e.target.value;render()});
-  els.setup.addEventListener('change',e=>{state.setup=e.target.value;render()});
-  els.sort.addEventListener('change',e=>{state.sort=e.target.value;render()});
-  els.clear.addEventListener('click',()=>{state.q='';state.platform='';state.setup='';state.tags.clear();els.search.value='';els.platform.value='';els.setup.value='';render()});
-  document.querySelectorAll('.viewBtns button').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.view;render()}));
-  els.random.addEventListener('click',randomPick);
-  els.randomCard.addEventListener('click',randomPick);
-  els.modal.addEventListener('click',e=>{if(e.target===els.modal)closeModal()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-  els.form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const data=Object.fromEntries(new FormData(e.currentTarget).entries());
-    const saved=JSON.parse(localStorage.getItem('eddies-basement-submissions')||'[]');
-    saved.push({...data,createdAt:new Date().toISOString()});
-    localStorage.setItem('eddies-basement-submissions',JSON.stringify(saved));
-    els.save.classList.add('show');
-    setTimeout(()=>els.save.classList.remove('show'),2500);
-    e.currentTarget.reset();
-  });
-  els.brand.addEventListener('error',()=>{els.brand.style.display='none';els.brandText.style.display='block'});
-  renderSpotlight();
-  render();
-}
+function resetFilters(){state.q='';state.platform='';state.setup='';state.tags.clear();state.startNow=false;state.party=false;els.search.value='';els.platform.value='';els.setup.value='';render()}
+function init(){setupPlatforms();renderRails();els.total.textContent=games.length;els.featured.textContent=FEATURED_TITLES.filter(t=>games.some(g=>g.title===t)).length;els.quick.textContent=games.filter(matchesStartNow).length;els.search.addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render()});els.platform.addEventListener('change',e=>{state.platform=e.target.value;render()});els.setup.addEventListener('change',e=>{state.setup=e.target.value;render()});els.sort.addEventListener('change',e=>{state.sort=e.target.value;render()});els.clear.addEventListener('click',resetFilters);els.startNow.addEventListener('click',()=>{state.startNow=!state.startNow;if(state.startNow){state.party=false;state.setup='';els.setup.value='';state.tags.clear()}render();document.getElementById('games').scrollIntoView({behavior:'smooth',block:'start'})});els.party.addEventListener('click',()=>{state.party=!state.party;if(state.party){state.startNow=false;state.tags.clear()}render();document.getElementById('games').scrollIntoView({behavior:'smooth',block:'start'})});document.querySelectorAll('.viewBtns button').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.view;render()}));els.random.addEventListener('click',()=>{const list=filtered();if(list.length)openGame(list[Math.floor(Math.random()*list.length)])});els.modal.addEventListener('click',e=>{if(e.target===els.modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});els.form.addEventListener('submit',e=>{e.preventDefault();const data=Object.fromEntries(new FormData(e.currentTarget).entries());const saved=JSON.parse(localStorage.getItem('eddies-basement-submissions')||'[]');saved.push({...data,createdAt:new Date().toISOString()});localStorage.setItem('eddies-basement-submissions',JSON.stringify(saved));els.save.classList.add('show');setTimeout(()=>els.save.classList.remove('show'),2500);e.currentTarget.reset()});els.brand.addEventListener('error',()=>{els.brand.style.display='none';els.brandText.style.display='block'});render()}
 init();
 </script>
 </body>
