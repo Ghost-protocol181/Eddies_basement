@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eddie's Basement — Free Multiplayer Game Finder</title>
+  <meta name="description" content="A visual shelf-style finder for free multiplayer games without weird paywall energy." />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --panel: #14161d;
+      --panel-2: #1c1f2a;
+      --text: #f4efe5;
+      --muted: #b7ad9b;
+      --line: rgba(255,255,255,.12);
+      --gold: #f8c66d;
+      --orange: #f28f3b;
+      --green: #74d99f;
+      --red: #ff6b6b;
+      --blue: #7ab8ff;
+      --purple: #bb8cff;
+      --shadow: 0 24px 80px rgba(0,0,0,.45);
+      --radius: 24px;
+      --radius-sm: 14px;
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 5%, rgba(248,198,109,.18), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(122,184,255,.10), transparent 26%),
+        linear-gradient(180deg, #0b0c10 0%, #11131a 48%, #08090d 100%);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .wrap { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(11,12,16,.82);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; min-width: 220px; }
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(248,198,109,.95), rgba(242,143,59,.95)),
+        #222;
+      box-shadow: 0 10px 30px rgba(248,198,109,.22);
+      color: #16110a;
+      font-weight: 900;
+      letter-spacing: -.08em;
+    }
+    .brand h1 { margin: 0; font-size: 18px; letter-spacing: -.03em; }
+    .brand p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+
+    .nav-links { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav-links a, .small-button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+    .nav-links a:hover, .small-button:hover { border-color: rgba(248,198,109,.5); background: rgba(248,198,109,.10); }
+
+    .hero { padding: 58px 0 30px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 28px; align-items: stretch; }
+    .hero-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.035));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 4vw, 48px);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(circle at 75% 15%, rgba(248,198,109,.22), transparent 34%);
+      pointer-events: none;
+    }
+    .hero-card > * { position: relative; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+    .hero h2 { margin: 16px 0 12px; font-size: clamp(42px, 7vw, 84px); line-height: .92; letter-spacing: -.075em; max-width: 780px; }
+    .hero-copy { color: #ded5c5; font-size: clamp(17px, 2vw, 21px); line-height: 1.5; max-width: 740px; margin: 0 0 26px; }
+
+    .search-panel {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid rgba(248,198,109,.24);
+      background: rgba(0,0,0,.26);
+      border-radius: 20px;
+    }
+    .search-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+    .search-input {
+      width: 100%;
+      padding: 16px 16px;
+      border-radius: 15px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      outline: none;
+    }
+    .search-input:focus { border-color: rgba(248,198,109,.72); box-shadow: 0 0 0 4px rgba(248,198,109,.12); }
+    .primary-btn {
+      border: 0;
+      padding: 14px 20px;
+      border-radius: 15px;
+      color: #1a1208;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      font-weight: 900;
+      box-shadow: 0 12px 26px rgba(242,143,59,.22);
+    }
+    .primary-btn:hover { transform: translateY(-1px); }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      user-select: none;
+    }
+    .chip.active { color: #1a1208; border-color: transparent; background: linear-gradient(135deg, var(--gold), var(--orange)); font-weight: 800; }
+
+    .basement-visual {
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(248,198,109,.12), rgba(255,255,255,.03)),
+        #101218;
+      box-shadow: var(--shadow);
+      min-height: 420px;
+    }
+    .basement-sign {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--gold);
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .fake-shelves {
+      position: absolute;
+      inset: 74px 18px 20px;
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .fake-row { display: flex; align-items: end; gap: 12px; border-bottom: 12px solid rgba(107,67,32,.82); padding: 0 10px 12px; }
+    .fake-case { flex: 1; min-width: 34px; max-width: 72px; height: clamp(96px, 11vw, 150px); border-radius: 10px; background: linear-gradient(135deg, var(--c1), var(--c2)); box-shadow: 0 18px 24px rgba(0,0,0,.32); transform: rotate(var(--r)); position: relative; overflow: hidden; }
+    .fake-case::before { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(255,255,255,.28); border-radius: 7px; }
+    .fake-case::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 14px; height: 10px; border-radius: 99px; background: rgba(255,255,255,.35); }
+
+    .toolbar {
+      margin: 18px 0 22px;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .select {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .view-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; background: rgba(255,255,255,.04); }
+    .view-toggle button { border: 0; background: transparent; color: var(--muted); padding: 12px 14px; }
+    .view-toggle button.active { background: rgba(248,198,109,.15); color: var(--gold); font-weight: 800; }
+
+    .section { padding: 28px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin: 0 0 16px; }
+    .section h3 { margin: 0; font-size: clamp(24px, 3vw, 38px); letter-spacing: -.05em; }
+    .section-desc { color: var(--muted); margin: 5px 0 0; line-height: 1.45; }
+    .result-count { color: var(--gold); font-weight: 800; }
+
+    .shelf-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(220px, 260px);
+      gap: 16px;
+      overflow-x: auto;
+      padding: 12px 0 24px;
+      scroll-snap-type: x mandatory;
+      scrollbar-color: rgba(248,198,109,.45) rgba(255,255,255,.05);
+    }
+    .shelf-row::after { content: ""; width: 12px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+    .list { display: grid; gap: 12px; }
+
+    .game-card {
+      scroll-snap-align: start;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035));
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,.24);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      position: relative;
+    }
+    .game-card:hover, .game-card:focus-within { transform: translateY(-6px); border-color: rgba(248,198,109,.54); box-shadow: 0 28px 70px rgba(0,0,0,.38); }
+    .cover {
+      height: 310px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--art1), var(--art2));
+    }
+    .grid .cover { height: 290px; }
+    .list .game-card { display: grid; grid-template-columns: 140px 1fr; min-height: 160px; }
+    .list .cover { height: 100%; min-height: 160px; }
+
+    .cover-art {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-content: space-between;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 72% 22%, rgba(255,255,255,.34), transparent 14%),
+        radial-gradient(circle at 25% 78%, rgba(255,255,255,.18), transparent 20%),
+        linear-gradient(160deg, rgba(255,255,255,.18), rgba(0,0,0,.30));
+    }
+    .cover-art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 18px 18px;
+      mask-image: linear-gradient(180deg, transparent, #000 20%, #000 80%, transparent);
+      opacity: .55;
+    }
+    .cover-title { position: relative; font-weight: 1000; font-size: 31px; letter-spacing: -.08em; line-height: .88; text-shadow: 0 10px 26px rgba(0,0,0,.45); max-width: 190px; }
+    .cover-symbol { position: relative; justify-self: end; width: 74px; height: 74px; display: grid; place-items: center; border: 2px solid rgba(255,255,255,.62); border-radius: 22px; font-size: 34px; font-weight: 900; background: rgba(0,0,0,.12); backdrop-filter: blur(8px); }
+    .cover-footer { position: relative; display: flex; justify-content: space-between; gap: 8px; align-items: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: .08em; }
+
+    .preview-layer {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .22s ease;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.34), transparent 12%),
+        linear-gradient(120deg, rgba(0,0,0,.10), rgba(255,255,255,.18), rgba(0,0,0,.24));
+      animation: drift 4s ease-in-out infinite alternate;
+    }
+    .preview-layer::after {
+      content: "PREVIEW";
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.58);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+    .game-card:hover .preview-layer, .game-card.preview-on .preview-layer { opacity: 1; }
+    @keyframes drift { from { filter: hue-rotate(0deg); transform: scale(1); } to { filter: hue-rotate(12deg); transform: scale(1.04); } }
+
+    .card-body { padding: 16px; }
+    .game-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin: 0 0 8px; font-size: 19px; letter-spacing: -.035em; }
+    .game-desc { color: #d6ccbd; line-height: 1.45; font-size: 14px; margin: 0 0 12px; min-height: 42px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 12px; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); background: rgba(255,255,255,.055); color: #e9dfd0; border-radius: 999px; padding: 6px 8px; font-size: 11px; font-weight: 800; }
+    .badge.green { color: #0e1c12; background: var(--green); border-color: transparent; }
+    .badge.gold { color: #1a1208; background: var(--gold); border-color: transparent; }
+    .badge.orange { color: #211006; background: #ffb067; border-color: transparent; }
+    .badge.red { color: #290909; background: var(--red); border-color: transparent; }
+    .badge.blue { color: #071827; background: var(--blue); border-color: transparent; }
+
+    .meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; color: var(--muted); font-size: 12px; }
+    .meta span { display: block; color: var(--text); font-weight: 800; margin-top: 2px; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .secondary-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 13px;
+      padding: 11px 10px;
+      text-align: center;
+      font-weight: 850;
+      font-size: 13px;
+    }
+    .secondary-btn:hover { border-color: rgba(248,198,109,.45); background: rgba(248,198,109,.10); }
+
+    .drawer-backdrop { position: fixed; inset: 0; display: none; background: rgba(0,0,0,.62); z-index: 80; padding: 22px; overflow: auto; }
+    .drawer-backdrop.open { display: grid; place-items: center; }
+    .drawer {
+      width: min(920px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      border: 1px solid rgba(248,198,109,.28);
+      border-radius: 28px;
+      background: #11131a;
+      box-shadow: 0 28px 100px rgba(0,0,0,.62);
+    }
+    .detail-hero { min-height: 310px; padding: 20px; background: linear-gradient(135deg, var(--art1), var(--art2)); position: relative; overflow: hidden; }
+    .detail-hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 30%, rgba(255,255,255,.24), transparent 18%), linear-gradient(180deg, transparent, rgba(0,0,0,.45)); }
+    .drawer-close { position: absolute; top: 18px; right: 18px; z-index: 2; border: 1px solid var(--line); background: rgba(0,0,0,.42); color: white; width: 42px; height: 42px; border-radius: 999px; font-weight: 900; }
+    .detail-content { padding: 24px; display: grid; gap: 20px; }
+    .detail-content h3 { margin: 0; font-size: clamp(30px, 6vw, 56px); letter-spacing: -.06em; }
+    .detail-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 20px; }
+    .info-panel { border: 1px solid var(--line); border-radius: 20px; background: rgba(255,255,255,.045); padding: 16px; }
+    .info-panel h4 { margin: 0 0 10px; color: var(--gold); }
+    .info-panel p, .info-panel li { color: #ded5c5; line-height: 1.5; }
+    .info-panel ul { margin: 0; padding-left: 18px; }
+
+    .hunt {
+      border: 1px solid rgba(122,184,255,.22);
+      background: linear-gradient(180deg, rgba(122,184,255,.08), rgba(255,255,255,.035));
+      border-radius: var(--radius);
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+    }
+    .hunt h3 { margin: 0; font-size: clamp(24px, 3vw, 36px); letter-spacing: -.05em; }
+    .hunt p { margin: 0; color: var(--muted); line-height: 1.5; }
+    .hunt-row { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; }
+
+    .submit-box {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.045);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
+    .field { display: grid; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .field input, .field textarea, .field select { border: 1px solid var(--line); background: rgba(255,255,255,.07); color: var(--text); border-radius: 14px; padding: 12px; outline: none; }
+    .field textarea { min-height: 98px; resize: vertical; }
+
+    .footer { padding: 42px 0 60px; color: var(--muted); border-top: 1px solid var(--line); margin-top: 32px; }
+    .footer p { line-height: 1.5; max-width: 920px; }
+
+    .hidden { display: none !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .preview-layer { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .detail-grid { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+      .hero { padding-top: 26px; }
+      .basement-visual { min-height: 320px; }
+      .nav { height: auto; padding: 14px 0; align-items: flex-start; }
+      .nav-links { display: none; }
+      .search-row, .hunt-row { grid-template-columns: 1fr; }
+      .list .game-card { grid-template-columns: 1fr; }
+      .list .cover { height: 260px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a href="#top" class="brand" aria-label="Eddie's Basement home">
+        <div class="logo">EB</div>
+        <div>
+          <h1>Eddie's Basement</h1>
+          <p>Free multiplayer game shelf</p>
+        </div>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#games">Game Shelf</a>
+        <a href="#hunt">Web Hunt</a>
+        <a href="#submit">Submit</a>
+        <a href="#notes">Notes</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <span class="eyebrow">Basement tested idea</span>
+          <h2>Pull a free multiplayer game off the shelf.</h2>
+          <p class="hero-copy">A visual finder for free multiplayer games that are easy to browse, easy to filter, and not buried behind weird subscription traps.</p>
+          <div class="search-panel" role="search">
+            <div class="search-row">
+              <input id="searchInput" class="search-input" type="search" placeholder="Search party, co-op, browser, racing, cards…" autocomplete="off" />
+              <button id="clearBtn" class="primary-btn" type="button">Clear</button>
+            </div>
+            <div class="filters" id="filterChips" aria-label="Game filters"></div>
+          </div>
+        </div>
+        <div class="basement-visual" aria-hidden="true">
+          <div class="basement-sign"><span>New shelf drop</span><span>No weird paywall energy</span></div>
+          <div class="fake-shelves">
+            <div class="fake-row">
+              <div class="fake-case" style="--c1:#f8c66d;--c2:#f28f3b;--r:-4deg"></div>
+              <div class="fake-case" style="--c1:#7ab8ff;--c2:#1d4ed8;--r:2deg"></div>
+              <div class="fake-case" style="--c1:#74d99f;--c2:#0f766e;--r:-1deg"></div>
+              <div class="fake-case" style="--c1:#bb8cff;--c2:#6d28d9;--r:4deg"></div>
+              <div class="fake-case" style="--c1:#ff6b6b;--c2:#b91c1c;--r:-3deg"></div>
+            </div>
+            <div class="fake-row">
+              <div class="fake-case" style="--c1:#38bdf8;--c2:#0f172a;--r:3deg"></div>
+              <div class="fake-case" style="--c1:#f472b6;--c2:#831843;--r:-2deg"></div>
+              <div class="fake-case" style="--c1:#a3e635;--c2:#3f6212;--r:1deg"></div>
+              <div class="fake-case" style="--c1:#facc15;--c2:#92400e;--r:-5deg"></div>
+              <div class="fake-case" style="--c1:#c084fc;--c2:#312e81;--r:2deg"></div>
+            </div>
+            <div class="fake-row">
+              <div class="fake-case" style="--c1:#fb7185;--c2:#7f1d1d;--r:-2deg"></div>
+              <div class="fake-case" style="--c1:#60a5fa;--c2:#172554;--r:3deg"></div>
+              <div class="fake-case" style="--c1:#2dd4bf;--c2:#134e4a;--r:-4deg"></div>
+              <div class="fake-case" style="--c1:#fde68a;--c2:#9a3412;--r:1deg"></div>
+              <div class="fake-case" style="--c1:#e879f9;--c2:#581c87;--r:-1deg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="games" class="section wrap">
+      <div class="section-head">
+        <div>
+          <h3>The Game Shelf</h3>
+          <p class="section-desc">Image-first browsing. Hover a case on desktop, tap details on mobile.</p>
+        </div>
+        <div class="result-count" id="resultCount">0 games</div>
+      </div>
+
+      <div class="toolbar">
+        <select id="sortSelect" class="select" aria-label="Sort games">
+          <option value="featured">Sort: Eddie's shelf order</option>
+          <option value="leastPaywall">Sort: Least paywall energy</option>
+          <option value="playersHigh">Sort: Biggest group size</option>
+          <option value="title">Sort: A to Z</option>
+        </select>
+        <div class="view-toggle" aria-label="View options">
+          <button type="button" data-view="shelf" class="active">Shelf</button>
+          <button type="button" data-view="grid">Grid</button>
+          <button type="button" data-view="list">List</button>
+        </div>
+        <button id="familyBtn" class="small-button" type="button">Family Browse: Off</button>
+      </div>
+
+      <div id="featuredShelves"></div>
+      <div id="allGames" class="grid hidden"></div>
+    </section>
+
+    <section id="hunt" class="section wrap">
+      <div class="hunt">
+        <h3>Eddie's Web Hunt</h3>
+        <p>This single HTML file cannot scrape the entire internet from your browser. This is the safe shortcut: search trusted public web results with smart terms, then add good finds into the shelf database.</p>
+        <div class="hunt-row">
+          <input id="huntInput" class="search-input" type="search" placeholder="Example: free browser co-op games no download" />
+          <button id="huntWebBtn" class="primary-btn" type="button">Search Web</button>
+          <button id="huntItchBtn" class="secondary-btn" type="button">Search itch.io</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="submit" class="section wrap">
+      <div class="submit-box">
+        <h3>Submit a game for the basement</h3>
+        <p class="section-desc">This saves suggestions in your browser for now. Later, Codex can connect this to a real database or GitHub issue flow.</p>
+        <form id="submitForm" class="form-grid">
+          <div class="field">
+            <label for="gameName">Game name</label>
+            <input id="gameName" required placeholder="Game title" />
+          </div>
+          <div class="field">
+            <label for="gameUrl">Official URL</label>
+            <input id="gameUrl" required placeholder="https://official-site.example" />
+          </div>
+          <div class="field">
+            <label for="gamePlatform">Platform</label>
+            <select id="gamePlatform">
+              <option>Browser</option><option>PC</option><option>Mobile</option><option>Console</option><option>Multiple</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="gameType">Multiplayer type</label>
+            <select id="gameType">
+              <option>Party</option><option>Co-op</option><option>Competitive</option><option>Local</option><option>MMO</option><option>Social</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="gameNotes">Notes</label>
+            <textarea id="gameNotes" placeholder="Is it really free? Account required? Download required? Any paywall concerns?"></textarea>
+          </div>
+          <div class="field full">
+            <button class="primary-btn" type="submit">Save suggestion locally</button>
+          </div>
+        </form>
+        <div id="submissionList" style="margin-top:18px"></div>
+      </div>
+    </section>
+
+    <section id="notes" class="section wrap">
+      <div class="info-panel">
+        <h4>Important build note</h4>
+        <p>Eddie's Basement should link to legitimate official game pages only. Do not build piracy, ROM scraping, unauthorized crawling, or shady download funnels. Treat this file as the easy visual MVP. The future real version should use approved APIs, curated source adapters, admin review, and stored media permissions.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="drawerBackdrop" class="drawer-backdrop" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <article id="drawer" class="drawer"></article>
+  </div>
+
+  <footer class="footer">
+    <div class="wrap">
+      <strong>Eddie's Basement</strong>
+      <p>Prototype single-file app. Starter records are for product-design testing and should be verified before public launch. Add real games by editing the <code>gameData</code> array inside this HTML file.</p>
+    </div>
+  </footer>
+
+  <script>
+    const filters = [
+      { key: 'browserPlayable', label: 'Browser' },
+      { key: 'noDownload', label: 'No Download' },
+      { key: 'noAccount', label: 'No Account' },
+      { key: 'party', label: 'Party' },
+      { key: 'coop', label: 'Co-op' },
+      { key: 'competitive', label: 'Competitive' },
+      { key: 'local', label: 'Local' },
+      { key: 'mobile', label: 'Mobile' },
+      { key: 'controller', label: 'Controller' },
+      { key: 'lowPaywall', label: 'Low Paywall' }
+    ];
+
+    // Starter data. Verify official URLs/free status before public use.
+    // To add games: copy one object, change the fields, and save the file.
+    const gameData = [
+      { title:'Skribbl.io', url:'https://skribbl.io', symbol:'✏️', short:'Draw and guess with friends in a browser room.', platforms:['Browser'], types:['Party','Social'], tags:['drawing','party','quick','kids','private room'], players:'2-12+', maxPlayers:12, browserPlayable:true, noDownload:true, noAccount:true, party:true, coop:false, competitive:false, local:false, mobile:false, controller:false, lowPaywall:true, freeStatus:'verified_free', monetization:'light', family:true, featured:true, art1:'#f8c66d', art2:'#f28f3b' },
+      { title:'Gartic Phone', url:'https://garticphone.com', symbol:'☎️', short:'Telephone-game chaos with drawings and funny prompts.', platforms:['Browser'], types:['Party'], tags:['drawing','party','funny','group','private room'], players:'4-30', maxPlayers:30, browserPlayable:true, noDownload:true, noAccount:true, party:true, coop:false, competitive:false, local:false, mobile:false, controller:false, lowPaywall:true, freeStatus:'verified_free', monetization:'light', family:true, featured:true, art1:'#7ab8ff', art2:'#1d4ed8' },
+      { title:'Codenames Online', url:'https://codenames.game', symbol:'🕵️', short:'Team word guessing built for groups and voice chat.', platforms:['Browser'], types:['Party','Team'], tags:['board game','words','team','party'], players:'4-8+', maxPlayers:10, browserPlayable:true, noDownload:true, noAccount:true, party:true, coop:true, competitive:true, local:false, mobile:false, controller:false, lowPaywall:true, freeStatus:'verified_free', monetization:'none', family:true, featured:true, art1:'#bb8cff', art2:'#312e81' },
+      { title:'Board Game Arena', url:'https://boardgamearena.com', symbol:'🎲', short:'Huge board-game library; some tables and features may vary.', platforms:['Browser','Mobile'], types:['Board','Competitive'], tags:['board games','cards','strategy','turn based'], players:'2+', maxPlayers:8, browserPlayable:true, noDownload:true, noAccount:false, party:false, coop:false, competitive:true, local:false, mobile:true, controller:false, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:true, featured:false, art1:'#74d99f', art2:'#0f766e' },
+      { title:'GeoGuessr Free Alternatives Search', url:'https://www.google.com/search?q=free+multiplayer+geography+guessing+game', symbol:'🌍', short:'Use this as a search shelf card for free geography games.', platforms:['Browser'], types:['Party','Quiz'], tags:['geography','quiz','learning','search card'], players:'1+', maxPlayers:8, browserPlayable:true, noDownload:true, noAccount:false, party:true, coop:false, competitive:true, local:false, mobile:true, controller:false, lowPaywall:false, freeStatus:'needs_review', monetization:'unknown', family:true, featured:false, art1:'#38bdf8', art2:'#0f172a' },
+      { title:'Krunker', url:'https://krunker.io', symbol:'🎯', short:'Fast browser FPS with quick matches and custom games.', platforms:['Browser','PC'], types:['Competitive'], tags:['fps','shooter','browser','fast'], players:'2-16+', maxPlayers:16, browserPlayable:true, noDownload:true, noAccount:true, party:false, coop:false, competitive:true, local:false, mobile:false, controller:false, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:false, featured:true, art1:'#ff6b6b', art2:'#7f1d1d' },
+      { title:'Shell Shockers', url:'https://shellshock.io', symbol:'🥚', short:'Egg-themed browser shooter with quick multiplayer rooms.', platforms:['Browser'], types:['Competitive'], tags:['fps','browser','shooter','funny'], players:'2-16+', maxPlayers:16, browserPlayable:true, noDownload:true, noAccount:true, party:false, coop:false, competitive:true, local:false, mobile:false, controller:false, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:false, featured:false, art1:'#fde68a', art2:'#9a3412' },
+      { title:'Brawlhalla', url:'https://www.brawlhalla.com', symbol:'⚔️', short:'Free platform fighter with online and local multiplayer.', platforms:['PC','Console','Mobile'], types:['Competitive','Local'], tags:['fighting','local','controller','crossplay'], players:'1-8', maxPlayers:8, browserPlayable:false, noDownload:false, noAccount:false, party:true, coop:false, competitive:true, local:true, mobile:true, controller:true, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:true, featured:true, art1:'#60a5fa', art2:'#172554' },
+      { title:'Rocket League', url:'https://www.rocketleague.com', symbol:'🚗', short:'Car soccer with teams, casual play, and ranked matches.', platforms:['PC','Console'], types:['Competitive','Team'], tags:['sports','cars','soccer','controller','crossplay'], players:'1-8', maxPlayers:8, browserPlayable:false, noDownload:false, noAccount:false, party:true, coop:true, competitive:true, local:true, mobile:false, controller:true, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:true, featured:true, art1:'#facc15', art2:'#92400e' },
+      { title:'Fortnite', url:'https://www.fortnite.com', symbol:'🚌', short:'Battle royale and creator-made multiplayer islands.', platforms:['PC','Console','Mobile'], types:['Competitive','Co-op','Party'], tags:['battle royale','creative','crossplay','teams'], players:'1-100', maxPlayers:100, browserPlayable:false, noDownload:false, noAccount:false, party:true, coop:true, competitive:true, local:false, mobile:true, controller:true, lowPaywall:false, freeStatus:'free_with_iap', monetization:'heavy', family:false, featured:true, art1:'#c084fc', art2:'#312e81' },
+      { title:'Roblox', url:'https://www.roblox.com', symbol:'🧱', short:'Massive user-created game platform with endless multiplayer rooms.', platforms:['PC','Mobile','Console'], types:['Social','Party','Co-op'], tags:['ugc','kids','social','many games'], players:'1+', maxPlayers:50, browserPlayable:false, noDownload:false, noAccount:false, party:true, coop:true, competitive:true, local:false, mobile:true, controller:true, lowPaywall:false, freeStatus:'free_with_iap', monetization:'heavy', family:false, featured:false, art1:'#e5e7eb', art2:'#374151' },
+      { title:'Warframe', url:'https://www.warframe.com', symbol:'🌌', short:'Free online co-op action with deep progression.', platforms:['PC','Console'], types:['Co-op','Action'], tags:['co-op','looter','sci fi','pve'], players:'1-4', maxPlayers:4, browserPlayable:false, noDownload:false, noAccount:false, party:false, coop:true, competitive:false, local:false, mobile:false, controller:true, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:false, featured:false, art1:'#2dd4bf', art2:'#134e4a' },
+      { title:'Fall Guys', url:'https://www.fallguys.com', symbol:'👑', short:'Chaotic obstacle-course party competition.', platforms:['PC','Console'], types:['Party','Competitive'], tags:['party','obstacle','funny','crossplay'], players:'1-40', maxPlayers:40, browserPlayable:false, noDownload:false, noAccount:false, party:true, coop:false, competitive:true, local:false, mobile:false, controller:true, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:true, featured:true, art1:'#f472b6', art2:'#831843' },
+      { title:'Trackmania Starter Access', url:'https://www.trackmania.com', symbol:'🏁', short:'Racing with free starter access; verify current limits.', platforms:['PC','Console'], types:['Competitive'], tags:['racing','time trial','controller'], players:'1+', maxPlayers:32, browserPlayable:false, noDownload:false, noAccount:false, party:false, coop:false, competitive:true, local:false, mobile:false, controller:true, lowPaywall:false, freeStatus:'needs_review', monetization:'moderate', family:true, featured:false, art1:'#fb7185', art2:'#7f1d1d' },
+      { title:'Pokémon Showdown', url:'https://pokemonshowdown.com', symbol:'⚡', short:'Browser-based competitive battle simulator.', platforms:['Browser'], types:['Competitive'], tags:['strategy','turn based','browser','battles'], players:'1v1', maxPlayers:2, browserPlayable:true, noDownload:true, noAccount:true, party:false, coop:false, competitive:true, local:false, mobile:true, controller:false, lowPaywall:true, freeStatus:'verified_free', monetization:'none', family:true, featured:false, art1:'#facc15', art2:'#b91c1c' },
+      { title:'Bonk.io', url:'https://bonk.io', symbol:'⚪', short:'Physics-based browser arena game for groups.', platforms:['Browser'], types:['Party','Competitive'], tags:['physics','browser','arena','quick'], players:'2-8', maxPlayers:8, browserPlayable:true, noDownload:true, noAccount:true, party:true, coop:false, competitive:true, local:false, mobile:false, controller:false, lowPaywall:true, freeStatus:'verified_free', monetization:'light', family:true, featured:false, art1:'#a3e635', art2:'#3f6212' },
+      { title:'Transformice', url:'https://www.transformice.com', symbol:'🐭', short:'Multiplayer platforming rooms built around teamwork and chaos.', platforms:['Browser','PC'], types:['Social','Co-op'], tags:['platformer','social','teamwork','browser'], players:'2+', maxPlayers:25, browserPlayable:true, noDownload:true, noAccount:false, party:true, coop:true, competitive:false, local:false, mobile:false, controller:false, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:true, featured:false, art1:'#f97316', art2:'#451a03' },
+      { title:'Agar.io', url:'https://agar.io', symbol:'🟢', short:'Simple browser multiplayer survival arena.', platforms:['Browser','Mobile'], types:['Competitive'], tags:['io','browser','quick','arena'], players:'Massive', maxPlayers:50, browserPlayable:true, noDownload:true, noAccount:true, party:false, coop:false, competitive:true, local:false, mobile:true, controller:false, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:true, featured:false, art1:'#4ade80', art2:'#14532d' },
+      { title:'Slither.io', url:'https://slither.io', symbol:'🐍', short:'Classic browser snake arena with quick drop-in play.', platforms:['Browser','Mobile'], types:['Competitive'], tags:['io','browser','snake','quick'], players:'Massive', maxPlayers:50, browserPlayable:true, noDownload:true, noAccount:true, party:false, coop:false, competitive:true, local:false, mobile:true, controller:false, lowPaywall:false, freeStatus:'free_with_iap', monetization:'moderate', family:true, featured:false, art1:'#22c55e', art2:'#052e16' },
+      { title:'Tetr.io', url:'https://tetr.io', symbol:'🧩', short:'Modern free online block-stacking battles.', platforms:['Browser','PC'], types:['Competitive'], tags:['puzzle','tetris-like','browser','ranked'], players:'1+', maxPlayers:99, browserPlayable:true, noDownload:true, noAccount:true, party:false, coop:false, competitive:true, local:false, mobile:false, controller:false, lowPaywall:true, freeStatus:'verified_free', monetization:'light', family:true, featured:false, art1:'#38bdf8', art2:'#1e3a8a' }
+    ];
+
+    const state = { query: '', activeFilters: new Set(), view: 'shelf', family: false, sort: 'featured' };
+
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+    const slugify = str => str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    const freeBadge = game => {
+      if (game.freeStatus === 'verified_free') return '<span class="badge green">✓ Free</span>';
+      if (game.freeStatus === 'free_with_iap') return '<span class="badge orange">Free + IAP</span>';
+      return '<span class="badge red">Needs Review</span>';
+    };
+
+    const paywallLabel = game => {
+      if (game.monetization === 'none') return 'None';
+      if (game.monetization === 'light') return 'Light';
+      if (game.monetization === 'moderate') return 'Moderate';
+      if (game.monetization === 'heavy') return 'Heavy';
+      return 'Unknown';
+    };
+
+    const matchesFilter = (game, key) => {
+      if (key === 'lowPaywall') return game.lowPaywall || game.monetization === 'none' || game.monetization === 'light';
+      return !!game[key];
+    };
+
+    function getFilteredGames() {
+      const q = state.query.trim().toLowerCase();
+      let games = gameData.filter(game => {
+        if (state.family && !game.family) return false;
+        for (const f of state.activeFilters) if (!matchesFilter(game, f)) return false;
+        if (!q) return true;
+        const haystack = [game.title, game.short, ...game.platforms, ...game.types, ...game.tags].join(' ').toLowerCase();
+        return haystack.includes(q);
+      });
+
+      games.sort((a,b) => {
+        if (state.sort === 'title') return a.title.localeCompare(b.title);
+        if (state.sort === 'playersHigh') return (b.maxPlayers || 0) - (a.maxPlayers || 0);
+        if (state.sort === 'leastPaywall') {
+          const score = { none: 0, light: 1, moderate: 2, heavy: 3, unknown: 4 };
+          return (score[a.monetization] ?? 4) - (score[b.monetization] ?? 4);
+        }
+        return Number(b.featured) - Number(a.featured);
+      });
+      return games;
+    }
+
+    function gameCard(game) {
+      const id = slugify(game.title);
+      const badgeHtml = [
+        freeBadge(game),
+        game.browserPlayable ? '<span class="badge blue">Browser</span>' : '',
+        game.noDownload ? '<span class="badge gold">No Download</span>' : '',
+        game.party ? '<span class="badge">Party</span>' : '',
+        game.coop ? '<span class="badge">Co-op</span>' : '',
+        game.controller ? '<span class="badge">Controller</span>' : ''
+      ].filter(Boolean).join('');
+
+      return `
+        <article class="game-card" data-id="${id}" style="--art1:${game.art1};--art2:${game.art2}">
+          <div class="cover" aria-label="${game.title} cover art">
+            <div class="cover-art">
+              <div class="cover-symbol">${game.symbol}</div>
+              <div class="cover-title">${game.title}</div>
+              <div class="cover-footer"><span>Eddie's Shelf</span><span>${game.types[0]}</span></div>
+            </div>
+            <div class="preview-layer"></div>
+          </div>
+          <div class="card-body">
+            <h4 class="game-title"><span>${game.title}</span>${game.featured ? '<span class="badge gold">Pick</span>' : ''}</h4>
+            <p class="game-desc">${game.short}</p>
+            <div class="badges">${badgeHtml}</div>
+            <div class="meta">
+              <div>Players<span>${game.players}</span></div>
+              <div>Paywall<span>${paywallLabel(game)}</span></div>
+            </div>
+            <div class="actions">
+              <a class="secondary-btn" href="${game.url}" target="_blank" rel="noopener">Play / Visit</a>
+              <button class="secondary-btn" type="button" data-details="${id}">Details</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderFilters() {
+      $('#filterChips').innerHTML = filters.map(f => `<button type="button" class="chip ${state.activeFilters.has(f.key) ? 'active' : ''}" data-filter="${f.key}">${f.label}</button>`).join('');
+    }
+
+    function renderShelfRows(games) {
+      const groups = [
+        { title: 'Featured Shelf', desc: 'The most visually browseable starters.', items: games.filter(g => g.featured) },
+        { title: 'Play Right Now', desc: 'Browser-first and no-download friendly.', items: games.filter(g => g.browserPlayable && g.noDownload) },
+        { title: 'Good With a Group', desc: 'Party, family, and quick group energy.', items: games.filter(g => g.party || g.family) },
+        { title: 'Competitive Basement', desc: 'For people who want a match, not a meeting.', items: games.filter(g => g.competitive) },
+        { title: 'Co-op Corner', desc: 'Work together, survive together, laugh together.', items: games.filter(g => g.coop) }
+      ].filter(group => group.items.length);
+
+      $('#featuredShelves').innerHTML = groups.map(group => `
+        <div class="section">
+          <div class="section-head">
+            <div><h3>${group.title}</h3><p class="section-desc">${group.desc}</p></div>
+          </div>
+          <div class="shelf-row">${group.items.map(gameCard).join('')}</div>
+        </div>
+      `).join('') || emptyState();
+    }
+
+    function emptyState() {
+      return `<div class="info-panel"><h4>No games found</h4><p>Try clearing filters or using Eddie's Web Hunt to find new candidates.</p></div>`;
+    }
+
+    function renderGames() {
+      const games = getFilteredGames();
+      $('#resultCount').textContent = `${games.length} game${games.length === 1 ? '' : 's'}`;
+      if (state.view === 'shelf') {
+        $('#featuredShelves').classList.remove('hidden');
+        $('#allGames').classList.add('hidden');
+        renderShelfRows(games);
+      } else {
+        $('#featuredShelves').classList.add('hidden');
+        const box = $('#allGames');
+        box.className = state.view === 'list' ? 'list' : 'grid';
+        box.innerHTML = games.length ? games.map(gameCard).join('') : emptyState();
+      }
+      bindCardEvents();
+    }
+
+    function bindCardEvents() {
+      $$('[data-details]').forEach(btn => {
+        btn.addEventListener('click', () => openDetails(btn.dataset.details));
+      });
+      $$('.game-card').forEach(card => {
+        card.addEventListener('pointermove', event => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+          card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+        });
+        card.addEventListener('click', event => {
+          if (event.target.closest('a,button')) return;
+          card.classList.toggle('preview-on');
+        });
+      });
+    }
+
+    function openDetails(id) {
+      const game = gameData.find(g => slugify(g.title) === id);
+      if (!game) return;
+      const drawer = $('#drawer');
+      drawer.innerHTML = `
+        <div class="detail-hero" style="--art1:${game.art1};--art2:${game.art2}">
+          <button class="drawer-close" type="button" aria-label="Close details">×</button>
+          <div class="cover-art">
+            <div class="cover-symbol">${game.symbol}</div>
+            <div class="cover-title" id="drawerTitle">${game.title}</div>
+            <div class="cover-footer"><span>${game.platforms.join(' / ')}</span><span>${game.types.join(' / ')}</span></div>
+          </div>
+          <div class="preview-layer" style="opacity:.85"></div>
+        </div>
+        <div class="detail-content">
+          <div>
+            <h3>${game.title}</h3>
+            <p class="section-desc">${game.short}</p>
+            <div class="badges" style="margin-top:12px">${freeBadge(game)}<span class="badge">${game.players} players</span><span class="badge">${paywallLabel(game)} monetization</span></div>
+          </div>
+          <div class="detail-grid">
+            <div class="info-panel">
+              <h4>Basement notes</h4>
+              <p>This listing is part of the starter shelf. Before making this public, verify the official page, current free access, account requirements, download requirements, and monetization details.</p>
+              <p><strong>Tags:</strong> ${game.tags.join(', ')}</p>
+            </div>
+            <div class="info-panel">
+              <h4>Quick facts</h4>
+              <ul>
+                <li>Platforms: ${game.platforms.join(', ')}</li>
+                <li>Types: ${game.types.join(', ')}</li>
+                <li>No download: ${game.noDownload ? 'Yes' : 'No'}</li>
+                <li>No account: ${game.noAccount ? 'Yes' : 'No'}</li>
+                <li>Family browse candidate: ${game.family ? 'Yes' : 'No / review first'}</li>
+              </ul>
+              <p><a class="primary-btn" href="${game.url}" target="_blank" rel="noopener" style="display:inline-block;margin-top:12px">Open official page</a></p>
+            </div>
+          </div>
+        </div>`;
+      $('#drawerBackdrop').classList.add('open');
+      $('.drawer-close', drawer).addEventListener('click', closeDetails);
+    }
+
+    function closeDetails() { $('#drawerBackdrop').classList.remove('open'); }
+
+    function renderSubmissions() {
+      const submissions = JSON.parse(localStorage.getItem('eddiesBasementSubmissions') || '[]');
+      $('#submissionList').innerHTML = submissions.length ? `
+        <div class="info-panel"><h4>Saved suggestions</h4><ul>${submissions.map(s => `<li><strong>${s.name}</strong> — ${s.platform} / ${s.type}<br><small>${s.url}</small></li>`).join('')}</ul></div>
+      ` : '';
+    }
+
+    function init() {
+      renderFilters();
+      renderGames();
+      renderSubmissions();
+
+      $('#searchInput').addEventListener('input', e => { state.query = e.target.value; renderGames(); });
+      $('#clearBtn').addEventListener('click', () => { state.query = ''; state.activeFilters.clear(); $('#searchInput').value = ''; renderFilters(); renderGames(); });
+      $('#filterChips').addEventListener('click', e => {
+        const btn = e.target.closest('[data-filter]');
+        if (!btn) return;
+        const key = btn.dataset.filter;
+        state.activeFilters.has(key) ? state.activeFilters.delete(key) : state.activeFilters.add(key);
+        renderFilters(); renderGames();
+      });
+      $('#sortSelect').addEventListener('change', e => { state.sort = e.target.value; renderGames(); });
+      $$('.view-toggle button').forEach(btn => btn.addEventListener('click', () => {
+        state.view = btn.dataset.view;
+        $$('.view-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+        renderGames();
+      }));
+      $('#familyBtn').addEventListener('click', () => {
+        state.family = !state.family;
+        $('#familyBtn').textContent = `Family Browse: ${state.family ? 'On' : 'Off'}`;
+        renderGames();
+      });
+      $('#huntWebBtn').addEventListener('click', () => {
+        const q = $('#huntInput').value.trim() || 'free multiplayer browser games no download official';
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(q + ' free multiplayer game official no subscription')}`, '_blank', 'noopener');
+      });
+      $('#huntItchBtn').addEventListener('click', () => {
+        const q = $('#huntInput').value.trim() || 'multiplayer free browser';
+        window.open(`https://itch.io/search?q=${encodeURIComponent(q)}`, '_blank', 'noopener');
+      });
+      $('#submitForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const submissions = JSON.parse(localStorage.getItem('eddiesBasementSubmissions') || '[]');
+        submissions.unshift({
+          name: $('#gameName').value.trim(),
+          url: $('#gameUrl').value.trim(),
+          platform: $('#gamePlatform').value,
+          type: $('#gameType').value,
+          notes: $('#gameNotes').value.trim(),
+          createdAt: new Date().toISOString()
+        });
+        localStorage.setItem('eddiesBasementSubmissions', JSON.stringify(submissions));
+        e.target.reset();
+        renderSubmissions();
+      });
+      $('#drawerBackdrop').addEventListener('click', e => { if (e.target.id === 'drawerBackdrop') closeDetails(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetails(); });
+    }
+
+    init();
+  </script>
+</body>
+</html>
