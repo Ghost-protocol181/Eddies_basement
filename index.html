@@ -9,406 +9,69 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#05070d;
-      --bg2:#0a0e18;
-      --panel:#0f1421;
-      --panel2:#151b2b;
-      --line:rgba(255,255,255,.12);
-      --text:#f6f8ff;
-      --muted:#98a2b3;
-      --soft:#c7d0e1;
-      --cyan:#38d7ff;
-      --pink:#ff3df2;
-      --lime:#8fff45;
-      --yellow:#ffd36b;
-      --orange:#ff8a35;
-      --red:#ff4b67;
-      --purple:#8f6bff;
-      --good:#54f59d;
-      --warn:#ffd36b;
-      --bad:#ff5b6e;
-      --r:24px;
-      --max:1440px;
-      --shadow:0 24px 80px rgba(0,0,0,.48);
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      background:
-        radial-gradient(circle at 14% -5%, rgba(56,215,255,.22), transparent 30%),
-        radial-gradient(circle at 86% 8%, rgba(255,61,242,.18), transparent 28%),
-        radial-gradient(circle at 50% 110%, rgba(143,107,255,.22), transparent 38%),
-        linear-gradient(180deg,#05070d 0%,#090d17 48%,#05070d 100%);
-      color:var(--text);
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
-      min-height:100vh;
-    }
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      opacity:.18;
-      background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
-      background-size:42px 42px;
-      mask-image:linear-gradient(180deg,rgba(0,0,0,.75),transparent 70%);
-    }
-    a{color:inherit;text-decoration:none}
-    button,input,select,textarea{font:inherit}
-    button{cursor:pointer}
-    .wrap{width:min(var(--max),calc(100% - 32px));margin:auto}
-    .topbar{
-      position:sticky;top:0;z-index:50;
-      border-bottom:1px solid var(--line);
-      background:rgba(5,7,13,.76);
-      backdrop-filter:blur(18px);
-    }
-    .nav{height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:12px;min-width:220px}
-    .mark{
-      width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
-      color:#071019;font:900 18px/1 Orbitron,Inter,sans-serif;
-      background:linear-gradient(135deg,var(--cyan),var(--lime));
-      box-shadow:0 0 30px rgba(56,215,255,.32);
-    }
-    .brand strong{display:block;font-size:18px;letter-spacing:-.04em}
-    .brand span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
-    .nav-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .pillbtn,.ghostbtn{
-      border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:rgba(255,255,255,.06);color:var(--soft);font-size:13px;font-weight:700;
-    }
-    .pillbtn:hover,.ghostbtn:hover{border-color:rgba(56,215,255,.55);color:#fff;background:rgba(56,215,255,.10)}
-    .hero{padding:38px 0 18px}
-    .hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:stretch}
-    .hero-card,.spotlight{
-      border:1px solid var(--line);border-radius:32px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));box-shadow:var(--shadow);overflow:hidden;position:relative;
-    }
-    .hero-card{padding:clamp(24px,4vw,46px)}
-    .hero-card::after{content:"";position:absolute;inset:auto -18% -40% 20%;height:280px;background:radial-gradient(circle,rgba(56,215,255,.18),transparent 62%);pointer-events:none}
-    .label{display:inline-flex;gap:8px;align-items:center;color:var(--cyan);font-size:12px;text-transform:uppercase;font-weight:900;letter-spacing:.14em}
-    .label::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 20px var(--lime)}
-    h1{margin:18px 0 14px;font-size:clamp(46px,8vw,96px);line-height:.86;letter-spacing:-.085em;max-width:760px}
-    .accent{background:linear-gradient(135deg,#fff,var(--cyan) 45%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .hero p{font-size:clamp(16px,2vw,21px);line-height:1.48;color:#d4dbea;margin:0 0 24px;max-width:690px}
-    .searchbox{border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(0,0,0,.28);padding:14px;display:grid;gap:12px;position:relative;z-index:2}
-    .searchrow{display:grid;grid-template-columns:1fr auto;gap:10px}
-    .searchrow input{min-width:0;width:100%;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.08);color:#fff;padding:16px 16px;outline:0;font-weight:700}
-    .searchrow input:focus{border-color:rgba(56,215,255,.72);box-shadow:0 0 0 5px rgba(56,215,255,.12)}
-    .clear{border:0;border-radius:16px;padding:0 18px;color:#071019;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--lime))}
-    .chips{display:flex;flex-wrap:wrap;gap:9px}
-    .chip{border:1px solid var(--line);background:rgba(255,255,255,.055);color:#c8d1e2;border-radius:999px;padding:9px 12px;font-size:12px;font-weight:800}
-    .chip.active{border-color:transparent;background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;box-shadow:0 0 26px rgba(56,215,255,.22)}
-    .spotlight{min-height:510px;padding:20px;display:grid;grid-template-rows:auto 1fr auto;gap:14px}
-    .spot-top{display:flex;justify-content:space-between;align-items:center;color:#f6f8ff;font-weight:900;letter-spacing:-.02em}
-    .spot-sub{color:var(--muted);font-size:13px;font-weight:700}
-    .hero-covers{display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:14px;min-height:340px}
-    .big-cover,.mini-cover{
-      border-radius:24px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.14);background:#101624;min-height:180px;box-shadow:0 20px 55px rgba(0,0,0,.38)
-    }
-    .big-cover{grid-row:span 2}
-    .media-img{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.02);transition:transform .3s ease,filter .3s ease}
-    .big-cover:hover .media-img,.mini-cover:hover .media-img,.game:hover .poster{transform:scale(1.07)}
-    .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.82))}
-    .cover-copy{position:absolute;left:16px;right:16px;bottom:16px;z-index:2}
-    .cover-copy b{display:block;font-size:clamp(20px,2.8vw,34px);line-height:1;letter-spacing:-.06em}
-    .cover-copy span{display:block;color:#d4dbea;font-size:12px;font-weight:800;margin-top:6px}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .stat{border:1px solid var(--line);background:rgba(255,255,255,.055);border-radius:18px;padding:12px}
-    .stat b{display:block;font-size:20px;letter-spacing:-.05em}.stat span{color:var(--muted);font-size:12px;font-weight:700}
-    .section{padding:28px 0}.head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:16px}
-    h2{margin:0;font-size:clamp(28px,4vw,48px);letter-spacing:-.065em}.sub{color:var(--muted);font-size:14px;margin-top:5px;font-weight:600}.count{color:var(--cyan);font-weight:900}
-    .toolbar{display:grid;grid-template-columns:1fr auto auto;gap:10px;margin-bottom:16px}
-    select,.family{border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;border-radius:16px;padding:12px 14px;font-weight:800;min-width:0}
-    .views{display:flex;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.055)}
-    .views button{border:0;background:transparent;color:var(--muted);padding:12px 14px;font-weight:900}
-    .views button.active{background:rgba(56,215,255,.16);color:var(--cyan)}
-    .game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px}
-    .game-grid.shelf{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-    .game-grid.list{display:grid;grid-template-columns:1fr;gap:12px}
-    .game{
-      border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.28);position:relative;transition:.22s ease;
-    }
-    .game:hover{transform:translateY(-7px);border-color:rgba(56,215,255,.55);box-shadow:0 30px 70px rgba(0,0,0,.42),0 0 30px rgba(56,215,255,.12)}
-    .poster-wrap{height:128px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--a),var(--b))}
-    .shelf .poster-wrap{height:305px}.list .game{display:grid;grid-template-columns:220px 1fr}.list .poster-wrap{height:100%;min-height:146px}
-    .poster{position:absolute;inset:0;background-size:cover;background-position:center;transition:.25s ease}
-    .poster.fallback{display:grid;place-items:end start;padding:18px;background:linear-gradient(135deg,var(--a),var(--b));font:900 30px/.9 Orbitron,Inter,sans-serif;text-shadow:0 5px 22px rgba(0,0,0,.45)}
-    .poster.fallback::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 20%,rgba(255,255,255,.28),transparent 18%),linear-gradient(135deg,rgba(255,255,255,.14),rgba(0,0,0,.24))}
-    .poster.fallback span{position:relative;max-width:90%}
-    .tagline{position:absolute;left:12px;top:12px;z-index:3;display:flex;gap:6px;flex-wrap:wrap}.badge{border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.54);backdrop-filter:blur(10px);border-radius:999px;padding:6px 8px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}.badge.free{color:#0e1b13;background:linear-gradient(135deg,var(--good),var(--lime));border:0}.badge.browser{color:#071019;background:linear-gradient(135deg,var(--cyan),#9ff3ff);border:0}.badge.warn{color:#201503;background:linear-gradient(135deg,var(--warn),var(--orange));border:0}
-    .playdot{position:absolute;right:12px;bottom:12px;z-index:3;width:48px;height:48px;border-radius:50%;border:0;background:linear-gradient(135deg,var(--cyan),var(--pink));color:#fff;font-size:20px;font-weight:900;display:grid;place-items:center;box-shadow:0 14px 38px rgba(56,215,255,.28)}
-    .info{padding:14px}.titleline{display:flex;justify-content:space-between;gap:10px;align-items:start}.titleline h3{margin:0;font-size:18px;letter-spacing:-.045em}.score{color:var(--cyan);font-weight:900;font-size:13px}.desc{color:#b8c2d6;font-size:13px;line-height:1.38;margin:7px 0 12px}.meta{display:flex;gap:8px;flex-wrap:wrap;color:#9eabc0;font-size:11px;font-weight:800}.meta span{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.045);border-radius:999px;padding:6px 8px}.actions{display:flex;gap:8px;margin-top:13px}.actions button,.actions a{flex:1;text-align:center;border:1px solid var(--line);border-radius:13px;padding:10px 8px;background:rgba(255,255,255,.06);font-size:12px;font-weight:900;color:#fff}.actions .play{border:0;color:#071019;background:linear-gradient(135deg,var(--cyan),var(--lime))}
-    .webhunt{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px;align-items:start}.hunt-card,.submit-card,.notes{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));box-shadow:var(--shadow);padding:22px}.hunt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}.hunt{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.06);color:#fff;padding:14px;text-align:left;font-weight:900}.hunt span{display:block;color:var(--muted);font-size:12px;font-weight:700;margin-top:4px}
-    .formgrid{display:grid;gap:10px}.field{display:grid;gap:6px}.field label{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.06em}.field input,.field textarea{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.07);color:white;border-radius:14px;padding:13px;outline:0}.field textarea{min-height:88px;resize:vertical}.saved{margin-top:14px;color:var(--muted);font-size:13px;line-height:1.4}
-    footer{padding:34px 0 50px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:28px}.footergrid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-    .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.72);backdrop-filter:blur(14px)}.modal.open{display:flex}.modal-card{width:min(980px,100%);max-height:90vh;overflow:auto;border:1px solid var(--line);border-radius:30px;background:#0a0f1c;box-shadow:0 40px 120px rgba(0,0,0,.7)}.modal-hero{height:330px;position:relative;background:#111827}.modal-hero .poster{transform:none}.modal-body{padding:22px}.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:start}.modal h3{margin:0;font-size:clamp(30px,5vw,56px);letter-spacing:-.08em}.close{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;width:42px;height:42px;font-weight:900}.detail-grid{display:grid;grid-template-columns:1fr 260px;gap:18px;margin-top:16px}.detail-box{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.045);padding:15px}.detail-box b{display:block;margin-bottom:8px}.detail-box p{margin:0;color:#c7d0e1;line-height:1.45}.detail-list{display:grid;gap:8px;color:#c7d0e1;font-size:14px}.detail-list div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:8px}.detail-list span{color:var(--muted)}
-    .empty{border:1px dashed rgba(255,255,255,.22);border-radius:24px;padding:34px;text-align:center;color:var(--muted)}
-    @media (max-width:900px){.hero-grid,.webhunt,.detail-grid{grid-template-columns:1fr}.spotlight{min-height:auto}.hero-covers{min-height:360px}.toolbar{grid-template-columns:1fr}.list .game{grid-template-columns:130px 1fr}.list .poster-wrap{min-height:170px}.nav{height:auto;padding:12px 0;align-items:flex-start}.nav-actions{display:none}.brand{min-width:0}.spotlight{display:none}}
-    @media (max-width:560px){.wrap{width:min(100% - 22px,var(--max))}.hero{padding-top:22px}.searchrow{grid-template-columns:1fr}.game-grid,.game-grid.shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.shelf .poster-wrap,.poster-wrap{height:190px}.info{padding:10px}.titleline h3{font-size:15px}.desc{display:none}.actions{display:none}.meta span{font-size:10px;padding:5px 6px}.badge{font-size:9px}.playdot{width:38px;height:38px}.hero h1{font-size:49px}.hero p{font-size:16px}.chips{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}.chip{white-space:nowrap}.stats{grid-template-columns:1fr}.modal-hero{height:240px}}
+    :root{--bg:#05070d;--panel:#0f1421;--panel2:#151b2b;--line:rgba(255,255,255,.13);--text:#f6f8ff;--muted:#98a2b3;--soft:#c7d0e1;--cyan:#38d7ff;--lime:#8fff45;--yellow:#ffd36b;--orange:#ff8a35;--red:#ff4b67;--max:1440px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 8% 8%,rgba(56,215,255,.20),transparent 24%),radial-gradient(circle at 90% 0%,rgba(255,138,53,.24),transparent 24%),radial-gradient(circle at 56% 28%,rgba(143,255,69,.10),transparent 22%),linear-gradient(180deg,#05070d 0%,#0b0f19 45%,#05070d 100%)}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px);background-size:100% 3px;mix-blend-mode:screen}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}.wrap{width:min(var(--max),calc(100% - 32px));margin:0 auto}
+    .site-header{position:sticky;top:0;z-index:40;background:rgba(5,7,13,.84);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.nav{min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;min-width:0}.brand-logo-small{height:54px;width:min(330px,50vw);object-fit:contain;object-position:left center;filter:drop-shadow(0 0 18px rgba(255,138,53,.22))}.nav-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}.pill{border:1px solid var(--line);background:rgba(255,255,255,.055);color:#e7edff;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:800}.pill:hover,.pill.active{border-color:rgba(255,138,53,.72);background:rgba(255,138,53,.13);color:#fff}
+    .hero{padding:34px 0 16px}.hero-panel{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(320px,.96fr);gap:26px;align-items:center;border:1px solid var(--line);border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 34px 100px rgba(0,0,0,.42);overflow:hidden}.hero-copy{padding:clamp(24px,4vw,48px)}.kicker{display:inline-flex;color:var(--orange);font-family:Orbitron,sans-serif;font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}h1{font-family:Orbitron,sans-serif;margin:14px 0 10px;font-size:clamp(38px,6vw,82px);line-height:.92;letter-spacing:-.06em;text-transform:uppercase;text-shadow:0 0 20px rgba(56,215,255,.18)}.hero-copy p{margin:0;color:var(--soft);font-size:clamp(16px,2vw,20px);line-height:1.5;max-width:700px}.hero-logo-stage{min-height:330px;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 45%,rgba(255,138,53,.22),transparent 32%),radial-gradient(circle at 30% 75%,rgba(56,215,255,.14),transparent 28%),rgba(0,0,0,.16)}.hero-logo{width:100%;max-width:760px;height:auto;object-fit:contain;filter:drop-shadow(0 22px 30px rgba(0,0,0,.42))}
+    .search-panel{margin-top:22px;display:grid;gap:14px;padding:15px;border:1px solid rgba(255,138,53,.32);border-radius:22px;background:rgba(0,0,0,.25)}.search-row{display:grid;grid-template-columns:1fr auto;gap:10px}input,select,textarea{border:1px solid var(--line);background:rgba(255,255,255,.075);color:#fff;border-radius:15px;padding:14px 15px;outline:none}input:focus,select:focus,textarea:focus{border-color:rgba(56,215,255,.75);box-shadow:0 0 0 4px rgba(56,215,255,.12)}.primary{border:0;border-radius:15px;padding:13px 20px;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#120a03;font-weight:900;box-shadow:0 12px 34px rgba(255,138,53,.25)}.chips{display:flex;gap:9px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:rgba(255,255,255,.055);color:var(--soft);border-radius:999px;padding:9px 12px;font-size:13px;font-weight:800}.chip.active{color:#071006;background:linear-gradient(135deg,var(--lime),#d7ff6c);border-color:transparent}
+    .asset-note{display:flex;gap:12px;align-items:center;border:1px solid rgba(255,138,53,.25);border-radius:18px;padding:13px;background:rgba(255,138,53,.07);color:#f0d1bd;margin-top:16px}.asset-note img{width:56px;height:74px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.14)}.section{padding:28px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:14px}.section h2{font-family:Orbitron,sans-serif;margin:0;font-size:clamp(24px,3vw,38px);letter-spacing:-.04em;text-transform:uppercase}.hint{margin:5px 0 0;color:var(--muted);line-height:1.45}.count{color:var(--orange);font-weight:900}.toolbar{display:grid;grid-template-columns:1fr auto auto;gap:12px;margin:16px 0 20px}.toggle{display:flex;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04)}.toggle button{border:0;background:transparent;color:var(--muted);padding:12px 14px;font-weight:800}.toggle button.active{background:rgba(255,138,53,.16);color:var(--orange)}
+    .games.shelf{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px,292px);gap:18px;overflow-x:auto;padding:10px 0 26px;scroll-snap-type:x mandatory;scrollbar-color:rgba(255,138,53,.55) rgba(255,255,255,.05)}.games.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}.games.list{display:grid;gap:12px}.game-card{scroll-snap-align:start;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.025));overflow:hidden;box-shadow:0 20px 55px rgba(0,0,0,.28);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;position:relative}.game-card:hover{transform:translateY(-6px);border-color:rgba(255,138,53,.70);box-shadow:0 30px 70px rgba(0,0,0,.42)}.games.list .game-card{display:grid;grid-template-columns:210px 1fr;min-height:155px}.poster{height:330px;position:relative;overflow:hidden;background:#090d16}.games.grid .poster{height:300px}.games.list .poster{height:100%;min-height:155px}.game-image{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.12) contrast(1.04)}.game-image.fallback{object-fit:cover}.poster:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.76) 100%);pointer-events:none}.badges{position:absolute;left:12px;right:12px;top:12px;display:flex;gap:7px;flex-wrap:wrap;z-index:2}.badge{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 8px;background:rgba(0,0,0,.52);backdrop-filter:blur(10px);color:#fff}.badge.green{color:#132004;background:linear-gradient(135deg,var(--lime),#e2ff7b);border:0}.badge.orange{color:#160b02;background:linear-gradient(135deg,var(--orange),var(--yellow));border:0}.poster-title{position:absolute;left:14px;right:14px;bottom:12px;z-index:2}.poster-title h3{margin:0;font-family:Orbitron,sans-serif;font-size:22px;line-height:1;letter-spacing:-.04em;text-shadow:0 3px 15px rgba(0,0,0,.9)}.meta-line{margin-top:7px;color:#d7deed;font-size:12px;font-weight:800}.card-body{padding:14px}.game-title{margin:0 0 7px;font-size:18px;line-height:1.08;font-weight:900}.genre{color:var(--soft);font-size:13px;line-height:1.35;margin-bottom:12px}.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.stat{border:1px solid rgba(255,255,255,.10);border-radius:13px;background:rgba(0,0,0,.20);padding:9px}.stat b{display:block;color:#fff;font-size:12px}.stat span{display:block;color:var(--muted);font-size:11px;margin-top:2px}.actions{display:flex;gap:8px;align-items:center}.btn{border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.06);color:#fff;font-weight:900;padding:10px 12px;font-size:13px}.btn.play{border:0;background:linear-gradient(135deg,var(--cyan),#62ffcb);color:#061013}.btn:hover{filter:brightness(1.08)}.empty{display:none;border:1px dashed rgba(255,255,255,.22);border-radius:24px;padding:40px;text-align:center;color:var(--muted);background:rgba(255,255,255,.035)}
+    .modal{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:20px;background:rgba(0,0,0,.72);backdrop-filter:blur(12px)}.modal.open{display:grid}.modal-card{width:min(960px,100%);max-height:92vh;overflow:auto;border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,#11192b,#080b13);box-shadow:0 34px 120px rgba(0,0,0,.6)}.modal-hero{height:340px;position:relative;overflow:hidden}.modal-hero img{width:100%;height:100%;object-fit:cover}.modal-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),#11192b)}.modal-content{padding:22px;display:grid;gap:14px}.modal-title{display:flex;justify-content:space-between;gap:12px;align-items:start}.modal-title h2{font-family:Orbitron,sans-serif;margin:0;font-size:32px;line-height:1}.close{border:1px solid var(--line);background:rgba(255,255,255,.06);color:white;border-radius:12px;padding:9px 12px;font-weight:900}.submit-panel{border:1px solid var(--line);border-radius:26px;background:rgba(255,255,255,.04);padding:20px;display:grid;gap:12px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .wide{grid-column:1/-1}textarea{width:100%;min-height:100px;resize:vertical}footer{padding:34px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:30px;font-size:13px}
+    @media(max-width:900px){.hero-panel{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.games.list .game-card{grid-template-columns:140px 1fr}.poster{height:310px}.nav{align-items:flex-start;flex-direction:column;padding:14px 0}.nav-actions{justify-content:flex-start}}@media(max-width:560px){.wrap{width:min(100% - 22px,var(--max))}.search-row{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.games.shelf{grid-auto-columns:minmax(230px,82vw)}.games.list .game-card{grid-template-columns:1fr}.games.list .poster{height:240px}.brand-logo-small{width:100%;height:auto;max-height:66px}.hero-copy{padding:22px}h1{font-size:38px}.modal-hero{height:240px}}
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="wrap nav">
-      <a class="brand" href="#top" aria-label="Eddie's Basement home">
-        <div class="mark">EB</div>
-        <div><strong>Eddie's Basement</strong><span>Free multiplayer game finder</span></div>
-      </a>
-      <nav class="nav-actions" aria-label="Main navigation">
-        <a class="pillbtn" href="#games">Games</a>
-        <a class="pillbtn" href="#webhunt">Web Hunt</a>
-        <a class="pillbtn" href="#submit">Submit</a>
-      </nav>
-    </div>
-  </header>
-
+  <header class="site-header"><div class="wrap nav"><a class="brand" href="#top" aria-label="Eddie's Basement home"><img class="brand-logo-small" src="assets/eddies-basement-logo.svg" alt="Eddie's Basement logo"></a><nav class="nav-actions" aria-label="Main navigation"><a class="pill" href="#games">Games</a><a class="pill" href="#webhunt">Web Hunt</a><a class="pill" href="#submit">Submit</a><button class="pill" id="randomBtn" type="button">Random Pick</button></nav></div></header>
   <main id="top">
-    <section class="hero wrap">
-      <div class="hero-grid">
-        <div class="hero-card">
-          <span class="label">Free games. Fast picks.</span>
-          <h1>Find the next <span class="accent">squad game.</span></h1>
-          <p>Search free multiplayer games by vibe, platform, setup time, player count, and how annoying the monetization looks.</p>
-          <div class="searchbox">
-            <div class="searchrow">
-              <input id="search" autocomplete="off" placeholder="Search Fortnite, racing, browser, horror, party..." />
-              <button class="clear" id="clearBtn">Clear</button>
-            </div>
-            <div class="chips" id="chips"></div>
-          </div>
-        </div>
-        <aside class="spotlight" aria-label="Featured games">
-          <div class="spot-top"><div>Tonight's shelf</div><div class="spot-sub">recognizable picks first</div></div>
-          <div class="hero-covers" id="heroCovers"></div>
-          <div class="stats">
-            <div class="stat"><b id="statGames">0</b><span>games loaded</span></div>
-            <div class="stat"><b id="statBrowser">0</b><span>browser picks</span></div>
-            <div class="stat"><b id="statLow">0</b><span>low-friction picks</span></div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section wrap" id="games">
-      <div class="head">
-        <div><h2>Game shelf</h2><div class="sub">Big images, clear names, quick filters. No fake app-store maze.</div></div>
-        <div class="count" id="count"></div>
-      </div>
-      <div class="toolbar">
-        <select id="sort" aria-label="Sort games">
-          <option value="hype">Sort: most likely to get picked</option>
-          <option value="instant">Sort: easiest to start</option>
-          <option value="players">Sort: biggest player count</option>
-          <option value="az">Sort: A to Z</option>
-        </select>
-        <div class="views" aria-label="View options">
-          <button data-view="shelf" class="active">Shelf</button>
-          <button data-view="grid">Grid</button>
-          <button data-view="list">List</button>
-        </div>
-        <button class="family" id="familyBtn">Quick Start: Off</button>
-      </div>
-      <div class="game-grid shelf" id="gameGrid"></div>
-    </section>
-
-    <section class="section wrap" id="webhunt">
-      <div class="webhunt">
-        <div class="hunt-card">
-          <span class="label">Web Hunt</span>
-          <h2>Search smarter.</h2>
-          <p class="sub">This single HTML file cannot crawl the whole internet by itself, so these buttons open targeted searches for legitimate free multiplayer games.</p>
-          <div class="hunt-grid" id="hunts"></div>
-        </div>
-        <div class="notes">
-          <h2>What this should become</h2>
-          <p class="sub">Codex can turn this into a real database later: official source adapters, verified media, API refreshes, review queue, and a proper backend. For now, this is the clean visual MVP.</p>
-          <div class="detail-box" style="margin-top:14px"><b>Design rule</b><p>Lead with the actual game. Big title. Big art. Clear platform. Clear cost. Less cute copy. More confidence.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section wrap" id="submit">
-      <div class="submit-card">
-        <span class="label">Add a find</span>
-        <h2>Submit a game</h2>
-        <p class="sub">Saved in your browser for now. A future version can send these into an admin review queue.</p>
-        <form class="formgrid" id="submitForm">
-          <div class="field"><label for="gameName">Game name</label><input id="gameName" required placeholder="Example: Shell Shockers" /></div>
-          <div class="field"><label for="gameUrl">Official link</label><input id="gameUrl" type="url" placeholder="https://..." /></div>
-          <div class="field"><label for="gameNotes">Why it belongs here</label><textarea id="gameNotes" placeholder="Free? Browser? Co-op? Party? Any monetization warning?"></textarea></div>
-          <button class="clear" style="height:50px" type="submit">Save suggestion</button>
-        </form>
-        <div class="saved" id="savedList"></div>
-      </div>
-    </section>
+    <section class="hero wrap"><div class="hero-panel"><div class="hero-copy"><span class="kicker">Free multiplayer game finder</span><h1>Find the next squad game.</h1><p>Browse free multiplayer games fast. Big art, clear setup, no buried “wait, this costs money?” surprises.</p><div class="search-panel"><div class="search-row"><input id="search" type="search" placeholder="Search shooter, party, browser, co-op, Roblox, Fortnite..." autocomplete="off"><button class="primary" id="clearBtn" type="button">Clear</button></div><div class="chips" id="chips"></div></div><div class="asset-note"><img src="assets/image-coming-soon.svg" alt="Eddie's Basement image coming soon placeholder"><div><b>Image fail-safe is on.</b><br>Missing or broken game art automatically swaps to the Eddie’s Basement cover.</div></div></div><div class="hero-logo-stage"><img class="hero-logo" src="assets/eddies-basement-logo.svg" alt="Eddie's Basement retro gamer logo"></div></div></section>
+    <section class="section wrap" id="games"><div class="section-head"><div><h2>Game Shelf</h2><p class="hint">Image-first browsing. Click Details for the full read before jumping in.</p></div><div class="count" id="count"></div></div><div class="toolbar"><select id="sort" aria-label="Sort games"><option value="eddie">Sort: Eddie's shelf order</option><option value="low">Low friction first</option><option value="browser">Browser / no download first</option><option value="az">A–Z</option></select><div class="toggle" aria-label="View mode"><button type="button" class="active" data-view="shelf">Shelf</button><button type="button" data-view="grid">Grid</button><button type="button" data-view="list">List</button></div><button class="pill" id="familyBtn" type="button">Quick Group: Off</button></div><div class="games shelf" id="gamesGrid"></div><div class="empty" id="emptyState">Nothing matched. Clear filters or try “party,” “browser,” “shooter,” or “co-op.”</div></section>
+    <section class="section wrap" id="webhunt"><div class="section-head"><div><h2>Web Hunt</h2><p class="hint">Use these to find more candidates, then add the good ones to the shelf.</p></div></div><div class="chips"><a class="chip" target="_blank" rel="noopener" href="https://www.google.com/search?q=best+free+multiplayer+browser+games">Free browser multiplayer</a><a class="chip" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+party+games+to+play+with+friends+online">Free party games</a><a class="chip" target="_blank" rel="noopener" href="https://www.google.com/search?q=best+free+co-op+games+PC">Free co-op games</a><a class="chip" target="_blank" rel="noopener" href="https://www.google.com/search?q=free+crossplay+multiplayer+games">Free crossplay games</a></div></section>
+    <section class="section wrap" id="submit"><div class="section-head"><div><h2>Submit a Game</h2><p class="hint">This saves suggestions in your browser for now. Later Codex can wire it to a real database.</p></div></div><form class="submit-panel" id="submitForm"><div class="form-grid"><input required name="title" placeholder="Game name"><input required name="url" placeholder="Official URL"><input name="genre" placeholder="Genre"><input name="platforms" placeholder="Platforms, comma separated"><textarea class="wide" name="notes" placeholder="Why it belongs in Eddie's Basement. Is it actually free? Does it need a download?"></textarea></div><button class="primary" type="submit">Save Suggestion</button></form></section>
   </main>
-
-  <footer>
-    <div class="wrap footergrid">
-      <div><b>Eddie's Basement</b><br />Prototype single-file HTML5 game finder.</div>
-      <div>Use official links. Verify free status. Avoid shady downloads, piracy, and fake installers.</div>
-    </div>
-  </footer>
-
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Game details">
-    <div class="modal-card">
-      <div class="modal-hero"><div class="poster" id="modalPoster"></div><div class="shade"></div></div>
-      <div class="modal-body">
-        <div class="modal-head"><div><h3 id="modalTitle"></h3><div class="sub" id="modalSubtitle"></div></div><button class="close" id="closeModal">×</button></div>
-        <div class="detail-grid">
-          <div class="detail-box"><b>Why it might work</b><p id="modalDesc"></p><div class="actions" style="margin-top:16px"><a class="play" id="modalPlay" target="_blank" rel="noopener">Official page</a><button id="modalSearch">Search web</button></div></div>
-          <div class="detail-box"><b>Quick facts</b><div class="detail-list" id="modalFacts"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<script>
-/*
-  Eddie's Basement single-file MVP.
-  Media links below are prototype references for visual testing. Production should store approved/cached images,
-  verify official source rights, and keep free-to-play status checked regularly.
-*/
-const games = [
-  {title:'Fortnite', vibe:'battle royale, creative, squads', genre:['Shooter','Battle Royale','Creative'], platform:['PC','Console','Mobile'], players:'1-100', browser:false, noDownload:false, account:true, lowPaywall:false, family:false, hype:100, status:'Free', monetization:'Cosmetics + battle pass', url:'https://www.fortnite.com/', image:'https://cdn2.unrealengine.com/keyart-chapter-5-season-4-3840x2160-418e1e9bcc7f.jpg', a:'#2ad7ff', b:'#7c3cff'},
-  {title:'Roblox', vibe:'huge library of free social games', genre:['Sandbox','Social','Party'], platform:['PC','Console','Mobile'], players:'1-100+', browser:false, noDownload:false, account:true, lowPaywall:false, family:false, hype:98, status:'Free', monetization:'Robux marketplace', url:'https://www.roblox.com/', image:'', a:'#1e293b', b:'#ef4444'},
-  {title:'Rocket League', vibe:'cars, soccer, ranked, casual', genre:['Sports','Racing','Competitive'], platform:['PC','Console'], players:'1-8', browser:false, noDownload:false, account:true, lowPaywall:true, family:true, hype:96, status:'Free', monetization:'Cosmetics + passes', url:'https://www.rocketleague.com/', image:'https://cdn2.unrealengine.com/rl-free-to-play-keyart-1920x1080-1920x1080-88a364e43e7a.jpg', a:'#0099ff', b:'#ff7a18'},
-  {title:'Valorant', vibe:'tactical 5v5 shooter', genre:['Shooter','Competitive'], platform:['PC','Console'], players:'5v5', browser:false, noDownload:false, account:true, lowPaywall:true, family:false, hype:95, status:'Free', monetization:'Cosmetics', url:'https://playvalorant.com/', image:'https://cmsassets.rgpub.io/sanity/images/dsfx7636/news_live/0a30146078f0eec72f696b7f1f05005cad9cf9ff-1920x1080.jpg', a:'#ff4655', b:'#111827'},
-  {title:'Marvel Rivals', vibe:'hero shooter with friends', genre:['Shooter','Team','Superhero'], platform:['PC','Console'], players:'6v6', browser:false, noDownload:false, account:true, lowPaywall:true, family:false, hype:94, status:'Free', monetization:'Cosmetics + passes', url:'https://www.marvelrivals.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2767030/header.jpg', a:'#172554', b:'#dc2626'},
-  {title:'Brawlhalla', vibe:'free platform fighter', genre:['Fighting','Party','Competitive'], platform:['PC','Console','Mobile'], players:'1-8', browser:false, noDownload:false, account:false, lowPaywall:true, family:true, hype:92, status:'Free', monetization:'Cosmetics + characters', url:'https://www.brawlhalla.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/291550/header.jpg', a:'#0ea5e9', b:'#f97316'},
-  {title:'Fall Guys', vibe:'chaos obstacle party game', genre:['Party','Platformer','Casual'], platform:['PC','Console','Mobile'], players:'1-40', browser:false, noDownload:false, account:true, lowPaywall:true, family:true, hype:91, status:'Free', monetization:'Cosmetics + passes', url:'https://www.fallguys.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1097150/header.jpg', a:'#ff4fd8', b:'#1dd3ff'},
-  {title:'Warframe', vibe:'space ninja co-op grind', genre:['Co-op','Action','RPG'], platform:['PC','Console','Mobile'], players:'1-4 co-op', browser:false, noDownload:false, account:true, lowPaywall:false, family:false, hype:90, status:'Free', monetization:'Heavy optional grind/shop', url:'https://www.warframe.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/230410/header.jpg', a:'#64748b', b:'#06b6d4'},
-  {title:'Apex Legends', vibe:'squad battle royale', genre:['Shooter','Battle Royale'], platform:['PC','Console'], players:'1-60', browser:false, noDownload:false, account:true, lowPaywall:false, family:false, hype:88, status:'Free', monetization:'Cosmetics + passes', url:'https://www.ea.com/games/apex-legends', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1172470/header.jpg', a:'#dc2626', b:'#111827'},
-  {title:'The Finals', vibe:'destruction arena shooter', genre:['Shooter','Competitive','Team'], platform:['PC','Console'], players:'3v3v3+', browser:false, noDownload:false, account:true, lowPaywall:true, family:false, hype:87, status:'Free', monetization:'Cosmetics', url:'https://www.reachthefinals.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2073850/header.jpg', a:'#ef4444', b:'#facc15'},
-  {title:'Overwatch 2', vibe:'hero shooter with fast team fights', genre:['Shooter','Team','Competitive'], platform:['PC','Console'], players:'5v5', browser:false, noDownload:false, account:true, lowPaywall:false, family:false, hype:86, status:'Free', monetization:'Cosmetics + battle pass', url:'https://overwatch.blizzard.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2357570/header.jpg', a:'#f97316', b:'#2563eb'},
-  {title:'Counter-Strike 2', vibe:'classic tactical shooter', genre:['Shooter','Competitive'], platform:['PC'], players:'5v5', browser:false, noDownload:false, account:false, lowPaywall:true, family:false, hype:85, status:'Free', monetization:'Cosmetics/market', url:'https://store.steampowered.com/app/730/CounterStrike_2/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/header.jpg', a:'#334155', b:'#f59e0b'},
-  {title:'Dota 2', vibe:'deep 5v5 strategy', genre:['MOBA','Strategy','Competitive'], platform:['PC'], players:'5v5', browser:false, noDownload:false, account:false, lowPaywall:true, family:false, hype:82, status:'Free', monetization:'Cosmetics + battle pass', url:'https://www.dota2.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/570/header.jpg', a:'#991b1b', b:'#111827'},
-  {title:'League of Legends', vibe:'fast 5v5 MOBA', genre:['MOBA','Strategy','Competitive'], platform:['PC'], players:'5v5', browser:false, noDownload:false, account:true, lowPaywall:true, family:false, hype:84, status:'Free', monetization:'Cosmetics + champions', url:'https://www.leagueoflegends.com/', image:'https://cmsassets.rgpub.io/sanity/images/dsfx7636/news_live/907cf8fe38f88099d4df3be58a72b14ff2fbe0d6-1920x1080.jpg', a:'#0f766e', b:'#1e3a8a'},
-  {title:'PUBG: Battlegrounds', vibe:'military battle royale', genre:['Shooter','Battle Royale'], platform:['PC','Console','Mobile'], players:'1-100', browser:false, noDownload:false, account:true, lowPaywall:false, family:false, hype:80, status:'Free', monetization:'Cosmetics + passes', url:'https://pubg.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/578080/header.jpg', a:'#1f2937', b:'#f59e0b'},
-  {title:'Crab Game', vibe:'ridiculous free party chaos', genre:['Party','Casual','Competitive'], platform:['PC'], players:'2-35', browser:false, noDownload:false, account:false, lowPaywall:true, family:false, hype:78, status:'Free', monetization:'Light/unknown', url:'https://store.steampowered.com/app/1782210/Crab_Game/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1782210/header.jpg', a:'#ef4444', b:'#facc15'},
-  {title:'Goose Goose Duck', vibe:'social deduction with geese', genre:['Party','Social','Deduction'], platform:['PC','Mobile'], players:'5-16', browser:false, noDownload:false, account:true, lowPaywall:true, family:true, hype:77, status:'Free', monetization:'Cosmetics', url:'https://store.steampowered.com/app/1568590/Goose_Goose_Duck/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1568590/header.jpg', a:'#06b6d4', b:'#f97316'},
-  {title:'Stumble Guys', vibe:'mobile-friendly obstacle chaos', genre:['Party','Platformer','Casual'], platform:['PC','Console','Mobile'], players:'1-32', browser:false, noDownload:false, account:false, lowPaywall:false, family:true, hype:76, status:'Free', monetization:'In-app purchases', url:'https://www.stumbleguys.com/', image:'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1677740/header.jpg', a:'#a855f7', b:'#22c55e'},
-  {title:'Gartic Phone', vibe:'drawing telephone with friends', genre:['Party','Drawing','Browser'], platform:['Browser','Mobile'], players:'4-30', browser:true, noDownload:true, account:false, lowPaywall:true, family:true, hype:86, status:'Free', monetization:'Light/ads optional', url:'https://garticphone.com/', image:'', a:'#7c3aed', b:'#06b6d4'},
-  {title:'skribbl.io', vibe:'quick browser drawing guesses', genre:['Party','Drawing','Browser'], platform:['Browser'], players:'2-12', browser:true, noDownload:true, account:false, lowPaywall:true, family:true, hype:83, status:'Free', monetization:'Ads', url:'https://skribbl.io/', image:'', a:'#f97316', b:'#22c55e'},
-  {title:'Krunker', vibe:'fast browser FPS', genre:['Shooter','Browser','Competitive'], platform:['Browser','PC'], players:'2-16+', browser:true, noDownload:true, account:false, lowPaywall:false, family:false, hype:79, status:'Free', monetization:'Ads/shop', url:'https://krunker.io/', image:'', a:'#f59e0b', b:'#1f2937'},
-  {title:'Shell Shockers', vibe:'egg FPS in the browser', genre:['Shooter','Browser','Casual'], platform:['Browser'], players:'2-20+', browser:true, noDownload:true, account:false, lowPaywall:false, family:false, hype:74, status:'Free', monetization:'Ads/shop', url:'https://shellshock.io/', image:'', a:'#facc15', b:'#22c55e'},
-  {title:'Bloxd.io', vibe:'Minecraft-ish browser mini games', genre:['Sandbox','Browser','Casual'], platform:['Browser'], players:'2-100+', browser:true, noDownload:true, account:false, lowPaywall:false, family:true, hype:73, status:'Free', monetization:'Ads/shop', url:'https://bloxd.io/', image:'', a:'#22c55e', b:'#0ea5e9'},
-  {title:'Slither.io', vibe:'snake arena classic', genre:['Arcade','Browser','Casual'], platform:['Browser','Mobile'], players:'Massive lobby', browser:true, noDownload:true, account:false, lowPaywall:true, family:true, hype:72, status:'Free', monetization:'Ads', url:'https://slither.io/', image:'', a:'#22c55e', b:'#111827'},
-  {title:'Agar.io', vibe:'eat cells, grow huge', genre:['Arcade','Browser','Casual'], platform:['Browser','Mobile'], players:'Massive lobby', browser:true, noDownload:true, account:false, lowPaywall:false, family:true, hype:71, status:'Free', monetization:'Ads/IAP', url:'https://agar.io/', image:'', a:'#f43f5e', b:'#3b82f6'},
-  {title:'Codenames Online', vibe:'word game for groups', genre:['Party','Board Game','Browser'], platform:['Browser'], players:'4-8+', browser:true, noDownload:true, account:false, lowPaywall:true, family:true, hype:70, status:'Free', monetization:'None/light', url:'https://codenames.game/', image:'', a:'#111827', b:'#ef4444'},
-  {title:'Board Game Arena', vibe:'tons of board games online', genre:['Board Game','Strategy','Browser'], platform:['Browser','Mobile'], players:'2+', browser:true, noDownload:true, account:true, lowPaywall:false, family:true, hype:69, status:'Free tier', monetization:'Some premium tables/games', url:'https://boardgamearena.com/', image:'', a:'#1d4ed8', b:'#eab308'},
-  {title:'GeoGuessr Free Alternatives', vibe:'map guessing with friends', genre:['Browser','Trivia','Party'], platform:['Browser'], players:'2+', browser:true, noDownload:true, account:false, lowPaywall:false, family:true, hype:65, status:'Varies', monetization:'Verify source', url:'https://duckduckgo.com/?q=free+multiplayer+geoguessr+alternative', image:'', a:'#16a34a', b:'#0ea5e9'}
-];
-
-const filterDefs = [
-  {id:'browser', label:'Browser', test:g=>g.browser},
-  {id:'instant', label:'No download', test:g=>g.noDownload},
-  {id:'party', label:'Party', test:g=>g.genre.includes('Party')},
-  {id:'shooter', label:'Shooter', test:g=>g.genre.includes('Shooter')},
-  {id:'coop', label:'Co-op', test:g=>g.genre.includes('Co-op') || /co-op/i.test(g.vibe)},
-  {id:'racing', label:'Racing/Sports', test:g=>g.genre.includes('Racing') || g.genre.includes('Sports')},
-  {id:'competitive', label:'Competitive', test:g=>g.genre.includes('Competitive')},
-  {id:'mobile', label:'Mobile', test:g=>g.platform.includes('Mobile')},
-  {id:'low', label:'Low friction', test:g=>g.lowPaywall && !g.account},
-  {id:'family', label:'Quick group', test:g=>g.family}
-];
-const active = new Set();
-let view = 'shelf';
-let quickStart = false;
-
-const $ = s => document.querySelector(s);
-const grid = $('#gameGrid');
-const count = $('#count');
-const search = $('#search');
-const sort = $('#sort');
-
-function coverStyle(g){ return g.image ? `background-image:url('${g.image}')` : `background:linear-gradient(135deg,${g.a},${g.b})`; }
-function poster(g){
-  if(g.image) return `<div class="poster" loading="lazy" style="${coverStyle(g)}"></div>`;
-  return `<div class="poster fallback" style="--a:${g.a};--b:${g.b}"><span>${g.title}</span></div>`;
-}
-function badges(g){
-  return `<div class="tagline"><span class="badge free">${g.status}</span>${g.browser?'<span class="badge browser">Browser</span>':''}${g.lowPaywall?'<span class="badge">Easy</span>':'<span class="badge warn">Check shop</span>'}</div>`;
-}
-function card(g){
-  return `<article class="game" tabindex="0">
-    <div class="poster-wrap">${poster(g)}<div class="shade"></div>${badges(g)}<button class="playdot" onclick="event.stopPropagation(); window.open('${g.url}','_blank','noopener')">▶</button></div>
-    <div class="info">
-      <div class="titleline"><h3>${g.title}</h3><div class="score">${g.hype}</div></div>
-      <p class="desc">${g.vibe}</p>
-      <div class="meta"><span>${g.platform.join(' / ')}</span><span>${g.players}</span><span>${g.genre.slice(0,2).join(' + ')}</span></div>
-      <div class="actions"><a class="play" href="${g.url}" target="_blank" rel="noopener">Play</a><button onclick="event.stopPropagation(); openModal('${g.title.replace(/'/g,"\\'")}')">Details</button></div>
-    </div>
-  </article>`;
-}
-function filtered(){
-  const q = search.value.trim().toLowerCase();
-  let list = games.filter(g=>{
-    const text = [g.title,g.vibe,g.genre.join(' '),g.platform.join(' '),g.players,g.monetization].join(' ').toLowerCase();
-    const qok = !q || text.includes(q);
-    const fok = [...active].every(id => filterDefs.find(f=>f.id===id).test(g));
-    const quick = !quickStart || (g.noDownload || g.lowPaywall || g.family);
-    return qok && fok && quick;
-  });
-  const s = sort.value;
-  if(s==='instant') list.sort((a,b)=>(b.noDownload-a.noDownload)||(b.lowPaywall-a.lowPaywall)||b.hype-a.hype);
-  else if(s==='players') list.sort((a,b)=>(/100|Massive/.test(b.players)?1:0)-(/100|Massive/.test(a.players)?1:0)||b.hype-a.hype);
-  else if(s==='az') list.sort((a,b)=>a.title.localeCompare(b.title));
-  else list.sort((a,b)=>b.hype-a.hype);
-  return list;
-}
-function render(){
-  const list = filtered();
-  grid.className = `game-grid ${view}`;
-  grid.innerHTML = list.length ? list.map(card).join('') : `<div class="empty">No games matched. Clear a filter or search a broader vibe.</div>`;
-  count.textContent = `${list.length} games`;
-}
-function renderChips(){
-  $('#chips').innerHTML = filterDefs.map(f=>`<button class="chip ${active.has(f.id)?'active':''}" data-filter="${f.id}">${f.label}</button>`).join('');
-  document.querySelectorAll('[data-filter]').forEach(btn=>btn.addEventListener('click',()=>{active.has(btn.dataset.filter)?active.delete(btn.dataset.filter):active.add(btn.dataset.filter);renderChips();render();}));
-}
-function renderHero(){
-  const picks = games.slice().sort((a,b)=>b.hype-a.hype).slice(0,5);
-  $('#heroCovers').innerHTML = picks.map((g,i)=>`<button class="${i===0?'big-cover':'mini-cover'}" onclick="openModal('${g.title.replace(/'/g,"\\'")}')"><div class="media-img" style="${coverStyle(g)}"></div><div class="shade"></div><div class="cover-copy"><b>${g.title}</b><span>${g.platform.join(' / ')} • ${g.players}</span></div></button>`).join('');
-  $('#statGames').textContent = games.length;
-  $('#statBrowser').textContent = games.filter(g=>g.browser).length;
-  $('#statLow').textContent = games.filter(g=>g.lowPaywall || g.noDownload).length;
-}
-function renderHunts(){
-  const hunts = [
-    ['free browser multiplayer games','Play instantly'],['free party games online with friends','Group chaos'],['free co-op games pc','Team up'],['free multiplayer racing games','Racing'],['free multiplayer horror games','Horror'],['best free crossplay games','Crossplay']
-  ];
-  $('#hunts').innerHTML = hunts.map(h=>`<button class="hunt" onclick="window.open('https://duckduckgo.com/?q=${encodeURIComponent(h[0])}','_blank','noopener')">${h[0]}<span>${h[1]}</span></button>`).join('');
-}
-function openModal(title){
-  const g = games.find(x=>x.title===title); if(!g) return;
-  $('#modalTitle').textContent = g.title;
-  $('#modalSubtitle').textContent = `${g.platform.join(' / ')} • ${g.players} • ${g.status}`;
-  $('#modalDesc').textContent = `${g.vibe}. Monetization note: ${g.monetization}. Verify current free status on the official page before letting younger players download or create accounts.`;
-  $('#modalPoster').setAttribute('style', coverStyle(g));
-  $('#modalPlay').href = g.url;
-  $('#modalSearch').onclick = () => window.open(`https://duckduckgo.com/?q=${encodeURIComponent(g.title + ' free multiplayer official')}`,'_blank','noopener');
-  $('#modalFacts').innerHTML = [
-    ['Platforms',g.platform.join(', ')],['Players',g.players],['Genre',g.genre.join(', ')],['Browser playable',g.browser?'Yes':'No'],['Download',g.noDownload?'No download':'Download required'],['Account',g.account?'Usually required':'Not required/varies'],['Monetization',g.monetization]
-  ].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
-  $('#modal').classList.add('open');
-}
-function savedList(){
-  const saved = JSON.parse(localStorage.getItem('eddiesBasementSuggestions')||'[]');
-  $('#savedList').innerHTML = saved.length ? `<b>Saved suggestions:</b><br>${saved.map(x=>`• ${x.name}${x.url?` — ${x.url}`:''}`).join('<br>')}` : 'No local suggestions yet.';
-}
-
-renderChips();renderHero();renderHunts();render();savedList();
-search.addEventListener('input', render); sort.addEventListener('change', render);
-$('#clearBtn').addEventListener('click',()=>{search.value='';active.clear();quickStart=false;$('#familyBtn').textContent='Quick Start: Off';renderChips();render();});
-document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('active',x===b));render();}));
-$('#familyBtn').addEventListener('click',()=>{quickStart=!quickStart;$('#familyBtn').textContent=`Quick Start: ${quickStart?'On':'Off'}`;render();});
-$('#closeModal').addEventListener('click',()=>$('#modal').classList.remove('open'));
-$('#modal').addEventListener('click',e=>{if(e.target.id==='modal') $('#modal').classList.remove('open')});
-document.addEventListener('keydown',e=>{if(e.key==='Escape') $('#modal').classList.remove('open')});
-$('#submitForm').addEventListener('submit',e=>{e.preventDefault();const saved=JSON.parse(localStorage.getItem('eddiesBasementSuggestions')||'[]');saved.unshift({name:$('#gameName').value,url:$('#gameUrl').value,notes:$('#gameNotes').value,created:new Date().toISOString()});localStorage.setItem('eddiesBasementSuggestions',JSON.stringify(saved.slice(0,20)));e.target.reset();savedList();});
-</script>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Game details"><div class="modal-card"><div class="modal-hero"><img id="modalImg" src="assets/image-coming-soon.svg" alt=""></div><div class="modal-content" id="modalContent"></div></div></div>
+  <footer><div class="wrap">Eddie's Basement links to official game pages and legitimate sources only. Prototype data should be verified before public launch.</div></footer>
+  <script>
+    const PLACEHOLDER='assets/image-coming-soon.svg';
+    const games=[
+      {title:'Fortnite',genre:'Battle Royale',players:'1–100',platforms:['PC','Console','Mobile','Cloud'],tags:['squad','shooter','crossplay','download'],mode:'competitive',setup:'Download',monetization:'Cosmetics',friction:'medium',image:'',url:'https://www.fortnite.com/'},
+      {title:'Roblox',genre:'Everything / Social',players:'1–100+',platforms:['Browser','PC','Console','Mobile'],tags:['party','creative','kids','social','quick group'],mode:'social',setup:'Account',monetization:'In-game purchases',friction:'medium',image:'',url:'https://www.roblox.com/'},
+      {title:'Rocket League',genre:'Car Soccer',players:'1–8',platforms:['PC','Console'],tags:['sports','competitive','controller','squad'],mode:'competitive',setup:'Download',monetization:'Cosmetics',friction:'medium',image:'',url:'https://www.rocketleague.com/'},
+      {title:'Valorant',genre:'Tactical Shooter',players:'5v5',platforms:['PC'],tags:['shooter','competitive','squad'],mode:'competitive',setup:'Download',monetization:'Cosmetics',friction:'medium',image:'',url:'https://playvalorant.com/'},
+      {title:'Brawlhalla',genre:'Platform Fighter',players:'1–8',platforms:['PC','Console','Mobile'],tags:['fighting','party','controller','low friction'],mode:'party',setup:'Download',monetization:'Cosmetics',friction:'low',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/291550/header.jpg',url:'https://www.brawlhalla.com/'},
+      {title:'Warframe',genre:'Co-op Action RPG',players:'1–4',platforms:['PC','Console'],tags:['co-op','rpg','action','squad'],mode:'co-op',setup:'Download',monetization:'Optional purchases',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/230410/header.jpg',url:'https://www.warframe.com/'},
+      {title:'Apex Legends',genre:'Battle Royale',players:'1–60',platforms:['PC','Console'],tags:['shooter','squad','competitive'],mode:'competitive',setup:'Download',monetization:'Cosmetics',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg',url:'https://www.ea.com/games/apex-legends'},
+      {title:'Team Fortress 2',genre:'Class Shooter',players:'2–32',platforms:['PC'],tags:['shooter','classic','squad','low friction'],mode:'competitive',setup:'Download',monetization:'Optional purchases',friction:'low',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/440/header.jpg',url:'https://www.teamfortress.com/'},
+      {title:'Counter-Strike 2',genre:'Tactical Shooter',players:'5v5',platforms:['PC'],tags:['shooter','competitive','squad'],mode:'competitive',setup:'Download',monetization:'Optional purchases',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg',url:'https://www.counter-strike.net/'},
+      {title:'Dota 2',genre:'MOBA',players:'5v5',platforms:['PC'],tags:['strategy','competitive','team'],mode:'competitive',setup:'Download',monetization:'Cosmetics',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg',url:'https://www.dota2.com/'},
+      {title:'Stumble Guys',genre:'Party Knockout',players:'1–32',platforms:['PC','Console','Mobile'],tags:['party','casual','quick group','low friction'],mode:'party',setup:'Download',monetization:'Optional purchases',friction:'low',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/1677740/header.jpg',url:'https://www.stumbleguys.com/'},
+      {title:'Goose Goose Duck',genre:'Social Deduction',players:'5–16',platforms:['PC','Mobile'],tags:['party','social','voice','quick group'],mode:'party',setup:'Download',monetization:'Optional purchases',friction:'low',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/1568590/header.jpg',url:'https://gaggle.fun/goose-goose-duck'},
+      {title:'Unturned',genre:'Survival Sandbox',players:'1–24+',platforms:['PC'],tags:['survival','sandbox','co-op','squad'],mode:'co-op',setup:'Download',monetization:'Optional purchases',friction:'low',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/304930/header.jpg',url:'https://store.steampowered.com/app/304930/Unturned/'},
+      {title:'Path of Exile',genre:'Action RPG',players:'1–6',platforms:['PC','Console'],tags:['rpg','co-op','loot'],mode:'co-op',setup:'Download',monetization:'Optional purchases',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/238960/header.jpg',url:'https://www.pathofexile.com/'},
+      {title:'Albion Online',genre:'Sandbox MMO',players:'Massive',platforms:['PC','Mobile'],tags:['mmo','rpg','social','co-op'],mode:'mmo',setup:'Download',monetization:'Optional purchases',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/761890/header.jpg',url:'https://albiononline.com/'},
+      {title:'Guild Wars 2',genre:'MMORPG',players:'Massive',platforms:['PC'],tags:['mmo','rpg','co-op'],mode:'mmo',setup:'Download',monetization:'Optional expansions',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/1284210/header.jpg',url:'https://www.guildwars2.com/'},
+      {title:'Yu-Gi-Oh! Master Duel',genre:'Card Battler',players:'1v1',platforms:['PC','Console','Mobile'],tags:['cards','strategy','competitive'],mode:'competitive',setup:'Download',monetization:'Optional purchases',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/1449850/header.jpg',url:'https://www.konami.com/yugioh/masterduel/'},
+      {title:'PUBG: Battlegrounds',genre:'Battle Royale',players:'1–100',platforms:['PC','Console'],tags:['shooter','battle royale','squad'],mode:'competitive',setup:'Download',monetization:'Optional purchases',friction:'medium',image:'https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg',url:'https://pubg.com/'},
+      {title:'Krunker',genre:'Browser FPS',players:'2–16',platforms:['Browser'],tags:['browser','no download','shooter','quick group'],mode:'competitive',setup:'No Download',monetization:'Optional purchases',friction:'low',image:'',url:'https://krunker.io/'},
+      {title:'Skribbl.io',genre:'Drawing Party',players:'2–12',platforms:['Browser'],tags:['browser','no download','party','quick group'],mode:'party',setup:'No Download',monetization:'Light ads',friction:'low',image:'',url:'https://skribbl.io/'},
+      {title:'Gartic Phone',genre:'Drawing / Telephone',players:'4–30',platforms:['Browser'],tags:['browser','no download','party','funny','quick group'],mode:'party',setup:'No Download',monetization:'Light',friction:'low',image:'',url:'https://garticphone.com/'},
+      {title:'Codenames Online',genre:'Word Party',players:'4–8+',platforms:['Browser'],tags:['browser','no download','party','strategy'],mode:'party',setup:'No Download',monetization:'None/Light',friction:'low',image:'',url:'https://codenames.game/'},
+      {title:'Board Game Arena',genre:'Board Games',players:'2–8+',platforms:['Browser','Mobile'],tags:['browser','board game','strategy','party'],mode:'party',setup:'Account',monetization:'Free with premium options',friction:'medium',image:'',url:'https://boardgamearena.com/'},
+      {title:'Shell Shockers',genre:'Browser FPS',players:'2–16',platforms:['Browser'],tags:['browser','no download','shooter','fun'],mode:'competitive',setup:'No Download',monetization:'Optional purchases',friction:'low',image:'',url:'https://shellshock.io/'},
+      {title:'Bonk.io',genre:'Physics Party',players:'2–8',platforms:['Browser'],tags:['browser','no download','party','quick group'],mode:'party',setup:'No Download',monetization:'Light',friction:'low',image:'',url:'https://bonk.io/'}
+    ];
+    const chipOptions=[{label:'Browser',value:'browser'},{label:'No Download',value:'no download'},{label:'Party',value:'party'},{label:'Shooter',value:'shooter'},{label:'Co-op',value:'co-op'},{label:'Mobile',value:'mobile'},{label:'Low Friction',value:'low friction'},{label:'Quick Group',value:'quick group'}];
+    const state={q:'',tags:new Set(),view:'shelf',sort:'eddie',quickGroup:false};
+    const els={search:document.getElementById('search'),clear:document.getElementById('clearBtn'),chips:document.getElementById('chips'),grid:document.getElementById('gamesGrid'),count:document.getElementById('count'),sort:document.getElementById('sort'),empty:document.getElementById('emptyState'),family:document.getElementById('familyBtn'),random:document.getElementById('randomBtn'),modal:document.getElementById('modal'),modalImg:document.getElementById('modalImg'),modalContent:document.getElementById('modalContent'),submit:document.getElementById('submitForm')};
+    function safeSrc(game){return game.image&&game.image.trim()?game.image:PLACEHOLDER}function imageError(img,title){if(img.dataset.fallbackApplied==='true')return;img.dataset.fallbackApplied='true';img.src=PLACEHOLDER;img.classList.add('fallback');img.alt=title+' image coming soon'}window.imageError=imageError;
+    function normalizedGameText(game){return [game.title,game.genre,game.players,game.setup,game.mode,game.monetization,...(game.platforms||[]),...(game.tags||[])].join(' ').toLowerCase()}
+    function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}function escapeAttr(str){return escapeHtml(str).replace(/`/g,'&#96;')}
+    function renderChips(){els.chips.innerHTML=chipOptions.map(c=>`<button type="button" class="chip ${state.tags.has(c.value)?'active':''}" data-tag="${c.value}">${c.label}</button>`).join('');els.chips.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{const tag=btn.dataset.tag;state.tags.has(tag)?state.tags.delete(tag):state.tags.add(tag);render()}))}
+    function getFiltered(){let list=games.filter(game=>{const text=normalizedGameText(game);const qPass=!state.q||text.includes(state.q);const tagsPass=[...state.tags].every(tag=>text.includes(tag));const groupPass=!state.quickGroup||['party','browser','no download','quick group','low friction','co-op'].some(t=>text.includes(t));return qPass&&tagsPass&&groupPass});if(state.sort==='az')list=list.sort((a,b)=>a.title.localeCompare(b.title));if(state.sort==='low')list=list.sort((a,b)=>(a.friction==='low'?0:1)-(b.friction==='low'?0:1));if(state.sort==='browser')list=list.sort((a,b)=>(normalizedGameText(a).includes('browser')?0:1)-(normalizedGameText(b).includes('browser')?0:1));return list}
+    function card(game,i){const setupClass=game.setup.toLowerCase().includes('no')?'green':'orange';const topTags=[game.setup,game.platforms[0],game.mode].filter(Boolean).slice(0,3);return `<article class="game-card"><div class="poster"><img class="game-image" src="${safeSrc(game)}" alt="${escapeHtml(game.title)} cover art" loading="lazy" onerror="imageError(this, '${escapeAttr(game.title)}')"><div class="badges"><span class="badge ${setupClass}">${escapeHtml(game.setup)}</span>${topTags.slice(1).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</div><div class="poster-title"><h3>${escapeHtml(game.title)}</h3><div class="meta-line">${escapeHtml(game.players)} • ${escapeHtml(game.genre)}</div></div></div><div class="card-body"><h3 class="game-title">${escapeHtml(game.title)}</h3><div class="genre">${escapeHtml(game.genre)} · ${escapeHtml(game.platforms.join(', '))}</div><div class="stat-grid"><div class="stat"><b>${escapeHtml(game.players)}</b><span>Players</span></div><div class="stat"><b>${escapeHtml(game.monetization)}</b><span>Free status</span></div></div><div class="actions"><a class="btn play" href="${escapeAttr(game.url)}" target="_blank" rel="noopener">Play</a><button class="btn" type="button" data-details="${i}">Details</button></div></div></article>`}
+    function render(){renderChips();const list=getFiltered();els.grid.className=`games ${state.view}`;els.grid.innerHTML=list.map(game=>card(game,games.indexOf(game))).join('');els.count.textContent=`${list.length} games`;els.empty.style.display=list.length?'none':'block';els.grid.querySelectorAll('[data-details]').forEach(btn=>btn.addEventListener('click',()=>openDetails(games[Number(btn.dataset.details)])));document.querySelectorAll('.toggle button').forEach(btn=>btn.classList.toggle('active',btn.dataset.view===state.view));els.family.textContent=`Quick Group: ${state.quickGroup?'On':'Off'}`;els.family.classList.toggle('active',state.quickGroup)}
+    function openDetails(game){els.modalImg.src=safeSrc(game);els.modalImg.onerror=()=>imageError(els.modalImg,game.title);els.modalContent.innerHTML=`<div class="modal-title"><div><h2>${escapeHtml(game.title)}</h2><p class="hint">${escapeHtml(game.genre)} · ${escapeHtml(game.platforms.join(', '))}</p></div><button class="close" type="button" id="closeModal">Close</button></div><div class="stat-grid"><div class="stat"><b>${escapeHtml(game.players)}</b><span>Player count</span></div><div class="stat"><b>${escapeHtml(game.setup)}</b><span>Setup</span></div><div class="stat"><b>${escapeHtml(game.monetization)}</b><span>Monetization note</span></div><div class="stat"><b>${escapeHtml(game.mode)}</b><span>Best mode</span></div></div><div class="chips">${game.tags.map(t=>`<span class="chip">${escapeHtml(t)}</span>`).join('')}</div><div class="actions"><a class="btn play" href="${escapeAttr(game.url)}" target="_blank" rel="noopener">Open Official Page</a><a class="btn" href="https://www.google.com/search?q=${encodeURIComponent(game.title+' free multiplayer game')}" target="_blank" rel="noopener">Search More</a></div>`;els.modal.classList.add('open');document.getElementById('closeModal').addEventListener('click',closeModal)}
+    function closeModal(){els.modal.classList.remove('open')}els.search.addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render()});els.clear.addEventListener('click',()=>{state.q='';state.tags.clear();els.search.value='';render()});els.sort.addEventListener('change',e=>{state.sort=e.target.value;render()});els.family.addEventListener('click',()=>{state.quickGroup=!state.quickGroup;render()});document.querySelectorAll('.toggle button').forEach(btn=>btn.addEventListener('click',()=>{state.view=btn.dataset.view;render()}));els.random.addEventListener('click',()=>{const list=getFiltered();if(list.length)openDetails(list[Math.floor(Math.random()*list.length)])});els.modal.addEventListener('click',e=>{if(e.target===els.modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});els.submit.addEventListener('submit',e=>{e.preventDefault();const data=Object.fromEntries(new FormData(e.currentTarget).entries());const saved=JSON.parse(localStorage.getItem('eddies-basement-submissions')||'[]');saved.push({...data,createdAt:new Date().toISOString()});localStorage.setItem('eddies-basement-submissions',JSON.stringify(saved));alert('Saved locally. In the next build, this can feed an admin review queue.');e.currentTarget.reset()});render();
+  </script>
 </body>
 </html>
