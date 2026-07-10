@@ -1,16 +1,123 @@
-const COVER='https://www.dropbox.com/scl/fi/p7jsg38fzmdnqbeayd6b9/Cover.png?rlkey=e8ngjkrda569sy9fwqs0nl4sg&st=43zxzx1l&raw=1';
-const IMG={
-'Fortnite':'https://cdn2.unrealengine.com/fortnite-og-social-1920x1080-1920x1080-7e6c85c8c15d.jpg','Roblox':'https://images.rbxcdn.com/076d146437ffc79cebc36bf2ded91196','Rocket League':'https://cdn.cloudflare.steamstatic.com/steam/apps/252950/header.jpg','Valorant':'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt4709bcfb012b7075/5eb26f54402b8b4d13a56656/agent-background-generic.JPG','Marvel Rivals':'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2767030/header.jpg','Apex Legends':'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg','Overwatch 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/2357570/header.jpg','Brawlhalla':'https://cdn.cloudflare.steamstatic.com/steam/apps/291550/header.jpg','Fall Guys':'https://cdn.cloudflare.steamstatic.com/steam/apps/1097150/header.jpg','Warframe':'https://cdn.cloudflare.steamstatic.com/steam/apps/230410/header.jpg','The Finals':'https://cdn.cloudflare.steamstatic.com/steam/apps/2073850/header.jpg','Team Fortress 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/440/header.jpg','Counter-Strike 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg','Destiny 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/1085660/header.jpg','Path of Exile':'https://cdn.cloudflare.steamstatic.com/steam/apps/238960/header.jpg','Guild Wars 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/1284210/header.jpg','Albion Online':'https://cdn.cloudflare.steamstatic.com/steam/apps/761890/header.jpg','Lost Ark':'https://cdn.cloudflare.steamstatic.com/steam/apps/1599340/header.jpg','PUBG: Battlegrounds':'https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg','Halo Infinite Multiplayer':'https://cdn.cloudflare.steamstatic.com/steam/apps/1240440/header.jpg','Paladins':'https://cdn.cloudflare.steamstatic.com/steam/apps/444090/header.jpg','Dota 2':'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg','Stumble Guys':'https://cdn.cloudflare.steamstatic.com/steam/apps/1677740/header.jpg','Naraka: Bladepoint':'https://cdn.cloudflare.steamstatic.com/steam/apps/1203220/header.jpg','Once Human':'https://cdn.cloudflare.steamstatic.com/steam/apps/2139460/header.jpg','Palia':'https://cdn.cloudflare.steamstatic.com/steam/apps/2707930/header.jpg','Trove':'https://cdn.cloudflare.steamstatic.com/steam/apps/304050/header.jpg','Rec Room':'https://cdn.cloudflare.steamstatic.com/steam/apps/471710/header.jpg','VRChat':'https://cdn.cloudflare.steamstatic.com/steam/apps/438100/header.jpg','Crab Game':'https://cdn.cloudflare.steamstatic.com/steam/apps/1782210/header.jpg','Unturned':'https://cdn.cloudflare.steamstatic.com/steam/apps/304930/header.jpg','SCP: Secret Laboratory':'https://cdn.cloudflare.steamstatic.com/steam/apps/700330/header.jpg','Alien Swarm: Reactive Drop':'https://cdn.cloudflare.steamstatic.com/steam/apps/563560/header.jpg','TrackMania Starter Access':'https://cdn.cloudflare.steamstatic.com/steam/apps/2225070/header.jpg','Asphalt Legends Unite':'https://cdn.cloudflare.steamstatic.com/steam/apps/1815780/header.jpg','Yu-Gi-Oh! Master Duel':'https://cdn.cloudflare.steamstatic.com/steam/apps/1449850/header.jpg','Magic: The Gathering Arena':'https://cdn.cloudflare.steamstatic.com/steam/apps/2141910/header.jpg','Goose Goose Duck':'https://cdn.cloudflare.steamstatic.com/steam/apps/1568590/header.jpg','Tower of Fantasy':'https://cdn.cloudflare.steamstatic.com/steam/apps/2064650/header.jpg','Mindustry':'https://cdn.cloudflare.steamstatic.com/steam/apps/1127400/header.jpg'};
-const officialUrl=t=>'https://www.google.com/search?q='+encodeURIComponent(t+' official free multiplayer game');
-const rows=(window.EDDIE_RAW||'').split('|').filter(Boolean).map((row,i)=>{const [title,genre,platforms,modes,setup,players,tags]=row.split('~');return {id:i,title,genre,platforms:(platforms||'').split(' '),modes,setup,players,tags:(tags||'').split(' '),img:IMG[title]||COVER,url:officialUrl(title)}});
-const state={q:'',platform:'',setup:'',sort:'featured',view:'grid',tags:new Set()};
-const chipOptions=['Browser','No download','Quick group','Party','Co-op','Shooter','Mobile','Racing','Cards','MMO','Local','Strategy','Battle Royale'];
-const $=id=>document.getElementById(id);const els={grid:$('gameGrid'),count:$('count'),search:$('search'),platform:$('platform'),setup:$('setup'),sort:$('sort'),chips:$('chips'),empty:$('emptyState'),modal:$('modal'),modalImg:$('modalImg'),modalInner:$('modalInner')};
-function text(g){return [g.title,g.genre,g.platforms.join(' '),g.modes,g.setup,g.players,g.tags.join(' ')].join(' ').toLowerCase()}function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function imageFail(img){if(img.dataset.failed)return;img.dataset.failed='1';img.src=COVER}window.imageFail=imageFail;function setupClass(s){return (s||'').toLowerCase().includes('no')?'easy':'hot'}
-function filtered(){let list=rows.filter(g=>{const hay=text(g);return (!state.q||hay.includes(state.q))&&(!state.platform||g.platforms.map(p=>p.toLowerCase()).includes(state.platform))&&(!state.setup||g.setup.toLowerCase()===state.setup)&&[...state.tags].every(tag=>hay.includes(tag))});if(state.sort==='az')list.sort((a,b)=>a.title.localeCompare(b.title));if(state.sort==='browser')list.sort((a,b)=>(text(a).includes('browser')?0:1)-(text(b).includes('browser')?0:1));if(state.sort==='easy')list.sort((a,b)=>(a.setup.toLowerCase().includes('no')?0:1)-(b.setup.toLowerCase().includes('no')?0:1));return list}
-function card(g){return `<article class="card"><div class="art"><img src="${esc(g.img)}" alt="${esc(g.title)} preview" loading="lazy" onerror="imageFail(this)"><div class="badges"><span class="badge ${setupClass(g.setup)}">${esc(g.setup)}</span><span class="badge">${esc(g.platforms[0]||'Game')}</span></div><div class="posterTitle"><h3>${esc(g.title)}</h3><p>${esc(g.genre)} • ${esc(g.players)}</p></div></div><div class="body"><p>${esc(g.modes)} on ${esc(g.platforms.join(', '))}</p><div class="facts"><div class="fact"><b>${esc(g.players)}</b><span>Players</span></div><div class="fact"><b>${esc(g.setup)}</b><span>Setup</span></div></div><div class="actions"><a class="btn play" href="${g.url}" target="_blank" rel="noopener">Play / Search</a><button class="btn" type="button" data-id="${g.id}">Details</button></div></div></article>`}
-function renderChips(){els.chips.innerHTML=chipOptions.map(c=>`<button class="chip ${state.tags.has(c.toLowerCase())?'active':''}" type="button" data-chip="${c.toLowerCase()}">${c}</button>`).join('');els.chips.querySelectorAll('[data-chip]').forEach(b=>b.onclick=()=>{const tag=b.dataset.chip;state.tags.has(tag)?state.tags.delete(tag):state.tags.add(tag);render()})}
-function render(){renderChips();let list=filtered();els.grid.className='games '+state.view;els.grid.innerHTML=list.map(card).join('');els.count.textContent=list.length+' showing';els.empty.style.display=list.length?'none':'block';els.grid.querySelectorAll('[data-id]').forEach(btn=>btn.onclick=()=>openDetails(rows[Number(btn.dataset.id)]));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view))}
-function openDetails(g){els.modalImg.src=g.img||COVER;els.modalImg.onerror=()=>imageFail(els.modalImg);els.modalInner.innerHTML=`<div class="modalTitle"><div><h2>${esc(g.title)}</h2><p class="sub">${esc(g.genre)} • ${esc(g.platforms.join(', '))}</p></div><button class="close" type="button" id="closeModal">Close</button></div><div class="facts"><div class="fact"><b>${esc(g.players)}</b><span>Players</span></div><div class="fact"><b>${esc(g.setup)}</b><span>Setup</span></div><div class="fact"><b>${esc(g.modes)}</b><span>Mode</span></div><div class="fact"><b>${esc(g.tags.join(', '))}</b><span>Tags</span></div></div><div class="actions"><a class="btn play" href="${g.url}" target="_blank" rel="noopener">Open Search</a><button class="btn" type="button" id="closeModal2">Back to Wall</button></div>`;els.modal.classList.add('open');$('closeModal').onclick=closeModal;$('closeModal2').onclick=closeModal}
-function closeModal(){els.modal.classList.remove('open')}function init(){const platforms=[...new Set(rows.flatMap(g=>g.platforms))].sort();els.platform.innerHTML+=platforms.map(p=>`<option value="${p.toLowerCase()}">${p}</option>`).join('');$('totalGames').textContent=rows.length;$('partyCount').textContent=rows.filter(g=>text(g).includes('party')).length;$('browserCount').textContent=rows.filter(g=>text(g).includes('browser')).length;render()}$('brandImg').onerror=()=>{$('brandImg').style.display='none';$('brandText').style.display='block'};els.search.oninput=e=>{state.q=e.target.value.trim().toLowerCase();render()};els.platform.onchange=e=>{state.platform=e.target.value;render()};els.setup.onchange=e=>{state.setup=e.target.value.toLowerCase();render()};els.sort.onchange=e=>{state.sort=e.target.value;render()};$('clearBtn').onclick=()=>{state.q='';state.platform='';state.setup='';state.sort='featured';state.tags.clear();els.search.value='';els.platform.value='';els.setup.value='';els.sort.value='featured';render()};document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;render()});$('randomBtn').onclick=()=>{const list=filtered();if(list.length)openDetails(list[Math.floor(Math.random()*list.length)])};els.modal.onclick=e=>{if(e.target===els.modal)closeModal()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});$('submitForm').onsubmit=e=>{e.preventDefault();const saved=JSON.parse(localStorage.getItem('eddies-basement-submissions')||'[]');saved.push({...Object.fromEntries(new FormData(e.currentTarget).entries()),createdAt:new Date().toISOString()});localStorage.setItem('eddies-basement-submissions',JSON.stringify(saved));alert('Saved. Nice find.');e.currentTarget.reset()};init();
+(() => {
+  'use strict';
+
+  const FALLBACK_COVER = 'https://www.dropbox.com/scl/fi/p7jsg38fzmdnqbeayd6b9/Cover.png?rlkey=e8ngjkrda569sy9fwqs0nl4sg&st=43zxzx1l&raw=1';
+  const PREVIEWS = window.EDDIE_PREVIEWS || {};
+  const URLS = window.EDDIE_URLS || {};
+  const MAX_RETRIES = 2;
+  const state = { games: [], q: '', platform: '', setup: '', tags: new Set(), showAll: false };
+  const brokenImages = new Set(JSON.parse(localStorage.getItem('eb-broken-images') || '[]'));
+  const $ = (s) => document.querySelector(s);
+  const els = {
+    search: $('#search'), platform: $('#platform'), setup: $('#setup'), clear: $('#clearBtn'), more: $('#moreBtn'),
+    chips: $('#chips'), grid: $('#gamesGrid'), featured: $('#featuredRail'), quick: $('#quickRail'), count: $('#count'),
+    status: $('#catalogStatus'), modal: $('#modal'), modalImg: $('#modalImg'), modalInner: $('#modalInner'),
+    random: $('#randomBtn'), total: $('#allCount'), brand: $('#brandImg'), brandText: $('#brandText')
+  };
+
+  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
+  function attr(v) { return esc(v).replace(/`/g, '&#96;'); }
+  function log(type, detail = {}) {
+    const entry = { type, detail, at: new Date().toISOString(), ua: navigator.userAgent };
+    const logs = JSON.parse(localStorage.getItem('eb-error-log') || '[]');
+    logs.push(entry);
+    localStorage.setItem('eb-error-log', JSON.stringify(logs.slice(-50)));
+  }
+  window.addEventListener('error', e => log('window_error', { message: e.message, source: e.filename, line: e.lineno }));
+  window.addEventListener('unhandledrejection', e => log('promise_rejection', { message: String(e.reason) }));
+
+  function normalizePlatform(value) {
+    const map = { playstation:'PlayStation', ps:'PlayStation', xbox:'Xbox', pc:'PC', mobile:'Mobile', android:'Mobile', ios:'Mobile', browser:'Browser', switch:'Switch', console:'Console', vr:'VR', mac:'Mac', linux:'Linux' };
+    return map[String(value || '').toLowerCase()] || String(value || '').trim();
+  }
+  function validPlayers(value) {
+    const v = String(value || '').trim();
+    return v && v.length <= 24 ? v : 'Varies';
+  }
+  function parseRaw(raw) {
+    return String(raw || '').split('|').filter(Boolean).map((row, id) => {
+      const [title, genre, platforms, mode, setup, players, tags] = row.split('~');
+      return { id, title:String(title||'').trim(), genre:String(genre||'Game').trim(), platforms:[...new Set(String(platforms||'').split(/\s+/).filter(Boolean).map(normalizePlatform))], mode:String(mode||'Multiplayer').trim(), setup:String(setup||'Check').trim(), players:validPlayers(players), tags:String(tags||'').toLowerCase().split(/\s+/).filter(Boolean) };
+    });
+  }
+  function normalizeObjectGames(items) {
+    return (items || []).map((g, id) => ({ id, title:String(g.title||'').trim(), genre:String(g.genre||'Game').trim(), platforms:[...new Set((g.platforms||[]).map(normalizePlatform).filter(Boolean))], mode:String(g.mode||'Multiplayer').trim(), setup:String(g.setup||'Check').trim(), players:validPlayers(g.players), tags:(g.tags||[]).map(t=>String(t).toLowerCase()) }));
+  }
+  function dedupe(items) {
+    const seen = new Set();
+    return items.filter(g => { const key=g.title.toLowerCase().replace(/[^a-z0-9]/g,''); if(!key||seen.has(key)) return false; seen.add(key); return true; });
+  }
+  function enrich(items) {
+    return dedupe(items).map((g,id)=>({ ...g, id, hasArt:Boolean(PREVIEWS[g.title])&&!brokenImages.has(g.title), image:PREVIEWS[g.title]||FALLBACK_COVER, url:URLS[g.title]||`https://www.google.com/search?q=${encodeURIComponent(g.title+' official game')}` }));
+  }
+  function retryScript(src, attempt) {
+    return new Promise((resolve,reject)=>{ const s=document.createElement('script'); s.src=`${src}?retry=${attempt}&t=${Date.now()}`; s.onload=resolve; s.onerror=reject; document.head.appendChild(s); });
+  }
+  async function loadCatalog() {
+    setStatus('loading');
+    for(let attempt=0;attempt<=MAX_RETRIES;attempt++){
+      if(window.EDDIE_RAW) return enrich(parseRaw(window.EDDIE_RAW));
+      if(attempt<MAX_RETRIES){ try{ await retryScript('vault-data.js',attempt+1); await new Promise(r=>setTimeout(r,300)); }catch(err){ log('catalog_retry_failed',{attempt:attempt+1,message:String(err)}); } }
+    }
+    if(Array.isArray(window.EDDIE_FALLBACK)&&window.EDDIE_FALLBACK.length){ log('catalog_fallback_used',{count:window.EDDIE_FALLBACK.length}); return enrich(normalizeObjectGames(window.EDDIE_FALLBACK)); }
+    throw new Error('Catalog unavailable');
+  }
+  function setStatus(type){
+    const messages={
+      loading:'<div class="stateCard"><div class="spinner"></div><strong>Loading games…</strong></div>',
+      unavailable:'<div class="stateCard"><strong>Games could not be loaded.</strong><button id="retryBtn" type="button">Try again</button></div>',
+      empty:'<div class="stateCard"><strong>No matches.</strong><span>Try another search or clear your filters.</span></div>'
+    };
+    els.status.innerHTML=messages[type]||''; els.status.hidden=!messages[type];
+    if(type==='unavailable') $('#retryBtn')?.addEventListener('click',initCatalog);
+  }
+  function text(g){ return [g.title,g.genre,g.platforms.join(' '),g.mode,g.setup,g.players,g.tags.join(' ')].join(' ').toLowerCase(); }
+  function usable(g){ return g.hasArt&&!brokenImages.has(g.title); }
+  function filtered(){
+    let list=state.games.filter(g=>{ const hay=text(g); return (!state.q||hay.includes(state.q))&&(!state.platform||g.platforms.includes(state.platform))&&(!state.setup||g.setup.toLowerCase()===state.setup.toLowerCase())&&[...state.tags].every(t=>hay.includes(t)); });
+    if(!state.showAll&&!state.q&&!state.platform&&!state.setup&&!state.tags.size) list=list.filter(usable);
+    return list.sort((a,b)=>Number(usable(b))-Number(usable(a))||a.title.localeCompare(b.title));
+  }
+  function imageError(img,title){
+    brokenImages.add(title); localStorage.setItem('eb-broken-images',JSON.stringify([...brokenImages])); log('image_failed',{title,url:img.src});
+    if(img.dataset.fallback==='1'){ img.closest('.art')?.classList.add('imageUnavailable'); img.remove(); return; }
+    img.dataset.fallback='1'; img.src=FALLBACK_COVER;
+  }
+  window.ebImgError=imageError;
+  function card(g,eager=false){
+    return `<article class="card" tabindex="0" data-id="${g.id}" aria-label="View ${attr(g.title)}"><div class="art"><div class="skeleton"></div><img src="${attr(g.image)}" alt="${attr(g.title)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" onload="this.previousElementSibling.remove()" onerror="ebImgError(this,'${attr(g.title)}')"><div class="badges"><span class="badge ${g.setup.toLowerCase().includes('no')?'easy':''}">${esc(g.setup)}</span><span class="badge">${esc(g.platforms[0]||'Game')}</span></div><div class="posterTitle"><h3>${esc(g.title)}</h3><p>${esc(g.genre)} · ${esc(g.players)}</p></div></div><div class="body"><span>${esc(g.mode)}</span><button class="detailsBtn" type="button">Details</button></div></article>`;
+  }
+  function wire(container){ container.querySelectorAll('.card').forEach(c=>{ c.addEventListener('click',()=>openGame(state.games[Number(c.dataset.id)])); c.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openGame(state.games[Number(c.dataset.id)]); } }); }); }
+  function renderRails(){
+    const art=state.games.filter(usable), featured=art.slice(0,14), quick=art.filter(g=>text(g).includes('browser')||g.setup.toLowerCase().includes('no download')).slice(0,14);
+    els.featured.innerHTML=featured.map((g,i)=>card(g,i<4)).join(''); els.quick.innerHTML=quick.map(card).join(''); wire(els.featured); wire(els.quick);
+  }
+  function render(){
+    els.chips.querySelectorAll('[data-chip]').forEach(b=>b.classList.toggle('active',state.tags.has(b.dataset.chip)));
+    els.more.classList.toggle('active',state.showAll); els.more.textContent=state.showAll?'Top picks only':'More games';
+    const list=filtered(); els.grid.innerHTML=list.map(card).join(''); els.count.textContent=`${list.length} game${list.length===1?'':'s'}`; setStatus(list.length?'':'empty'); wire(els.grid);
+  }
+  function setupFilters(){
+    const platforms=[...new Set(state.games.flatMap(g=>g.platforms))].sort(); els.platform.innerHTML='<option value="">Any platform</option>'+platforms.map(p=>`<option>${esc(p)}</option>`).join('');
+    const chips=['browser','no download','party','co-op','shooter','mobile','racing','local','strategy']; els.chips.innerHTML=chips.map(c=>`<button class="chip" type="button" data-chip="${attr(c)}">${esc(c.replace(/\b\w/g,m=>m.toUpperCase()))}</button>`).join('');
+    els.chips.querySelectorAll('[data-chip]').forEach(b=>b.addEventListener('click',()=>{ const c=b.dataset.chip; state.tags.has(c)?state.tags.delete(c):state.tags.add(c); render(); }));
+  }
+  function saveReport(g){ const reports=JSON.parse(localStorage.getItem('eb-reports')||'[]'); reports.push({title:g.title,at:new Date().toISOString()}); localStorage.setItem('eb-reports',JSON.stringify(reports.slice(-100))); alert('Thanks. We saved your report.'); }
+  function openGame(g){
+    if(!g)return; els.modalImg.src=g.image; els.modalImg.alt=g.title; els.modalImg.onerror=()=>imageError(els.modalImg,g.title);
+    els.modalInner.innerHTML=`<div class="modalHead"><div><h2>${esc(g.title)}</h2><p>${esc(g.genre)} · ${esc(g.platforms.join(', '))}</p></div><button class="close" id="closeModal" type="button">Close</button></div><div class="facts"><div><b>${esc(g.players)}</b><span>Players</span></div><div><b>${esc(g.setup)}</b><span>Setup</span></div><div><b>${esc(g.mode)}</b><span>Mode</span></div><div><b>${esc(g.platforms.join(', '))}</b><span>Platforms</span></div></div><div class="actions"><a class="action play" href="${attr(g.url)}" target="_blank" rel="noopener">Visit Game</a><button class="action" id="reportBtn" type="button">Report a problem</button></div>`;
+    els.modal.classList.add('open'); history.replaceState(null,'',`#game=${encodeURIComponent(g.title)}`); $('#closeModal').addEventListener('click',closeModal); $('#reportBtn').addEventListener('click',()=>saveReport(g));
+  }
+  function closeModal(){ els.modal.classList.remove('open'); history.replaceState(null,'',location.pathname+location.search); }
+  function randomGame(){ const pool=filtered().filter(usable), source=pool.length?pool:state.games.filter(usable); if(source.length)openGame(source[Math.floor(Math.random()*source.length)]); }
+  async function initCatalog(){
+    try{ state.games=await loadCatalog(); els.total.textContent=state.games.length; setupFilters(); renderRails(); render(); const hash=new URLSearchParams(location.hash.replace(/^#/,'')).get('game'); if(hash){ const g=state.games.find(x=>x.title.toLowerCase()===hash.toLowerCase()); if(g)openGame(g); } }
+    catch(err){ log('catalog_unavailable',{message:String(err)}); setStatus('unavailable'); }
+  }
+  function initEvents(){
+    els.search.addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render();}); els.platform.addEventListener('change',e=>{state.platform=e.target.value;render();}); els.setup.addEventListener('change',e=>{state.setup=e.target.value;render();});
+    els.clear.addEventListener('click',()=>{state.q='';state.platform='';state.setup='';state.tags.clear();els.search.value='';els.platform.value='';els.setup.value='';render();}); els.more.addEventListener('click',()=>{state.showAll=!state.showAll;render();}); els.random.addEventListener('click',randomGame);
+    els.modal.addEventListener('click',e=>{if(e.target===els.modal)closeModal();}); document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();}); els.brand.addEventListener('error',()=>{els.brand.style.display='none';els.brandText.style.display='block';});
+  }
+  initEvents(); initCatalog();
+})();
