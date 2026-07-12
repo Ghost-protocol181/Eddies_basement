@@ -1,0 +1,11 @@
+{
+  "name": "eddies-basement",
+  "private": true,
+  "version": "1.0.0-beta",
+  "scripts": {
+    "test:beta": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}
