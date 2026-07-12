@@ -1,180 +1,59 @@
 (() => {
-  'use strict';
-
-  const FALLBACK_COVER = 'https://www.dropbox.com/scl/fi/p7jsg38fzmdnqbeayd6b9/Cover.png?rlkey=e8ngjkrda569sy9fwqs0nl4sg&st=43zxzx1l&raw=1';
-  const MAX_RETRIES = 2;
-  const state = { games: [], q: '', platform: '', setup: '', tags: new Set(), showAll: false };
-  const failedUrls = new Set(JSON.parse(localStorage.getItem('eb-failed-artwork') || '[]'));
-  const workingArt = JSON.parse(localStorage.getItem('eb-working-artwork') || '{}');
-  const $ = (s) => document.querySelector(s);
-  const els = {
-    search: $('#search'), platform: $('#platform'), setup: $('#setup'), clear: $('#clearBtn'), more: $('#moreBtn'),
-    chips: $('#chips'), grid: $('#gamesGrid'), featured: $('#featuredRail'), quick: $('#quickRail'), count: $('#count'),
-    status: $('#catalogStatus'), modal: $('#modal'), modalImg: $('#modalImg'), modalInner: $('#modalInner'),
-    random: $('#randomBtn'), total: $('#allCount'), brand: $('#brandImg'), brandText: $('#brandText')
-  };
-
-  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
-  function attr(v) { return esc(v).replace(/`/g, '&#96;'); }
-  function safeRead(key, fallback) { try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); } catch { return fallback; } }
-  function log(type, detail = {}) {
-    const logs = safeRead('eb-error-log', []);
-    logs.push({ type, detail, at: new Date().toISOString(), ua: navigator.userAgent });
-    try { localStorage.setItem('eb-error-log', JSON.stringify(logs.slice(-80))); } catch {}
-  }
-  window.addEventListener('error', e => log('window_error', { message: e.message, source: e.filename, line: e.lineno }));
-  window.addEventListener('unhandledrejection', e => log('promise_rejection', { message: String(e.reason) }));
-
-  function normalizePlatform(value) {
-    const map = { playstation:'PlayStation', ps:'PlayStation', xbox:'Xbox', pc:'PC', mobile:'Mobile', android:'Mobile', ios:'Mobile', browser:'Browser', switch:'Switch', console:'Console', vr:'VR', mac:'Mac', linux:'Linux' };
-    return map[String(value || '').toLowerCase()] || String(value || '').trim();
-  }
-  function validPlayers(value) { const v = String(value || '').trim(); return v && v.length <= 24 ? v : 'Varies'; }
-  function parseRaw(raw) {
-    return String(raw || '').split('|').filter(Boolean).map((row, id) => {
-      const [title, genre, platforms, mode, setup, players, tags] = row.split('~');
-      return { id, title:String(title||'').trim(), genre:String(genre||'Game').trim(), platforms:[...new Set(String(platforms||'').split(/\s+/).filter(Boolean).map(normalizePlatform))], mode:String(mode||'Multiplayer').trim(), setup:String(setup||'Check').trim(), players:validPlayers(players), tags:String(tags||'').toLowerCase().split(/\s+/).filter(Boolean) };
-    });
-  }
-  function normalizeObjectGames(items) {
-    return (items || []).map((g, id) => ({ id, title:String(g.title||'').trim(), genre:String(g.genre||'Game').trim(), platforms:[...new Set((g.platforms||[]).map(normalizePlatform).filter(Boolean))], mode:String(g.mode||'Multiplayer').trim(), setup:String(g.setup||'Check').trim(), players:validPlayers(g.players), tags:(g.tags||[]).map(t=>String(t).toLowerCase()) }));
-  }
-  function dedupe(items) {
-    const seen = new Set();
-    return items.filter(g => { const key=g.title.toLowerCase().replace(/[^a-z0-9]/g,''); if(!key||seen.has(key)) return false; seen.add(key); return true; });
-  }
-  function steamMirrors(url) {
-    const match = String(url || '').match(/steam(?:static)?\.com\/steam\/apps\/(\d+)\/header\.jpg|steam\/apps\/(\d+)\/header\.jpg/);
-    const id = match && (match[1] || match[2]);
-    return id ? [
-      `https://cdn.cloudflare.steamstatic.com/steam/apps/${id}/header.jpg`,
-      `https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/${id}/header.jpg`,
-      `https://steamcdn-a.akamaihd.net/steam/apps/${id}/header.jpg`
-    ] : [];
-  }
-  function uniqueUrls(values) { return [...new Set(values.flat().filter(Boolean).map(String))]; }
-  function candidatesFor(game) {
-    const previews = window.EDDIE_PREVIEWS || {};
-    const artwork = window.EDDIE_ARTWORK || {};
-    const urls = window.EDDIE_URLS || {};
-    const primary = previews[game.title];
-    const official = urls[game.title];
-    const screenshot = official && !official.includes('google.com') ? `https://image.thum.io/get/width/960/crop/540/noanimate/${official}` : null;
-    let candidates = uniqueUrls([
-      workingArt[game.title],
-      artwork[game.title] || [],
-      primary,
-      steamMirrors(primary),
-      screenshot,
-      FALLBACK_COVER
-    ]).filter(url => url === FALLBACK_COVER || !failedUrls.has(url));
-    if (!candidates.includes(FALLBACK_COVER)) candidates.push(FALLBACK_COVER);
-    return candidates;
-  }
-  function enrich(items) {
-    const urls = window.EDDIE_URLS || {};
-    return dedupe(items).map((g,id) => {
-      const artCandidates = candidatesFor(g);
-      return { ...g, id, artCandidates, hasArt:artCandidates.some(u=>u!==FALLBACK_COVER), image:artCandidates[0] || FALLBACK_COVER, url:urls[g.title]||`https://www.google.com/search?q=${encodeURIComponent(g.title+' official game')}` };
-    });
-  }
-  function retryScript(src, attempt) {
-    return new Promise((resolve,reject)=>{ const s=document.createElement('script'); s.src=`${src}?retry=${attempt}&t=${Date.now()}`; s.onload=resolve; s.onerror=reject; document.head.appendChild(s); });
-  }
-  async function ensureArtworkData() {
-    if (window.EDDIE_ARTWORK) return;
-    try { await retryScript('artwork-data.js', 1); } catch (err) { log('artwork_data_unavailable', { message:String(err) }); }
-  }
-  async function loadCatalog() {
-    setStatus('loading');
-    await ensureArtworkData();
-    for(let attempt=0;attempt<=MAX_RETRIES;attempt++){
-      if(window.EDDIE_RAW) return enrich(parseRaw(window.EDDIE_RAW));
-      if(attempt<MAX_RETRIES){ try{ await retryScript('vault-data.js',attempt+1); await new Promise(r=>setTimeout(r,300)); }catch(err){ log('catalog_retry_failed',{attempt:attempt+1,message:String(err)}); } }
-    }
-    if(Array.isArray(window.EDDIE_FALLBACK)&&window.EDDIE_FALLBACK.length){ log('catalog_fallback_used',{count:window.EDDIE_FALLBACK.length}); return enrich(normalizeObjectGames(window.EDDIE_FALLBACK)); }
-    throw new Error('Catalog unavailable');
-  }
-  function setStatus(type){
-    const messages={
-      loading:'<div class="stateCard"><div class="spinner"></div><strong>Loading games…</strong></div>',
-      unavailable:'<div class="stateCard"><strong>Games could not be loaded.</strong><button id="retryBtn" type="button">Try again</button></div>',
-      empty:'<div class="stateCard"><strong>No matches.</strong><span>Try another search or clear your filters.</span></div>'
-    };
-    els.status.innerHTML=messages[type]||''; els.status.hidden=!messages[type];
-    if(type==='unavailable') $('#retryBtn')?.addEventListener('click',initCatalog);
-  }
-  function text(g){ return [g.title,g.genre,g.platforms.join(' '),g.mode,g.setup,g.players,g.tags.join(' ')].join(' ').toLowerCase(); }
-  function usable(g){ return g.hasArt && g.artCandidates.some(u=>u!==FALLBACK_COVER&&!failedUrls.has(u)); }
-  function filtered(){
-    let list=state.games.filter(g=>{ const hay=text(g); return (!state.q||hay.includes(state.q))&&(!state.platform||g.platforms.includes(state.platform))&&(!state.setup||g.setup.toLowerCase()===state.setup.toLowerCase())&&[...state.tags].every(t=>hay.includes(t)); });
-    if(!state.showAll&&!state.q&&!state.platform&&!state.setup&&!state.tags.size) list=list.filter(usable);
-    return list.sort((a,b)=>Number(usable(b))-Number(usable(a))||a.title.localeCompare(b.title));
-  }
-  function persistArtworkState() {
-    try {
-      localStorage.setItem('eb-failed-artwork', JSON.stringify([...failedUrls].slice(-300)));
-      localStorage.setItem('eb-working-artwork', JSON.stringify(workingArt));
-    } catch {}
-  }
-  function nextArtwork(img, gameId, reason='error') {
-    const g = state.games[Number(gameId)]; if(!g) return;
-    const current = img.src;
-    if(current && current !== FALLBACK_COVER) failedUrls.add(current);
-    log('image_candidate_failed',{title:g.title,url:current,reason});
-    let index = Number(img.dataset.artIndex || 0) + 1;
-    while(index < g.artCandidates.length && failedUrls.has(g.artCandidates[index]) && g.artCandidates[index] !== FALLBACK_COVER) index++;
-    if(index >= g.artCandidates.length){ img.closest('.art')?.classList.add('imageUnavailable'); img.remove(); persistArtworkState(); return; }
-    img.dataset.artIndex=String(index);
-    img.src=g.artCandidates[index];
-    persistArtworkState();
-  }
-  function artworkLoaded(img, gameId) {
-    const g=state.games[Number(gameId)]; if(!g)return;
-    const w=img.naturalWidth,h=img.naturalHeight,ratio=h?w/h:0;
-    if(w<300||h<150||ratio<1.15||ratio>2.8){ nextArtwork(img,gameId,'invalid_dimensions'); return; }
-    img.previousElementSibling?.classList.contains('skeleton') && img.previousElementSibling.remove();
-    if(img.src!==FALLBACK_COVER){ workingArt[g.title]=img.src; persistArtworkState(); }
-  }
-  window.ebImgError=(img,id)=>nextArtwork(img,id,'load_error');
-  window.ebImgLoaded=artworkLoaded;
-  function card(g,eager=false){
-    const first=g.artCandidates[0]||FALLBACK_COVER;
-    return `<article class="card" tabindex="0" data-id="${g.id}" aria-label="View ${attr(g.title)}"><div class="art"><div class="skeleton"></div><img src="${attr(first)}" data-art-index="0" alt="${attr(g.title)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" onload="ebImgLoaded(this,${g.id})" onerror="ebImgError(this,${g.id})"><div class="badges"><span class="badge ${g.setup.toLowerCase().includes('no')?'easy':''}">${esc(g.setup)}</span><span class="badge">${esc(g.platforms[0]||'Game')}</span></div><div class="posterTitle"><h3>${esc(g.title)}</h3><p>${esc(g.genre)} · ${esc(g.players)}</p></div></div><div class="body"><span>${esc(g.mode)}</span><button class="detailsBtn" type="button">Details</button></div></article>`;
-  }
-  function wire(container){ container.querySelectorAll('.card').forEach(c=>{ c.addEventListener('click',()=>openGame(state.games[Number(c.dataset.id)])); c.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openGame(state.games[Number(c.dataset.id)]); } }); }); }
-  function preload(items){ items.slice(0,4).forEach(g=>{ const img=new Image(); img.src=g.artCandidates[0]||FALLBACK_COVER; }); }
-  function renderRails(){
-    const art=state.games.filter(usable), featured=art.slice(0,14), used=new Set(featured.map(g=>g.title));
-    const quick=art.filter(g=>(text(g).includes('browser')||g.setup.toLowerCase().includes('no download'))&&!used.has(g.title)).slice(0,14);
-    preload(featured); els.featured.innerHTML=featured.map((g,i)=>card(g,i<4)).join(''); els.quick.innerHTML=quick.map(card).join(''); wire(els.featured); wire(els.quick);
-  }
-  function render(){
-    els.chips.querySelectorAll('[data-chip]').forEach(b=>b.classList.toggle('active',state.tags.has(b.dataset.chip)));
-    els.more.classList.toggle('active',state.showAll); els.more.textContent=state.showAll?'Top picks only':'More games';
-    const list=filtered(); els.grid.innerHTML=list.map(card).join(''); els.count.textContent=`${list.length} game${list.length===1?'':'s'}`; setStatus(list.length?'':'empty'); wire(els.grid);
-  }
-  function setupFilters(){
-    const platforms=[...new Set(state.games.flatMap(g=>g.platforms))].sort(); els.platform.innerHTML='<option value="">Any platform</option>'+platforms.map(p=>`<option>${esc(p)}</option>`).join('');
-    const chips=['browser','no download','party','co-op','shooter','mobile','racing','local','strategy']; els.chips.innerHTML=chips.map(c=>`<button class="chip" type="button" data-chip="${attr(c)}">${esc(c.replace(/\b\w/g,m=>m.toUpperCase()))}</button>`).join('');
-    els.chips.querySelectorAll('[data-chip]').forEach(b=>b.addEventListener('click',()=>{ const c=b.dataset.chip; state.tags.has(c)?state.tags.delete(c):state.tags.add(c); render(); }));
-  }
-  function saveReport(g){ const reports=safeRead('eb-reports',[]); reports.push({title:g.title,at:new Date().toISOString()}); try{localStorage.setItem('eb-reports',JSON.stringify(reports.slice(-100)));}catch{} alert('Thanks. We saved your report.'); }
-  function openGame(g){
-    if(!g)return; const first=g.artCandidates.find(u=>!failedUrls.has(u))||FALLBACK_COVER; els.modalImg.src=first; els.modalImg.dataset.artIndex=String(Math.max(0,g.artCandidates.indexOf(first))); els.modalImg.alt=g.title; els.modalImg.onload=()=>artworkLoaded(els.modalImg,g.id); els.modalImg.onerror=()=>nextArtwork(els.modalImg,g.id,'modal_error');
-    els.modalInner.innerHTML=`<div class="modalHead"><div><h2>${esc(g.title)}</h2><p>${esc(g.genre)} · ${esc(g.platforms.join(', '))}</p></div><button class="close" id="closeModal" type="button">Close</button></div><div class="facts"><div><b>${esc(g.players)}</b><span>Players</span></div><div><b>${esc(g.setup)}</b><span>Setup</span></div><div><b>${esc(g.mode)}</b><span>Mode</span></div><div><b>${esc(g.platforms.join(', '))}</b><span>Platforms</span></div></div><div class="actions"><a class="action play" href="${attr(g.url)}" target="_blank" rel="noopener">Visit Game</a><button class="action" id="reportBtn" type="button">Report a problem</button></div>`;
-    els.modal.classList.add('open'); history.replaceState(null,'',`#game=${encodeURIComponent(g.title)}`); $('#closeModal').addEventListener('click',closeModal); $('#reportBtn').addEventListener('click',()=>saveReport(g));
-  }
-  function closeModal(){ els.modal.classList.remove('open'); history.replaceState(null,'',location.pathname+location.search); }
-  function randomGame(){ const pool=filtered().filter(usable), source=pool.length?pool:state.games.filter(usable); if(source.length)openGame(source[Math.floor(Math.random()*source.length)]); }
-  async function initCatalog(){
-    try{ state.games=await loadCatalog(); els.total.textContent=state.games.length; setupFilters(); renderRails(); render(); const hash=new URLSearchParams(location.hash.replace(/^#/,'')).get('game'); if(hash){ const g=state.games.find(x=>x.title.toLowerCase()===hash.toLowerCase()); if(g)openGame(g); } }
-    catch(err){ log('catalog_unavailable',{message:String(err)}); setStatus('unavailable'); }
-  }
-  function initEvents(){
-    els.search.addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render();}); els.platform.addEventListener('change',e=>{state.platform=e.target.value;render();}); els.setup.addEventListener('change',e=>{state.setup=e.target.value;render();});
-    els.clear.addEventListener('click',()=>{state.q='';state.platform='';state.setup='';state.tags.clear();els.search.value='';els.platform.value='';els.setup.value='';render();}); els.more.addEventListener('click',()=>{state.showAll=!state.showAll;render();}); els.random.addEventListener('click',randomGame);
-    els.modal.addEventListener('click',e=>{if(e.target===els.modal)closeModal();}); document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();}); els.brand.addEventListener('error',()=>{els.brand.style.display='none';els.brandText.style.display='block';});
-  }
-  initEvents(); initCatalog();
+'use strict';
+const FALLBACK='https://www.dropbox.com/scl/fi/p7jsg38fzmdnqbeayd6b9/Cover.png?rlkey=e8ngjkrda569sy9fwqs0nl4sg&st=43zxzx1l&raw=1';
+const MAX_RETRIES=2;
+const safeRead=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch{return f}};
+const state={games:[],q:'',platform:'',setup:'',tags:new Set(),showAll:false,favorites:new Set(safeRead('eb-favorites',[])),recent:safeRead('eb-recent',[])};
+const failedUrls=new Set(safeRead('eb-failed-artwork',[]));
+const workingArt=safeRead('eb-working-artwork',{});
+const $=s=>document.querySelector(s);
+const els={search:$('#search'),platform:$('#platform'),setup:$('#setup'),clear:$('#clearBtn'),more:$('#moreBtn'),shareFilters:$('#shareFilters'),chips:$('#chips'),activeFilters:$('#activeFilters'),grid:$('#gamesGrid'),featured:$('#featuredRail'),quick:$('#quickRail'),friends:$('#friendsRail'),favorites:$('#favoritesRail'),recent:$('#recentRail'),favoritesSection:$('#favoritesSection'),recentSection:$('#recentSection'),count:$('#count'),status:$('#catalogStatus'),modal:$('#modal'),modalImg:$('#modalImg'),modalInner:$('#modalInner'),random:$('#randomBtn'),total:$('#allCount'),brand:$('#brandImg'),brandText:$('#brandText'),toast:$('#toast')};
+const esc=v=>String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+const attr=v=>esc(v).replace(/`/g,'&#96;');
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function log(type,detail={}){const logs=safeRead('eb-error-log',[]);logs.push({type,detail,at:new Date().toISOString(),ua:navigator.userAgent});save('eb-error-log',logs.slice(-80))}
+window.addEventListener('error',e=>log('window_error',{message:e.message,source:e.filename,line:e.lineno}));
+window.addEventListener('unhandledrejection',e=>log('promise_rejection',{message:String(e.reason)}));
+function toast(msg){els.toast.textContent=msg;els.toast.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>els.toast.classList.remove('show'),1800)}
+function normalizePlatform(v){const m={playstation:'PlayStation',ps:'PlayStation',xbox:'Xbox',pc:'PC',mobile:'Mobile',android:'Mobile',ios:'Mobile',browser:'Browser',switch:'Switch',console:'Console',vr:'VR',mac:'Mac',linux:'Linux'};return m[String(v||'').toLowerCase()]||String(v||'').trim()}
+const validPlayers=v=>{v=String(v||'').trim();return v&&v.length<=24?v:'Varies'};
+function parseRaw(raw){return String(raw||'').split('|').filter(Boolean).map((row,id)=>{const [title,genre,platforms,mode,setup,players,tags]=row.split('~');return{id,title:String(title||'').trim(),genre:String(genre||'Game').trim(),platforms:[...new Set(String(platforms||'').split(/\s+/).filter(Boolean).map(normalizePlatform))],mode:String(mode||'Multiplayer').trim(),setup:String(setup||'Check').trim(),players:validPlayers(players),tags:String(tags||'').toLowerCase().split(/\s+/).filter(Boolean)}})}
+function normalizeObjectGames(items){return(items||[]).map((g,id)=>({id,title:String(g.title||'').trim(),genre:String(g.genre||'Game').trim(),platforms:[...new Set((g.platforms||[]).map(normalizePlatform).filter(Boolean))],mode:String(g.mode||'Multiplayer').trim(),setup:String(g.setup||'Check').trim(),players:validPlayers(g.players),tags:(g.tags||[]).map(t=>String(t).toLowerCase())}))}
+function dedupe(items){const seen=new Set();return items.filter(g=>{const k=g.title.toLowerCase().replace(/[^a-z0-9]/g,'');if(!k||seen.has(k))return false;seen.add(k);return true})}
+function steamMirrors(url){const m=String(url||'').match(/steam(?:static)?\.com\/steam\/apps\/(\d+)\/header\.jpg|steam\/apps\/(\d+)\/header\.jpg/),id=m&&(m[1]||m[2]);return id?[`https://cdn.cloudflare.steamstatic.com/steam/apps/${id}/header.jpg`,`https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/${id}/header.jpg`,`https://steamcdn-a.akamaihd.net/steam/apps/${id}/header.jpg`]:[]}
+const uniqueUrls=v=>[...new Set(v.flat().filter(Boolean).map(String))];
+function candidatesFor(g){const previews=window.EDDIE_PREVIEWS||{},art=window.EDDIE_ARTWORK||{},urls=window.EDDIE_URLS||{},primary=previews[g.title],official=urls[g.title],shot=official&&!official.includes('google.com')?`https://image.thum.io/get/width/960/crop/540/noanimate/${official}`:null;const list=uniqueUrls([workingArt[g.title],art[g.title]||[],primary,steamMirrors(primary),shot,FALLBACK]).filter(u=>u===FALLBACK||!failedUrls.has(u));if(!list.includes(FALLBACK))list.push(FALLBACK);return list}
+function enrich(items){const urls=window.EDDIE_URLS||{};return dedupe(items).map((g,id)=>{const artCandidates=candidatesFor(g);return{...g,id,artCandidates,hasArt:artCandidates.some(u=>u!==FALLBACK),url:urls[g.title]||`https://www.google.com/search?q=${encodeURIComponent(g.title+' official game')}`}})}
+function retryScript(src,attempt){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=`${src}?retry=${attempt}&t=${Date.now()}`;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+async function loadCatalog(){setStatus('loading');for(let a=0;a<=MAX_RETRIES;a++){if(window.EDDIE_RAW)return enrich(parseRaw(window.EDDIE_RAW));if(a<MAX_RETRIES)try{await retryScript('vault-data.js',a+1);await new Promise(r=>setTimeout(r,250))}catch(e){log('catalog_retry_failed',{attempt:a+1,message:String(e)})}}if(Array.isArray(window.EDDIE_FALLBACK)&&window.EDDIE_FALLBACK.length)return enrich(normalizeObjectGames(window.EDDIE_FALLBACK));throw new Error('Catalog unavailable')}
+function setStatus(type){const m={loading:'<div class="stateCard"><div class="spinner"></div><strong>Loading games…</strong></div>',unavailable:'<div class="stateCard"><strong>Games could not be loaded.</strong><button id="retryBtn" type="button">Try again</button></div>',empty:'<div class="stateCard"><strong>No matches.</strong><span>Try another search or clear your filters.</span></div>'};els.status.innerHTML=m[type]||'';els.status.hidden=!m[type];if(type==='unavailable')$('#retryBtn')?.addEventListener('click',initCatalog)}
+const text=g=>[g.title,g.genre,g.platforms.join(' '),g.mode,g.setup,g.players,g.tags.join(' ')].join(' ').toLowerCase();
+const usable=g=>g.hasArt&&g.artCandidates.some(u=>u!==FALLBACK&&!failedUrls.has(u));
+const norm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+function editDistance(a,b){a=norm(a);b=norm(b);if(!a)return b.length;if(!b)return a.length;const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+function queryMatch(g,q){if(!q)return true;const hay=text(g);if(hay.includes(q))return true;return g.title.split(/\s+/).some(w=>editDistance(w,q)<=1)||editDistance(g.title,q)<=2}
+function filtered(){let list=state.games.filter(g=>queryMatch(g,state.q)&&(!state.platform||g.platforms.includes(state.platform))&&(!state.setup||g.setup.toLowerCase()===state.setup.toLowerCase())&&[...state.tags].every(t=>text(g).includes(t)));if(!state.showAll&&!state.q&&!state.platform&&!state.setup&&!state.tags.size)list=list.filter(usable);return list.sort((a,b)=>Number(state.favorites.has(b.title))-Number(state.favorites.has(a.title))||Number(usable(b))-Number(usable(a))||a.title.localeCompare(b.title))}
+function persistArtwork(){save('eb-failed-artwork',[...failedUrls].slice(-300));save('eb-working-artwork',workingArt)}
+function nextArtwork(img,id,reason='error'){const g=state.games[Number(id)];if(!g)return;const current=img.src;if(current&&current!==FALLBACK)failedUrls.add(current);log('image_candidate_failed',{title:g.title,url:current,reason});let i=Number(img.dataset.artIndex||0)+1;while(i<g.artCandidates.length&&failedUrls.has(g.artCandidates[i])&&g.artCandidates[i]!==FALLBACK)i++;if(i>=g.artCandidates.length){img.remove();persistArtwork();return}img.dataset.artIndex=String(i);img.src=g.artCandidates[i];persistArtwork()}
+function artworkLoaded(img,id){const g=state.games[Number(id)];if(!g)return;const w=img.naturalWidth,h=img.naturalHeight,r=h?w/h:0;if(img.src!==FALLBACK&&(w<300||h<150||r<1.15||r>2.8)){nextArtwork(img,id,'invalid_dimensions');return}img.previousElementSibling?.classList.contains('skeleton')&&img.previousElementSibling.remove();if(img.src!==FALLBACK){workingArt[g.title]=img.src;persistArtwork()}}
+window.ebImgError=(img,id)=>nextArtwork(img,id,'load_error');window.ebImgLoaded=artworkLoaded;
+function toggleFavorite(title){state.favorites.has(title)?state.favorites.delete(title):state.favorites.add(title);save('eb-favorites',[...state.favorites]);renderAll();toast(state.favorites.has(title)?'Saved to favorites':'Removed from favorites')}
+function card(g,eager=false){const first=g.artCandidates.find(u=>!failedUrls.has(u))||FALLBACK,fav=state.favorites.has(g.title);return`<article class="card" tabindex="0" data-id="${g.id}" aria-label="View ${attr(g.title)}"><div class="art"><div class="skeleton"></div><img src="${attr(first)}" data-art-index="${Math.max(0,g.artCandidates.indexOf(first))}" alt="${attr(g.title)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" onload="ebImgLoaded(this,${g.id})" onerror="ebImgError(this,${g.id})"><button class="favoriteBtn ${fav?'active':''}" type="button" data-favorite="${attr(g.title)}" aria-label="${fav?'Remove from':'Add to'} favorites">${fav?'★':'☆'}</button><div class="badges"><span class="badge ${g.setup.toLowerCase().includes('no')?'easy':''}">${esc(g.setup)}</span><span class="badge">${esc(g.platforms[0]||'Game')}</span></div><div class="posterTitle"><h3>${esc(g.title)}</h3><p>${esc(g.genre)} · ${esc(g.players)}</p></div></div><div class="body"><span>${esc(g.mode)}</span><button class="detailsBtn" type="button">Details</button></div></article>`}
+function wire(container){container.querySelectorAll('[data-favorite]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();toggleFavorite(b.dataset.favorite)}));container.querySelectorAll('.card').forEach(c=>{c.addEventListener('click',e=>{if(e.target.closest('[data-favorite]'))return;openGame(state.games[Number(c.dataset.id)])});c.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('button')){e.preventDefault();openGame(state.games[Number(c.dataset.id)])}})})}
+function fillRail(el,items,eager=false){el.innerHTML=items.map((g,i)=>card(g,eager&&i<4)).join('');wire(el)}
+function renderRails(){const art=state.games.filter(usable),used=new Set();const take=(pred,n=12)=>art.filter(g=>pred(g)&&!used.has(g.title)).slice(0,n).map(g=>(used.add(g.title),g));const featured=take(()=>true,14);const quick=take(g=>text(g).includes('browser')||g.setup.toLowerCase().includes('no download'),14);const friends=take(g=>text(g).includes('party')||text(g).includes('co-op')||/4|8|12|16|many|massive/i.test(g.players),14);fillRail(els.featured,featured,true);fillRail(els.quick,quick);fillRail(els.friends,friends);const favs=state.games.filter(g=>state.favorites.has(g.title));els.favoritesSection.hidden=!favs.length;fillRail(els.favorites,favs);const recents=state.recent.map(t=>state.games.find(g=>g.title===t)).filter(Boolean).slice(0,12);els.recentSection.hidden=!recents.length;fillRail(els.recent,recents)}
+function renderActiveFilters(){const items=[];if(state.q)items.push(['q',`Search: ${state.q}`]);if(state.platform)items.push(['platform',state.platform]);if(state.setup)items.push(['setup',state.setup]);state.tags.forEach(t=>items.push([`tag:${t}`,t.replace(/\b\w/g,m=>m.toUpperCase())]));els.activeFilters.innerHTML=items.map(([k,l])=>`<button class="activeFilter" data-remove="${attr(k)}" type="button">${esc(l)} ×</button>`).join('');els.activeFilters.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.remove;if(k==='q'){state.q='';els.search.value=''}else if(k==='platform'){state.platform='';els.platform.value=''}else if(k==='setup'){state.setup='';els.setup.value=''}else state.tags.delete(k.slice(4));render()}))}
+function updateUrl(){const p=new URLSearchParams();if(state.q)p.set('q',state.q);if(state.platform)p.set('platform',state.platform);if(state.setup)p.set('setup',state.setup);if(state.tags.size)p.set('tags',[...state.tags].join(','));history.replaceState(null,'',`${location.pathname}${p.toString()?'?'+p:''}${location.hash}`)}
+function render(){els.chips.querySelectorAll('[data-chip]').forEach(b=>b.classList.toggle('active',state.tags.has(b.dataset.chip)));els.more.classList.toggle('active',state.showAll);els.more.textContent=state.showAll?'Top Picks Only':'More Games';const list=filtered();els.grid.innerHTML=list.map(card).join('');els.count.textContent=`${list.length} game${list.length===1?'':'s'}`;setStatus(list.length?'':'empty');wire(els.grid);renderActiveFilters();updateUrl()}
+function renderAll(){renderRails();render()}
+function setupFilters(){const platforms=[...new Set(state.games.flatMap(g=>g.platforms))].sort();els.platform.innerHTML='<option value="">Any platform</option>'+platforms.map(p=>`<option>${esc(p)}</option>`).join('');const chips=['browser','no download','party','co-op','shooter','mobile','racing','local','strategy'];els.chips.innerHTML=chips.map(c=>`<button class="chip" type="button" data-chip="${attr(c)}">${esc(c.replace(/\b\w/g,m=>m.toUpperCase()))}</button>`).join('');els.chips.querySelectorAll('[data-chip]').forEach(b=>b.addEventListener('click',()=>{const c=b.dataset.chip;state.tags.has(c)?state.tags.delete(c):state.tags.add(c);render()}))}
+function saveReport(g){const r=safeRead('eb-reports',[]);r.push({title:g.title,at:new Date().toISOString()});save('eb-reports',r.slice(-100));toast('Thanks. Report saved.')}
+async function shareCurrent(){const url=location.href;if(navigator.share)try{await navigator.share({title:"Eddie's Basement",text:'Check out these multiplayer games',url});return}catch{}try{await navigator.clipboard.writeText(url);toast('Search link copied')}catch{toast('Copy the URL to share') }}
+function openGame(g){if(!g)return;state.recent=[g.title,...state.recent.filter(t=>t!==g.title)].slice(0,20);save('eb-recent',state.recent);const first=g.artCandidates.find(u=>!failedUrls.has(u))||FALLBACK;els.modalImg.src=first;els.modalImg.dataset.artIndex=String(Math.max(0,g.artCandidates.indexOf(first)));els.modalImg.alt=g.title;els.modalImg.onload=()=>artworkLoaded(els.modalImg,g.id);els.modalImg.onerror=()=>nextArtwork(els.modalImg,g.id,'modal_error');const fav=state.favorites.has(g.title);els.modalInner.innerHTML=`<div class="modalHead"><div><h2>${esc(g.title)}</h2><p>${esc(g.genre)} · ${esc(g.platforms.join(', '))}</p></div><button class="close" id="closeModal" type="button">Close</button></div><div class="facts"><div><b>${esc(g.players)}</b><span>Players</span></div><div><b>${esc(g.setup)}</b><span>Setup</span></div><div><b>${esc(g.mode)}</b><span>Mode</span></div><div><b>${esc(g.platforms.join(', '))}</b><span>Platforms</span></div></div><div class="actions"><a class="action play" href="${attr(g.url)}" target="_blank" rel="noopener">Visit Game</a><button class="action" id="favoriteModal" type="button">${fav?'Remove Favorite':'Save Favorite'}</button><button class="action" id="shareGame" type="button">Share</button><button class="action" id="reportBtn" type="button">Report a Problem</button></div>`;els.modal.classList.add('open');history.replaceState(null,'',`${location.pathname}${location.search}#game=${encodeURIComponent(g.title)}`);$('#closeModal').onclick=closeModal;$('#favoriteModal').onclick=()=>{toggleFavorite(g.title);openGame(g)};$('#shareGame').onclick=shareCurrent;$('#reportBtn').onclick=()=>saveReport(g);renderRails()}
+function closeModal(){els.modal.classList.remove('open');history.replaceState(null,'',location.pathname+location.search)}
+let lastRandom='';function randomGame(){const pool=filtered().filter(usable),source=(pool.length?pool:state.games.filter(usable)).filter(g=>g.title!==lastRandom);if(source.length){const g=source[Math.floor(Math.random()*source.length)];lastRandom=g.title;openGame(g)}}
+function loadUrlState(){const p=new URLSearchParams(location.search);state.q=(p.get('q')||'').toLowerCase();state.platform=p.get('platform')||'';state.setup=p.get('setup')||'';state.tags=new Set((p.get('tags')||'').split(',').filter(Boolean));els.search.value=state.q}
+async function initCatalog(){try{state.games=await loadCatalog();els.total.textContent=state.games.length;setupFilters();loadUrlState();els.platform.value=state.platform;els.setup.value=state.setup;renderAll();const hash=new URLSearchParams(location.hash.replace(/^#/,'')).get('game');if(hash){const g=state.games.find(x=>x.title.toLowerCase()===hash.toLowerCase());if(g)openGame(g)}}catch(e){log('catalog_unavailable',{message:String(e)});setStatus('unavailable')}}
+function initEvents(){els.search.oninput=e=>{state.q=e.target.value.trim().toLowerCase();render()};els.platform.onchange=e=>{state.platform=e.target.value;render()};els.setup.onchange=e=>{state.setup=e.target.value;render()};els.clear.onclick=()=>{state.q='';state.platform='';state.setup='';state.tags.clear();els.search.value='';els.platform.value='';els.setup.value='';render()};els.more.onclick=()=>{state.showAll=!state.showAll;render()};els.shareFilters.onclick=shareCurrent;els.random.onclick=randomGame;els.modal.onclick=e=>{if(e.target===els.modal)closeModal()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});els.brand.onerror=()=>{els.brand.style.display='none';els.brandText.style.display='block'}}
+initEvents();initCatalog();
 })();
