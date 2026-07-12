@@ -3,9 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Eddie's Basement</title>
-<meta name="description" content="Find free multiplayer games for your next session.">
+<title>Eddie's Basement | Free Multiplayer Game Finder</title>
+<meta name="description" content="Find free multiplayer games for your next session. Search by platform, setup, genre and squad size—or let Eddie choose.">
 <meta name="theme-color" content="#05070d">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ghost-protocol181.github.io/Eddies_basement/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Eddie's Basement">
+<meta property="og:title" content="Eddie's Basement | Find the next game">
+<meta property="og:description" content="Find free multiplayer games for your next session—or let Eddie choose.">
+<meta property="og:url" content="https://ghost-protocol181.github.io/Eddies_basement/">
+<meta property="og:image" content="https://ghost-protocol181.github.io/Eddies_basement/social-card.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Eddie's Basement | Find the next game">
+<meta name="twitter:description" content="Find free multiplayer games for your next session—or let Eddie choose.">
+<meta name="twitter:image" content="https://ghost-protocol181.github.io/Eddies_basement/social-card.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -26,32 +41,14 @@
 <section class="section wrap" id="games"><div class="sectionHead"><div><h2>All Games</h2><p>Search and filter the collection.</p></div><div id="count" class="count"></div></div><div id="gamesGrid" class="games"></div></section>
 </main>
 <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modalCard"><div class="modalArt"><img id="modalImg" alt=""></div><div class="modalInner" id="modalInner"></div></div></div>
-<div class="randomizer" id="randomizer" role="dialog" aria-modal="true" aria-labelledby="randomizerTitle" hidden>
-  <div class="randomizerCard">
-    <div class="randomizerHead"><div><span class="randomizerKicker">The Basement Randomizer</span><h2 id="randomizerTitle">What kind of night is this?</h2><p>Choose a vibe or leave everything open.</p></div><button class="randomClose" id="randomClose" type="button" aria-label="Close randomizer">×</button></div>
-    <div class="modeGrid" id="modeGrid">
-      <button type="button" data-mode="safe"><b>Safe Pick</b><span>Easy to start, broad appeal</span></button>
-      <button type="button" data-mode="chaos"><b>Chaos Mode</b><span>Anything goes</span></button>
-      <button type="button" data-mode="deep"><b>Deep Cut</b><span>Something less obvious</span></button>
-      <button type="button" data-mode="twenty"><b>We Have 20 Minutes</b><span>Fast setup and quick rounds</span></button>
-      <button type="button" data-mode="night"><b>Whole Night</b><span>Longer sessions and progression</span></button>
-    </div>
-    <div class="randomPrefs">
-      <label><span>Players</span><select id="randomPlayers"><option value="">Any</option><option value="2">Two</option><option value="4">Four or more</option><option value="many">Big group</option></select></label>
-      <label><span>Platform</span><select id="randomPlatform"><option value="">Any</option></select></label>
-      <label><span>Setup</span><select id="randomSetup"><option value="">Any</option><option value="browser">Browser / no download</option><option value="download">Download is fine</option></select></label>
-      <label><span>Style</span><select id="randomStyle"><option value="">Any</option><option value="co-op">Cooperative</option><option value="competitive">Competitive</option><option value="casual">Casual</option></select></label>
-    </div>
-    <label class="savePrefs"><input id="saveRandomPrefs" type="checkbox"> Remember these choices</label>
-    <div class="randomizerActions"><button class="randomGo" id="randomGo" type="button">✦ Pick Our Game</button><button class="randomReset" id="randomReset" type="button">Reset</button></div>
-  </div>
-</div>
+<div class="randomizer" id="randomizer" role="dialog" aria-modal="true" aria-labelledby="randomizerTitle" hidden><div class="randomizerCard"><div class="randomizerHead"><div><span class="randomizerKicker">The Basement Randomizer</span><h2 id="randomizerTitle">What kind of night is this?</h2><p>Choose a vibe or leave everything open.</p></div><button class="randomClose" id="randomClose" type="button" aria-label="Close randomizer">×</button></div><div class="modeGrid" id="modeGrid"><button type="button" data-mode="safe"><b>Safe Pick</b><span>Easy to start, broad appeal</span></button><button type="button" data-mode="chaos"><b>Chaos Mode</b><span>Anything goes</span></button><button type="button" data-mode="deep"><b>Deep Cut</b><span>Something less obvious</span></button><button type="button" data-mode="twenty"><b>We Have 20 Minutes</b><span>Fast setup and quick rounds</span></button><button type="button" data-mode="night"><b>Whole Night</b><span>Longer sessions and progression</span></button></div><div class="randomPrefs"><label><span>Players</span><select id="randomPlayers"><option value="">Any</option><option value="2">Two</option><option value="4">Four or more</option><option value="many">Big group</option></select></label><label><span>Platform</span><select id="randomPlatform"><option value="">Any</option></select></label><label><span>Setup</span><select id="randomSetup"><option value="">Any</option><option value="browser">Browser / no download</option><option value="download">Download is fine</option></select></label><label><span>Style</span><select id="randomStyle"><option value="">Any</option><option value="co-op">Cooperative</option><option value="competitive">Competitive</option><option value="casual">Casual</option></select></label></div><label class="savePrefs"><input id="saveRandomPrefs" type="checkbox"> Remember these choices</label><div class="randomizerActions"><button class="randomGo" id="randomGo" type="button">✦ Pick Our Game</button><button class="randomReset" id="randomReset" type="button">Reset</button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<footer><div class="wrap">Eddie's Basement helps groups find something free to play together.</div></footer>
+<footer><div class="wrap"><div>Eddie's Basement helps groups find something free to play together.</div><nav aria-label="Footer"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><button id="installApp" type="button" hidden>Install App</button></nav></div></footer>
 <script src="catalog-fallback.js"></script>
 <script src="previews.js"></script>
 <script src="artwork-data.js"></script>
 <script src="vault-data.js"></script>
 <script src="app.js"></script>
+<script src="launch.js"></script>
 </body>
 </html>
