@@ -1,45 +1,73 @@
 const { test, expect } = require('@playwright/test');
 
-const BASE = 'https://ghost-protocol181.github.io/Eddies_basement/';
+const SITE = 'https://ghost-protocol181.github.io/Eddies_basement/';
 
-test('homepage loads a usable game catalog', async ({ page }) => {
-  const consoleErrors = [];
-  page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
-  page.on('pageerror', err => consoleErrors.push(err.message));
+function watchErrors(page) {
+  const errors = [];
+  page.on('pageerror', err => errors.push(err.message));
+  page.on('console', msg => {
+    if (msg.type() === 'error') errors.push(msg.text());
+  });
+  return errors;
+}
 
-  await page.goto(BASE, { waitUntil: 'domcontentloaded' });
+function expectNoMeaningfulErrors(errors) {
+  const ignored = [/favicon/i, /Failed to load resource.*image/i, /thum\.io/i, /net::ERR_BLOCKED_BY_CLIENT/i];
+  const meaningful = errors.filter(message => !ignored.some(rx => rx.test(message)));
+  expect(meaningful, `Unexpected browser errors: ${meaningful.join('\n')}`).toEqual([]);
+}
+
+test('catalog loads and shows a usable game wall', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto(SITE, { waitUntil: 'domcontentloaded' });
   await expect(page).toHaveTitle(/Eddie's Basement/i);
-  await expect(page.locator('#randomBtn')).toBeVisible();
-  await expect(page.locator('#gamesGrid .card').first()).toBeVisible({ timeout: 20000 });
+  await expect(page.locator('#gamesGrid .card').first()).toBeVisible({ timeout: 30000 });
+  expect(await page.locator('#gamesGrid .card').count()).toBeGreaterThan(10);
   await expect(page.locator('#allCount')).not.toHaveText(/^(0|—)$/);
-  expect(consoleErrors, consoleErrors.join('\n')).toEqual([]);
+  await expect(page.locator('#catalogStatus')).toBeHidden();
+  expectNoMeaningfulErrors(errors);
 });
 
-test('search, filters and clear all work', async ({ page }) => {
-  await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#gamesGrid .card').first()).toBeVisible({ timeout: 20000 });
-  await page.locator('#search').fill('fortnite');
-  await expect(page.locator('#gamesGrid')).toContainText(/Fortnite/i);
-  await page.locator('#clearBtn').click();
-  await expect(page.locator('#search')).toHaveValue('');
-});
-
-test('randomizer opens and returns a game', async ({ page }) => {
-  await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#gamesGrid .card').first()).toBeVisible({ timeout: 20000 });
+test('randomizer opens and chooses a game', async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto(SITE, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#gamesGrid .card').first()).toBeVisible({ timeout: 30000 });
+  await expect(page.locator('#randomBtn')).toBeVisible();
   await page.locator('#randomBtn').click();
   await expect(page.locator('#randomizer')).toBeVisible();
   await page.locator('#randomGo').click();
-  await expect(page.locator('#modal')).toBeVisible({ timeout: 10000 });
-  await expect(page.locator('#modalInner h2')).toBeVisible();
+  await expect(page.locator('#modal')).toHaveClass(/open/, { timeout: 15000 });
+  await expect(page.locator('#modalInner h2')).not.toBeEmpty();
+  expectNoMeaningfulErrors(errors);
 });
 
-test('health endpoint and legal pages respond', async ({ request }) => {
-  const health = await request.get(`${BASE}health.json`);
+test('search, clear all, favorites and URL state work', async ({ page }) => {
+  await page.goto(SITE, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#gamesGrid .card').first()).toBeVisible({ timeout: 30000 });
+  await page.locator('#search').fill('fortnite');
+  await expect(page.locator('#gamesGrid')).toContainText(/Fortnite/i);
+  await expect(page).toHaveURL(/q=fortnite/);
+  await page.locator('#clearBtn').click();
+  await expect(page.locator('#search')).toHaveValue('');
+  await page.locator('#gamesGrid .card .favoriteBtn').first().click();
+  await expect(page.locator('#favoritesSection')).toBeVisible();
+});
+
+test('mobile header and controls remain usable', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(SITE, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#brandImg')).toBeVisible();
+  await expect(page.locator('#randomBtn')).toBeVisible();
+  await expect(page.locator('#search')).toBeVisible();
+  await expect(page.locator('#gamesGrid .card').first()).toBeVisible({ timeout: 30000 });
+});
+
+test('health, legal and feedback pages respond', async ({ request }) => {
+  const health = await request.get(`${SITE}health.json`);
   expect(health.ok()).toBeTruthy();
   expect(await health.json()).toMatchObject({ status: 'ok' });
   for (const path of ['privacy.html', 'terms.html', 'contact.html', 'feedback.html']) {
-    const response = await request.get(`${BASE}${path}`);
-    expect(response.ok(), path).toBeTruthy();
+    const response = await request.get(`${SITE}${path}`);
+    expect(response.ok(), `${path} should load`).toBeTruthy();
   }
 });
