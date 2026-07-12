@@ -1,1 +1,11 @@
-{"name":"Eddie's Basement","short_name":"Eddie's Basement","description":"Find free multiplayer games for your next session.","start_url":"./","display":"standalone","background_color":"#05070d","theme_color":"#05070d","icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "name":"Eddie's Basement",
+  "short_name":"Eddie's Basement",
+  "description":"Find free multiplayer games for your next session.",
+  "start_url":"/Eddies_basement/",
+  "scope":"/Eddies_basement/",
+  "display":"standalone",
+  "background_color":"#05070d",
+  "theme_color":"#05070d",
+  "icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
