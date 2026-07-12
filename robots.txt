@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ghost-protocol181.github.io/Eddies_basement/sitemap.xml
