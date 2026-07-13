@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="280" viewBox="0 0 980 280" role="img" aria-labelledby="title desc">
+  <title id="title">Eddie's Basement</title>
+  <desc id="desc">Arcade-style Eddie's Basement logo</desc>
+  <defs>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#38ddff"/>
+      <stop offset="1" stop-color="#1877ff"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bcff4f"/>
+      <stop offset="1" stop-color="#55d827"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff8a24"/>
+      <stop offset="1" stop-color="#ffc35d"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-25%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#000" flood-opacity=".55"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#ff8a24" flood-opacity=".35"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <path d="M88 63h726c33 0 61 24 66 57l6 42c6 41-25 78-67 78H79c-37 0-66-32-62-69l5-47c4-35 33-61 66-61Z" fill="#07101f" stroke="#ff8a24" stroke-width="7"/>
+    <path d="M92 77h720c27 0 49 19 53 46l6 39c4 31-19 59-50 59H82c-27 0-49-23-46-50l5-43c3-29 25-51 51-51Z" fill="#0e1b31" stroke="#38ddff" stroke-opacity=".45" stroke-width="3"/>
+
+    <g transform="translate(38 48) rotate(-8 115 90)">
+      <rect x="12" y="16" width="150" height="105" rx="18" fill="#122544" stroke="#ff8a24" stroke-width="6"/>
+      <rect x="31" y="32" width="92" height="55" rx="8" fill="#1b4aa3" stroke="#38ddff" stroke-width="4"/>
+      <path d="M59 61h38M78 42v38" stroke="#91ff37" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="134" cy="50" r="8" fill="#ff8a24"/>
+      <circle cx="145" cy="72" r="8" fill="#ffd15f"/>
+      <text x="34" y="108" fill="#ffc35d" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="900">BEAT</text>
+      <text x="78" y="108" fill="#ffc35d" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="900">SCORE</text>
+    </g>
+
+    <text x="214" y="126" fill="url(#blue)" stroke="#02101f" stroke-width="7" paint-order="stroke" font-family="Arial Black, Impact, Arial, Helvetica, sans-serif" font-size="82" font-weight="900" letter-spacing="-3">EDDIE'S</text>
+    <text x="214" y="194" fill="url(#green)" stroke="#02101f" stroke-width="7" paint-order="stroke" font-family="Arial Black, Impact, Arial, Helvetica, sans-serif" font-size="82" font-weight="900" letter-spacing="-3">BASEMENT</text>
+
+    <g transform="translate(691 58) rotate(5)">
+      <rect x="0" y="0" width="154" height="154" rx="18" fill="#132743" stroke="#ff8a24" stroke-width="6"/>
+      <text x="77" y="45" text-anchor="middle" fill="#38ddff" stroke="#07101f" stroke-width="3" paint-order="stroke" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="30" font-weight="900">GAME</text>
+      <text x="77" y="82" text-anchor="middle" fill="#91ff37" stroke="#07101f" stroke-width="3" paint-order="stroke" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="34" font-weight="900">ON</text>
+      <rect x="22" y="104" width="110" height="12" rx="6" fill="#ff8a24"/>
+      <rect x="22" y="125" width="110" height="12" rx="6" fill="#38ddff" opacity=".75"/>
+    </g>
+
+    <rect x="254" y="209" width="404" height="18" rx="9" fill="#06101d" stroke="#ff8a24" stroke-width="2"/>
+    <text x="456" y="223" text-anchor="middle" fill="url(#orange)" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="900" letter-spacing="1.8">GAMES. FRIENDS. HIGH SCORES.</text>
+  </g>
+</svg>
