@@ -7,6 +7,7 @@ const attr = value => esc(value).replace(/`/g, '&#96;');
 const normalize = value => String(value || '').toLowerCase();
 
 function parseCatalog(){
+  const blocked = new Set((window.EDDIE_BLOCKED_TITLES || []).map(v => String(v || '').toLowerCase().replace(/[^a-z0-9]/g,'')));
   const rows = String(window.EDDIE_RAW || '').split('|').filter(Boolean);
   return rows.map((row, id) => {
     const [title, genre, platforms, mode, setup, players, tags] = row.split('~');
@@ -20,7 +21,7 @@ function parseCatalog(){
       players: String(players || 'Varies').trim(),
       tags: String(tags || '').split(/\s+/).filter(Boolean)
     };
-  }).filter(game => game.title);
+  }).filter(game => game.title && !blocked.has(game.title.toLowerCase().replace(/[^a-z0-9]/g,'')));
 }
 
 function haystack(game){
@@ -91,7 +92,7 @@ function render(){
   };
   const defs = [
     { id:'easy-online', title:'Easy Online Games', copy:'Fast, low-friction games for a group to try without homework.', test:take(g => /browser|no download|party|quick/.test(haystack(g))), limit:12 },
-    { id:'phone-party', title:'Everyone Uses a Phone', copy:'Good for couches, classrooms, family rooms, and group chats.', test:take(g => /mobile|phone|airconsole|gartic|roblox|rec room|stumble/.test(haystack(g))), limit:12 },
+    { id:'phone-party', title:'Everyone Uses a Phone', copy:'Good for couches, family rooms, and group chats.', test:take(g => /mobile|phone|airconsole|gartic|stumble|spaceteam|bombparty/.test(haystack(g))), limit:12 },
     { id:'board-card', title:'Board, Card & Word Games', copy:'Table-style games when the group wants something simple.', test:take(g => /board|card|chess|word|drawing|codenames|colonist|playingcards|puzzle|skribb|gartic/.test(haystack(g))), limit:12 },
     { id:'four-plus', title:'Four or More Players', copy:'Better when more people are jumping in.', test:take(g => /4|5|6|7|8|12|16|32|40|many|massive|team|squad|party/.test(normalize(g.players + ' ' + g.mode + ' ' + g.tags.join(' ')))), limit:12 },
     { id:'two-player', title:'Two-Player Picks', copy:'Quick head-to-head or two-person starts.', test:take(g => /1v1|2\+|2-/.test(normalize(g.players + ' ' + g.mode)) || /chess|card|puzzle|strategy/.test(haystack(g))), limit:12 }
