@@ -10,32 +10,49 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: beta-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm install
-      - run: npx playwright install --with-deps chromium firefox webkit
-      - name: Wait for GitHub Pages
+
+      - name: Install test dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Wait for GitHub Pages deployment
         run: |
-          for i in {1..12}; do
-            if curl -fsS https://ghost-protocol181.github.io/Eddies_basement/health.json | grep -q '"status":"ok"'; then exit 0; fi
+          sleep 45
+          for i in {1..18}; do
+            if curl -fsS --retry 2 --retry-delay 2 https://ghost-protocol181.github.io/Eddies_basement/health.json | grep -q '"status":"ok"'; then
+              exit 0
+            fi
             sleep 10
           done
+          echo "GitHub Pages did not become healthy in time"
           exit 1
-      - run: npm run test:beta
+
+      - name: Run cross-browser beta tests
+        run: npm run test:beta
+
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: beta-test-report
+          name: beta-test-report-${{ github.run_attempt }}
           path: |
             playwright-report
             test-results
           if-no-files-found: ignore
+          retention-days: 14
