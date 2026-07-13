@@ -1,4 +1,4 @@
-/* Arcade stage: locked-in masthead, texture, and interaction */
+/* Arcade stage: responsive masthead, texture, and interaction */
 
 body.browse-enhanced{
   background:
@@ -23,7 +23,7 @@ body.browse-enhanced:before{
 
 body.browse-enhanced header{
   position:relative!important;
-  min-height:220px!important;
+  min-height:clamp(170px,14vw,255px)!important;
   display:flex!important;
   align-items:center!important;
   justify-content:center!important;
@@ -66,14 +66,14 @@ body.browse-enhanced .headerInner{
   width:100%!important;
   max-width:none!important;
   min-height:auto!important;
-  padding:18px!important;
+  padding:clamp(10px,1.3vw,18px)!important;
   display:grid!important;
   place-items:center!important;
 }
 
 body.browse-enhanced .brand{
   width:auto!important;
-  max-width:min(620px,76vw)!important;
+  max-width:min(clamp(520px,48vw,820px),86vw)!important;
   height:auto!important;
   display:flex!important;
   align-items:center!important;
@@ -91,7 +91,7 @@ body.browse-enhanced .brand:after{
 body.browse-enhanced .brand img{
   position:static!important;
   display:block!important;
-  width:min(620px,76vw)!important;
+  width:min(clamp(520px,48vw,820px),86vw)!important;
   height:auto!important;
   max-width:none!important;
   opacity:1!important;
@@ -193,30 +193,29 @@ body.hero-action-mode .intro:before{
   filter:saturate(1.08) contrast(1.04)!important;
 }
 
-@media(min-width:1440px){
+@media(min-width:1600px){
   body.browse-enhanced header{
-    min-height:240px!important;
+    min-height:255px!important;
   }
   body.browse-enhanced .brand,
   body.browse-enhanced .brand img{
-    width:min(700px,72vw)!important;
-    max-width:none!important;
+    width:min(820px,58vw)!important;
   }
 }
 
 @media(max-width:1280px){
   body.browse-enhanced header{
-    min-height:200px!important;
+    min-height:clamp(155px,14vw,205px)!important;
   }
   body.browse-enhanced .brand,
   body.browse-enhanced .brand img{
-    width:min(560px,74vw)!important;
+    width:min(clamp(460px,46vw,620px),82vw)!important;
   }
 }
 
 @media(max-width:980px){
   body.browse-enhanced header{
-    min-height:150px!important;
+    min-height:145px!important;
   }
   body.browse-enhanced .brand,
   body.browse-enhanced .brand img{
@@ -261,5 +260,15 @@ body.hero-action-mode .intro:before{
   body.browse-enhanced .brand,
   body.browse-enhanced .brand img{
     width:min(270px,84vw)!important;
+  }
+}
+
+@media(orientation:landscape) and (max-height:680px) and (min-width:900px){
+  body.browse-enhanced header{
+    min-height:150px!important;
+  }
+  body.browse-enhanced .brand,
+  body.browse-enhanced .brand img{
+    width:min(560px,42vw)!important;
   }
 }
