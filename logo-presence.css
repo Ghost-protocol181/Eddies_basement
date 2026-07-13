@@ -1,2 +1,210 @@
-/* Logo presence is intentionally neutralized.
-   The final logo rules now live in arcade-stage.css so sizing does not fight across layers. */
+/* Hero polish layer: improves the decision area without touching logo sizing or app logic. */
+
+html body.browse-enhanced.hero-action-mode .intro{
+  position:relative!important;
+  padding-top:clamp(24px,3.2vw,42px)!important;
+  padding-bottom:clamp(18px,2.6vw,30px)!important;
+  isolation:isolate!important;
+}
+
+html body.browse-enhanced.hero-action-mode .intro:before{
+  content:""!important;
+  position:absolute!important;
+  left:50%!important;
+  top:12px!important;
+  width:min(1060px,86vw)!important;
+  height:1px!important;
+  transform:translateX(-50%)!important;
+  background:linear-gradient(90deg,transparent,rgba(255,138,36,.54),rgba(54,217,255,.20),transparent)!important;
+  box-shadow:0 0 22px rgba(255,138,36,.18)!important;
+  z-index:-1!important;
+}
+
+html body.browse-enhanced.hero-action-mode .intro:after{
+  content:""!important;
+  position:absolute!important;
+  left:50%!important;
+  top:18px!important;
+  width:min(1120px,92vw)!important;
+  height:calc(100% - 8px)!important;
+  transform:translateX(-50%)!important;
+  border-radius:28px!important;
+  pointer-events:none!important;
+  z-index:-2!important;
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,138,36,.115),transparent 17rem),
+    radial-gradient(circle at 70% 30%,rgba(54,217,255,.075),transparent 20rem),
+    linear-gradient(180deg,rgba(255,255,255,.026),rgba(255,255,255,0) 52%)!important;
+  border:1px solid rgba(255,255,255,.035)!important;
+}
+
+html body.browse-enhanced.hero-action-mode .introCopy{
+  max-width:1080px!important;
+}
+
+html body.browse-enhanced.hero-action-mode .eyebrow{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  margin-bottom:10px!important;
+  letter-spacing:.20em!important;
+  color:#ffb14a!important;
+  text-shadow:0 0 18px rgba(255,138,36,.18)!important;
+}
+
+html body.browse-enhanced.hero-action-mode .eyebrow:before{
+  width:38px!important;
+  height:4px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,#ff8a24,#ffc266)!important;
+  box-shadow:0 0 16px rgba(255,138,36,.28)!important;
+}
+
+html body.browse-enhanced.hero-action-mode .intro h1{
+  margin-top:2px!important;
+  margin-bottom:4px!important;
+  font-size:clamp(58px,5.6vw,88px)!important;
+  line-height:.88!important;
+  letter-spacing:-.065em!important;
+  text-wrap:balance!important;
+  text-shadow:0 18px 42px rgba(0,0,0,.38)!important;
+}
+
+html body.browse-enhanced.hero-action-mode .intro p{
+  margin-top:10px!important;
+  max-width:760px!important;
+  color:rgba(224,236,248,.86)!important;
+  font-size:clamp(17px,1.35vw,21px)!important;
+  line-height:1.32!important;
+  text-shadow:0 8px 22px rgba(0,0,0,.32)!important;
+}
+
+html body.browse-enhanced .introCopy .heroActions{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(122px,1fr))!important;
+  gap:12px!important;
+  margin-top:24px!important;
+  width:min(1070px,100%)!important;
+  align-items:stretch!important;
+}
+
+html body.browse-enhanced .introCopy .heroAction{
+  min-height:72px!important;
+  padding:14px 15px 13px!important;
+  border-radius:18px!important;
+  text-align:left!important;
+  border:1px solid rgba(176,206,240,.20)!important;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.085),transparent 40%),
+    radial-gradient(circle at 88% 16%,rgba(54,217,255,.10),transparent 7rem),
+    linear-gradient(180deg,rgba(17,37,66,.96),rgba(8,18,34,.98))!important;
+  box-shadow:
+    0 18px 38px rgba(0,0,0,.27),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -1px 0 rgba(0,0,0,.28)!important;
+  backdrop-filter:blur(10px)!important;
+}
+
+html body.browse-enhanced .introCopy .heroAction:after{
+  content:""!important;
+  position:absolute!important;
+  left:14px!important;
+  right:14px!important;
+  bottom:9px!important;
+  height:1px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,rgba(255,138,36,.32),transparent)!important;
+  opacity:.38!important;
+  pointer-events:none!important;
+}
+
+html body.browse-enhanced .introCopy .heroAction:hover,
+html body.browse-enhanced .introCopy .heroAction:focus-visible{
+  transform:translateY(-4px)!important;
+  border-color:rgba(255,177,74,.58)!important;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.12),transparent 40%),
+    radial-gradient(circle at 86% 10%,rgba(54,217,255,.16),transparent 8rem),
+    linear-gradient(180deg,rgba(22,47,82,.98),rgba(9,20,38,.98))!important;
+  box-shadow:
+    0 24px 58px rgba(0,0,0,.40),
+    0 0 26px rgba(255,138,36,.13),
+    inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+html body.browse-enhanced .introCopy .heroAction b{
+  display:block!important;
+  font-size:16px!important;
+  line-height:1.05!important;
+  letter-spacing:-.015em!important;
+  color:#fff7df!important;
+}
+
+html body.browse-enhanced .introCopy .heroAction span{
+  display:block!important;
+  margin-top:7px!important;
+  color:rgba(211,226,244,.76)!important;
+  font-size:13px!important;
+  line-height:1.1!important;
+}
+
+html body.browse-enhanced .introCopy .heroActionSurprise{
+  border-color:rgba(255,138,36,.62)!important;
+  background:
+    radial-gradient(circle at 84% 20%,rgba(255,177,74,.18),transparent 7rem),
+    linear-gradient(135deg,rgba(255,138,36,.12),transparent 36%),
+    linear-gradient(180deg,rgba(32,48,68,.98),rgba(10,20,34,.98))!important;
+  box-shadow:
+    0 20px 48px rgba(0,0,0,.34),
+    0 0 28px rgba(255,138,36,.12),
+    inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+
+html body.browse-enhanced .introCopy .heroActionSurprise:after{
+  background:linear-gradient(90deg,rgba(255,138,36,.75),rgba(255,194,102,.18),transparent)!important;
+  opacity:.72!important;
+}
+
+html body.browse-enhanced .introCopy .heroActionFind{
+  border-color:rgba(54,217,255,.24)!important;
+}
+
+@media(max-width:1280px){
+  html body.browse-enhanced .introCopy .heroActions{
+    grid-template-columns:repeat(3,minmax(150px,1fr))!important;
+    width:min(760px,100%)!important;
+  }
+}
+
+@media(max-width:760px){
+  html body.browse-enhanced.hero-action-mode .intro{
+    padding-top:18px!important;
+    padding-bottom:16px!important;
+  }
+  html body.browse-enhanced.hero-action-mode .intro:after{
+    width:calc(100% - 18px)!important;
+    border-radius:20px!important;
+  }
+  html body.browse-enhanced.hero-action-mode .intro h1{
+    font-size:clamp(42px,12vw,56px)!important;
+    letter-spacing:-.055em!important;
+  }
+  html body.browse-enhanced.hero-action-mode .intro p{
+    font-size:16px!important;
+  }
+  html body.browse-enhanced .introCopy .heroActions{
+    grid-template-columns:1fr 1fr!important;
+    gap:9px!important;
+    margin-top:16px!important;
+    width:100%!important;
+  }
+  html body.browse-enhanced .introCopy .heroAction{
+    min-height:58px!important;
+    padding:10px 12px!important;
+    border-radius:15px!important;
+  }
+  html body.browse-enhanced .introCopy .heroAction:hover,
+  html body.browse-enhanced .introCopy .heroAction:focus-visible{
+    transform:none!important;
+  }
+}
