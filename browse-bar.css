@@ -63,6 +63,7 @@ body.hero-action-mode .controlsWrap{
   text-align:left!important;
   cursor:pointer!important;
   box-shadow:0 13px 32px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.06)!important;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important;
 }
 
 .heroAction:hover,
@@ -166,7 +167,7 @@ body.hero-action-mode .section:first-of-type{
 body.browse-enhanced .commandControls{
   display:grid!important;
   grid-template-columns:1fr!important;
-  gap:0!important;
+  gap:10px!important;
   width:100%!important;
 }
 
@@ -195,7 +196,8 @@ body.browse-enhanced .commandSearch::placeholder{
   margin-top:12px!important;
 }
 
-.searchShortcuts button{
+.searchShortcuts button,
+.searchCommand .filterDrawer summary{
   min-height:38px!important;
   padding:8px 13px!important;
   border-radius:999px!important;
@@ -206,13 +208,34 @@ body.browse-enhanced .commandSearch::placeholder{
   cursor:pointer!important;
 }
 
-.searchShortcuts button:hover{
+.searchShortcuts button:hover,
+.searchCommand .filterDrawer summary:hover{
   border-color:rgba(255,138,36,.42)!important;
   background:rgba(255,138,36,.12)!important;
 }
 
-body.browse-enhanced .filterDrawer{
-  display:none!important;
+.searchCommand .filterDrawer{
+  display:block!important;
+  position:relative!important;
+  margin-top:2px!important;
+}
+
+.searchCommand .filterPanel{
+  position:static!important;
+  width:100%!important;
+  min-width:0!important;
+  margin-top:10px!important;
+  padding:14px!important;
+  border-radius:20px!important;
+  background:rgba(7,16,31,.92)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:none!important;
+}
+
+.searchCommand .filterActions{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
 }
 
 @media(max-width:760px){
