@@ -1,0 +1,75 @@
+name: Phase 1 Beta Readiness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 14 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  catalog-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Audit catalog and URL syntax
+        run: node scripts/catalog-audit.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: catalog-audit
+          path: audit-results/
+
+  browser-tests:
+    needs: catalog-audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium-desktop, firefox-desktop, webkit-desktop, iphone, android]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install test dependencies
+        run: npm install
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps ${{ matrix.project == 'firefox-desktop' && 'firefox' || matrix.project == 'webkit-desktop' && 'webkit' || 'chromium' }}
+      - name: Wait for GitHub Pages deployment
+        run: |
+          for i in {1..20}; do
+            if curl --fail --silent --show-error https://ghost-protocol181.github.io/Eddies_basement/health.json | grep -q '"status":"ok"'; then exit 0; fi
+            sleep 15
+          done
+          exit 1
+      - name: Run browser and mobile tests
+        run: npx playwright test tests/phase1.spec.js --project=${{ matrix.project }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+
+  live-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify HTTPS, redirects, and public files
+        run: |
+          set -euo pipefail
+          BASE='https://ghost-protocol181.github.io/Eddies_basement'
+          curl --fail --location --silent --show-error "$BASE/" | grep -q "Eddie's Basement"
+          curl --fail --location --silent --show-error "$BASE/health.json" | grep -q '"status":"ok"'
+          curl --fail --location --silent --show-error "$BASE/vault-data.js" | grep -q 'EDDIE_RAW'
+          curl --fail --location --silent --show-error "$BASE/manifest.webmanifest" | grep -q "Eddie's Basement"
+          test "$(curl -s -o /dev/null -w '%{url_effective}' -L 'http://ghost-protocol181.github.io/Eddies_basement/')" = "$BASE/"
