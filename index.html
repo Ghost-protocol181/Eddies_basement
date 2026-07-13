@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Eddie's Basement | Pick a Multiplayer Game</title>
-<meta name="description" content="The fastest, most enjoyable way for a group to stop debating and start playing.">
+<title>Eddie's Basement | Free Multiplayer Games to Play Together</title>
+<meta name="description" content="Find free and easy multiplayer games to play online. Pick no-download browser games, party games, co-op games, two-player games, and group-friendly online games fast.">
 <meta name="theme-color" content="#0f2440">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="index,follow">
@@ -13,13 +13,13 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Eddie's Basement">
-<meta property="og:title" content="Eddie's Basement | Pick a Multiplayer Game">
-<meta property="og:description" content="Stop debating and start playing. Browse free multiplayer games or get a quick pick for the group.">
+<meta property="og:title" content="Eddie's Basement | Free Multiplayer Games to Play Together">
+<meta property="og:description" content="Find something free to play together. Browse no-download games, party games, co-op games, two-player picks, and quick online multiplayer games.">
 <meta property="og:url" content="https://ghost-protocol181.github.io/Eddies_basement/">
 <meta property="og:image" content="https://ghost-protocol181.github.io/Eddies_basement/social-card.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Eddie's Basement | Pick a Multiplayer Game">
-<meta name="twitter:description" content="Stop debating and start playing. Browse free multiplayer games or get a quick pick for the group.">
+<meta name="twitter:title" content="Eddie's Basement | Free Multiplayer Games to Play Together">
+<meta name="twitter:description" content="Find something free to play together. Browse no-download games, party games, co-op games, two-player picks, and quick online multiplayer games.">
 <meta name="twitter:image" content="https://ghost-protocol181.github.io/Eddies_basement/social-card.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="app-flow.css">
 <link rel="stylesheet" href="experience.css">
 <link rel="stylesheet" href="brand-polish.css">
+<link rel="stylesheet" href="decision-flow.css">
 </head>
 <body>
 <header>
@@ -46,16 +47,40 @@
 <main id="top">
   <section class="intro wrap">
     <div class="introCopy">
-      <span class="eyebrow">Free multiplayer games</span>
-      <h1>Pick something to play</h1>
-      <p>Search free multiplayer games by platform, setup, style, and player count.</p>
+      <span class="eyebrow">Free multiplayer games · easy online picks</span>
+      <h1>Find something free to play together.</h1>
+      <p>Skip the endless searching. Pick no-download browser games, party games, co-op games, two-player picks, and group-friendly online games your crew can actually start.</p>
       <div class="heroLinks" aria-label="Quick actions">
         <a href="#games">Browse games</a>
-        <a href="#quickRail">Quick starts</a>
+        <a href="no-download-multiplayer-games.html">No-download games</a>
       </div>
     </div>
     <div class="total" aria-hidden="true"><b id="allCount">—</b><span>games</span></div>
   </section>
+
+  <section class="pickPaths wrap" aria-label="Quick ways to pick a game">
+    <div class="pickPathsHead">
+      <div>
+        <h2>Start with the situation.</h2>
+        <p>Most people do not know the title yet. They know who is playing, how fast they want to start, and whether downloading is a pain.</p>
+      </div>
+    </div>
+    <div class="pathGrid">
+      <button class="pickPath primary" id="pathSurprise" type="button"><span>Fastest</span><b>Surprise me</b><small>Let Eddie pick something that fits.</small></button>
+      <a class="pickPath" href="no-download-multiplayer-games.html"><span>No install</span><b>No-download games</b><small>Browser games and fast starts.</small></a>
+      <a class="pickPath" href="two-player-online-games.html"><span>Head-to-head</span><b>Two-player picks</b><small>Good when it is just two of you.</small></a>
+      <a class="pickPath" href="free-party-games-online.html"><span>Group</span><b>Party games</b><small>Drawing, guessing, chaos, and laughs.</small></a>
+      <a class="pickPath" href="browser-multiplayer-games.html"><span>Browser</span><b>Easy online games</b><small>Low-friction games that run online.</small></a>
+      <a class="pickPath" href="phone-party-games.html"><span>Phones</span><b>Everyone uses a phone</b><small>Simple picks for rooms and group calls.</small></a>
+    </div>
+  </section>
+
+  <section class="trustStrip wrap" aria-label="What Eddie's Basement tries to avoid">
+    <div><b>Low friction first</b>Free or free-to-play games, clear setup labels, and picks that are easier to start.</div>
+    <div><b>Less sketch</b>We avoid fake download traps, obvious junk, and open-ended kid-social platforms.</div>
+    <div><b>Built for groups</b>Find games by player count, setup, platform, and what kind of night you are having.</div>
+  </section>
+
   <div class="controlsWrap">
     <div class="wrap commandDock">
       <div class="commandIntro">
@@ -96,7 +121,7 @@
 <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modalCard"><div class="modalArt"><img id="modalImg" alt=""></div><div class="modalInner" id="modalInner"></div></div></div>
 <div class="randomizer" id="randomizer" role="dialog" aria-modal="true" aria-labelledby="randomizerTitle" hidden><div class="randomizerCard"><div class="randomizerHead"><div><span class="randomizerKicker">Surprise Me</span><h2 id="randomizerTitle">Get a random pick</h2><p>Press Pick a Game now, or adjust the basics first.</p></div><button class="randomClose" id="randomClose" type="button" aria-label="Close randomizer">×</button></div><div class="modeGrid" id="modeGrid"><button type="button" data-mode="safe"><b>Easy Pick</b><span>Simple to start, broad appeal</span></button><button type="button" data-mode="chaos"><b>Anything Goes</b><span>No filters, just pick</span></button><button type="button" data-mode="deep"><b>Hidden Gem</b><span>Something less obvious</span></button><button type="button" data-mode="twenty"><b>Quick Round</b><span>About 20 minutes</span></button><button type="button" data-mode="night"><b>Longer Session</b><span>Something to stay with</span></button></div><div class="randomPrefs"><label><span>Players</span><select id="randomPlayers"><option value="">Any</option><option value="2">Two</option><option value="4">Four or more</option><option value="many">Big group</option></select></label><label><span>Platform</span><select id="randomPlatform"><option value="">Any</option></select></label><label><span>Setup</span><select id="randomSetup"><option value="">Any</option><option value="browser">Browser / no download</option><option value="download">Download is fine</option></select></label><label><span>Style</span><select id="randomStyle"><option value="">Any</option><option value="co-op">Cooperative</option><option value="competitive">Competitive</option><option value="casual">Casual</option></select></label></div><label class="savePrefs"><input id="saveRandomPrefs" type="checkbox"> Remember these choices</label><div class="randomizerActions"><button class="randomGo" id="randomGo" type="button">🎲 Pick a Game</button><button class="randomReset" id="randomReset" type="button">Reset</button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<footer><div class="wrap"><div>Eddie's Basement helps people find free multiplayer games.</div><nav aria-label="Footer"><a href="feedback.html">Feedback</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><button id="installApp" type="button" hidden>Install App</button></nav></div></footer>
+<footer><div class="wrap"><div>Eddie's Basement helps people find free and easy multiplayer games.</div><nav aria-label="Footer"><a href="browser-multiplayer-games.html">Browser games</a><a href="no-download-multiplayer-games.html">No download</a><a href="free-party-games-online.html">Party games</a><a href="feedback.html">Feedback</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><button id="installApp" type="button" hidden>Install App</button></nav></div></footer>
 <script src="catalog-fallback.js"></script>
 <script src="previews.js"></script>
 <script src="artwork-data.js"></script>
@@ -110,6 +135,8 @@
 <script src="copy-cleanup.js"></script>
 <script>
 (() => {
+  const surprise = document.getElementById('pathSurprise');
+  surprise?.addEventListener('click', () => document.getElementById('randomBtn')?.click());
   const rename = () => {
     const more = document.getElementById('moreBtn');
     if (more && more.textContent.trim() === 'More Games') more.textContent = 'All Games';
