@@ -3,7 +3,7 @@
 
   // Artwork reliability layer.
   // Loaded before app.js so the app receives cleaner candidates before cards render.
-  // Important: do not rely on screenshot services that return a visible "paid account" image.
+  // Generated fallback covers are artwork only; titles/details belong in the card UI.
   const art = { ...(window.EDDIE_ARTWORK || {}) };
   const previews = { ...(window.EDDIE_PREVIEWS || {}) };
   const urls = { ...(window.EDDIE_URLS || {}) };
@@ -13,35 +13,95 @@
   const esc = value => String(value || '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
   const uniq = list => [...new Set(list.flat().filter(Boolean).map(String))];
   const unreliable = url => /image\.thum\.io|screenshotmachine|urlbox|paid account|not authorized/i.test(String(url || ''));
+  const generatedCover = url => /^data:image\/svg\+xml/i.test(String(url || ''));
   const cleanUrls = list => uniq(list).filter(url => !unreliable(url));
 
   function hash(title) {
     return [...String(title || 'Eddie')].reduce((a,c)=>(a * 31 + c.charCodeAt(0)) >>> 0, 2166136261);
   }
 
-  function wrapTitle(title) {
-    const words = String(title || 'Game').split(/\s+/).filter(Boolean);
-    const lines = [];
-    let line = '';
-    words.forEach(word => {
-      const next = line ? `${line} ${word}` : word;
-      if (next.length > 17 && line) { lines.push(line); line = word; }
-      else line = next;
-    });
-    if (line) lines.push(line);
-    return lines.slice(0, 3);
+  function kindFor(title, genre) {
+    const text = `${title} ${genre}`.toLowerCase();
+    if (/chess|lichess/.test(text)) return { icon:'♟', motif:'board' };
+    if (/card|cards|dominion|playingcards|deck/.test(text)) return { icon:'♣', motif:'cards' };
+    if (/draw|gartic|skribbl|sketch|pictionary/.test(text)) return { icon:'✎', motif:'draw' };
+    if (/word|bombparty|jklm|codenames|guess/.test(text)) return { icon:'A', motif:'word' };
+    if (/tank|diep|shooter|fps|krunker|narrow|shell/.test(text)) return { icon:'✦', motif:'target' };
+    if (/snake|agar|slither|io|arcade/.test(text)) return { icon:'●', motif:'arcade' };
+    if (/board|colonist|strategy|rts|freeciv|widelands|zero-k|megaglest/.test(text)) return { icon:'◆', motif:'grid' };
+    if (/phone|party|airconsole|spaceteam/.test(text)) return { icon:'▣', motif:'party' };
+    return { icon:'▶', motif:'arcade' };
+  }
+
+  function motifSvg(kind) {
+    const icon = esc(kind.icon);
+    if (kind.motif === 'board') {
+      return `<g opacity=".48" transform="translate(660 64) rotate(-8)">
+        ${Array.from({length:7}).map((_,r)=>Array.from({length:7}).map((_,c)=>`<rect x="${c*70}" y="${r*70}" width="70" height="70" fill="${(r+c)%2?'#fff3d4':'#07101f'}" opacity="${(r+c)%2?'.2':'.46'}"/>`).join('')).join('')}
+        <circle cx="180" cy="180" r="70" fill="#ffb14a" opacity=".72"/>
+        <text x="138" y="235" font-size="172" font-weight="900" fill="#07101f">${icon}</text>
+      </g>`;
+    }
+    if (kind.motif === 'cards') {
+      return `<g transform="translate(710 82) rotate(8)">
+        <rect x="0" y="50" width="230" height="315" rx="32" fill="#fff3d4" opacity=".2"/>
+        <rect x="105" y="0" width="230" height="315" rx="32" fill="#ffb14a" opacity=".86"/>
+        <text x="166" y="214" font-size="156" font-weight="900" fill="#07101f">${icon}</text>
+      </g>`;
+    }
+    if (kind.motif === 'draw') {
+      return `<g transform="translate(695 96) rotate(-10)">
+        <path d="M20 318 C95 110 214 402 344 72" fill="none" stroke="#ffb14a" stroke-width="38" stroke-linecap="round" opacity=".9"/>
+        <path d="M280 36 L374 130 L178 326 L84 232 Z" fill="#fff3d4" opacity=".36"/>
+        <circle cx="198" cy="230" r="80" fill="#36d9ff" opacity=".16"/>
+      </g>`;
+    }
+    if (kind.motif === 'target') {
+      return `<g transform="translate(760 90)">
+        <circle cx="180" cy="180" r="172" fill="#36d9ff" opacity=".14"/>
+        <circle cx="180" cy="180" r="116" fill="none" stroke="#ffb14a" stroke-width="24" opacity=".9"/>
+        <circle cx="180" cy="180" r="48" fill="#fff3d4" opacity=".84"/>
+        <path d="M180 2 V86 M180 274 V358 M2 180 H86 M274 180 H358" stroke="#fff3d4" stroke-width="12" opacity=".28"/>
+      </g>`;
+    }
+    if (kind.motif === 'grid') {
+      return `<g transform="translate(670 76)" opacity=".82">
+        <path d="M58 360 L220 74 L394 360 Z" fill="#ffb14a" opacity=".2"/>
+        <path d="M54 360 H426 M96 286 H382 M140 210 H338 M184 136 H294 M220 74 L58 360 M220 74 L394 360" stroke="#fff3d4" stroke-width="10" opacity=".26"/>
+        <circle cx="224" cy="250" r="64" fill="#36d9ff" opacity=".2"/>
+      </g>`;
+    }
+    if (kind.motif === 'word') {
+      return `<g transform="translate(700 95) rotate(-3)">
+        <rect x="0" y="0" width="390" height="260" rx="38" fill="#fff3d4" opacity=".16"/>
+        <text x="70" y="174" font-size="150" font-weight="900" fill="#ffb14a">A</text>
+        <text x="184" y="174" font-size="96" font-weight="900" fill="#36d9ff" opacity=".78">B C</text>
+      </g>`;
+    }
+    if (kind.motif === 'party') {
+      return `<g transform="translate(720 104)">
+        <circle cx="58" cy="78" r="52" fill="#ffb14a" opacity=".92"/>
+        <circle cx="188" cy="48" r="40" fill="#36d9ff" opacity=".75"/>
+        <circle cx="286" cy="148" r="64" fill="#9cff5a" opacity=".58"/>
+        <rect x="86" y="195" width="238" height="128" rx="30" fill="#fff3d4" opacity=".2"/>
+      </g>`;
+    }
+    return `<g transform="translate(710 96)">
+      <circle cx="176" cy="174" r="176" fill="#36d9ff" opacity=".13"/>
+      <circle cx="176" cy="174" r="112" fill="#ffb14a" opacity=".16"/>
+      <text x="110" y="238" font-size="188" font-weight="900" fill="#ffb14a">${icon}</text>
+    </g>`;
   }
 
   function localCover(title, genre='Multiplayer') {
     const h = hash(title);
     const hueA = h % 360;
     const hueB = (h * 7) % 360;
-    const titleLines = wrapTitle(title);
-    const titleSvg = titleLines.map((line,i)=>`<text x="72" y="${292 + i * 82}" font-size="72" font-weight="900" letter-spacing="-2" fill="#fff3d4">${esc(line)}</text>`).join('');
+    const kind = kindFor(title, genre);
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
       <defs>
         <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="hsl(${hueA},76%,22%)"/>
+          <stop offset="0" stop-color="hsl(${hueA},76%,24%)"/>
           <stop offset="0.55" stop-color="#07101f"/>
           <stop offset="1" stop-color="hsl(${hueB},78%,18%)"/>
         </linearGradient>
@@ -58,13 +118,9 @@
       <rect width="1200" height="675" fill="url(#glow)"/>
       <rect width="1200" height="675" fill="url(#grid)"/>
       <path d="M0 522 C205 462 350 590 535 528 S872 450 1200 525 V675 H0Z" fill="#030814" opacity=".66"/>
-      <rect x="60" y="58" width="240" height="46" rx="23" fill="#ff8a24" opacity=".92"/>
-      <text x="82" y="89" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="900" fill="#07101f" letter-spacing="2">EDDIE'S PICK</text>
-      <text x="72" y="168" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="900" fill="#ffb14a" letter-spacing="4">${esc(String(genre || 'MULTIPLAYER').toUpperCase())}</text>
-      <g font-family="Arial, Helvetica, sans-serif">${titleSvg}</g>
-      <text x="72" y="598" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" fill="#c8d8ec">Free multiplayer • quick to check</text>
-      <circle cx="1015" cy="155" r="86" fill="#36d9ff" opacity=".13"/>
-      <circle cx="1068" cy="210" r="34" fill="#9cff5a" opacity=".22"/>
+      <circle cx="168" cy="136" r="104" fill="#36d9ff" opacity=".08"/>
+      <circle cx="238" cy="196" r="34" fill="#ffb14a" opacity=".45"/>
+      ${motifSvg(kind)}
     </svg>`;
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
   }
@@ -94,7 +150,7 @@
       if (!cached || typeof cached !== 'object') return;
       let changed = false;
       Object.keys(cached).forEach(title => {
-        if (unreliable(cached[title]) || blocked.has(keyFor(title))) {
+        if (unreliable(cached[title]) || generatedCover(cached[title]) || blocked.has(keyFor(title))) {
           delete cached[title];
           changed = true;
         }
@@ -154,11 +210,11 @@
 
   catalogRows.forEach(({title, genre}) => {
     if (!title || blocked.has(keyFor(title))) return;
-    const hasRealArt = cleanUrls([art[title] || [], previews[title] || []]).length > 0;
+    const hasRealArt = cleanUrls([art[title] || [], previews[title] || []]).some(url => !generatedCover(url));
     const fallback = localCover(title, genre || 'Multiplayer');
     if (hasRealArt) {
-      art[title] = uniq([cleanUrls(art[title] || []), cleanUrls(previews[title] || []), fallback]);
-      previews[title] = cleanUrls(previews[title] || [])[0] || art[title][0] || fallback;
+      art[title] = uniq([cleanUrls(art[title] || []).filter(url => !generatedCover(url)), cleanUrls(previews[title] || []).filter(url => !generatedCover(url)), fallback]);
+      previews[title] = cleanUrls(previews[title] || []).filter(url => !generatedCover(url))[0] || art[title][0] || fallback;
     } else {
       art[title] = [fallback];
       previews[title] = fallback;
@@ -168,10 +224,10 @@
   // Remove blocked and unreliable screenshot entries from the public image maps.
   Object.keys(art).forEach(title => {
     if (blocked.has(keyFor(title))) delete art[title];
-    else art[title] = uniq([cleanUrls(art[title]), localCover(title, 'Multiplayer')]);
+    else art[title] = uniq([cleanUrls(art[title]).filter(url => !generatedCover(url)), localCover(title, 'Multiplayer')]);
   });
   Object.keys(previews).forEach(title => {
-    if (blocked.has(keyFor(title)) || unreliable(previews[title])) previews[title] = art[title]?.[0] || localCover(title, 'Multiplayer');
+    if (blocked.has(keyFor(title)) || unreliable(previews[title]) || generatedCover(previews[title])) previews[title] = art[title]?.[0] || localCover(title, 'Multiplayer');
   });
   Object.keys(urls).forEach(title => { if (blocked.has(keyFor(title))) delete urls[title]; });
 
