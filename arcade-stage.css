@@ -1,4 +1,4 @@
-/* Arcade stage: stable header, framed logo, subtle texture, useful hero */
+/* Arcade stage: stable header, visually centered logo, subtle texture, useful hero */
 
 body.browse-enhanced{
   overflow-x:hidden!important;
@@ -93,7 +93,7 @@ body.browse-enhanced .brandText{
 body.browse-enhanced .brand img{
   position:absolute!important;
   top:50%!important;
-  left:clamp(120px,16vw,300px)!important;
+  left:clamp(52px,9vw,168px)!important;
   display:block!important;
   width:auto!important;
   height:100%!important;
@@ -221,7 +221,7 @@ body.hero-action-mode .intro p{
     height:182px!important;
   }
   body.browse-enhanced .brand img{
-    left:310px!important;
+    left:174px!important;
   }
 }
 
@@ -234,7 +234,7 @@ body.hero-action-mode .intro p{
     height:128px!important;
   }
   body.browse-enhanced .brand img{
-    left:clamp(130px,15vw,190px)!important;
+    left:clamp(58px,8vw,112px)!important;
   }
   .heroActions{
     grid-template-columns:repeat(3,minmax(150px,1fr))!important;
@@ -254,7 +254,7 @@ body.hero-action-mode .intro p{
     height:106px!important;
   }
   body.browse-enhanced .brand img{
-    left:clamp(70px,13vw,130px)!important;
+    left:clamp(28px,7vw,68px)!important;
   }
 }
 
@@ -314,6 +314,6 @@ body.hero-action-mode .intro p{
     height:94px!important;
   }
   body.browse-enhanced .brand img{
-    left:clamp(70px,10vw,130px)!important;
+    left:clamp(30px,6vw,74px)!important;
   }
 }
