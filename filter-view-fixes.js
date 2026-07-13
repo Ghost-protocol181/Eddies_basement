@@ -3,7 +3,17 @@
 
   // When a user filters/searches, generic homepage rails should not pretend
   // they are filtered results. Keep the page focused on the actual grid.
-  const GENERIC_RAIL_HEADINGS = new Set(['Best Picks','Recommended','Play Right Now','Best with Friends']);
+  const GENERIC_RAIL_HEADINGS = new Set([
+    'Best Picks',
+    'Recommended',
+    'Play Right Now',
+    'Best with Friends',
+    'Easy Online Games',
+    'Everyone Uses a Phone',
+    'Board, Card & Word Games',
+    'Four or More Players',
+    'Two-Player Picks'
+  ]);
 
   function hasActiveFilter() {
     const params = new URLSearchParams(location.search);
@@ -20,12 +30,15 @@
     return section?.querySelector('.sectionHead h2')?.textContent?.trim() || '';
   }
 
+  function isGenericRail(section) {
+    return section?.classList.contains('libraryExpansion') || GENERIC_RAIL_HEADINGS.has(sectionTitle(section));
+  }
+
   function apply() {
     const filtered = hasActiveFilter();
 
     document.querySelectorAll('main > section.section.wrap').forEach(section => {
-      const title = sectionTitle(section);
-      if (GENERIC_RAIL_HEADINGS.has(title)) {
+      if (isGenericRail(section)) {
         section.hidden = filtered;
         section.dataset.hiddenWhenFiltered = filtered ? 'true' : 'false';
       }
