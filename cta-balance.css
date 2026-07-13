@@ -26,11 +26,20 @@ body.browse-enhanced .randomBtn span{
   margin-right:4px!important;
 }
 
-.heroActionPrimary{
+.heroActionPrimary,
+.heroActionSurprise{
   background:linear-gradient(180deg,#ffbd5f,#ff8a24)!important;
   color:#07101f!important;
   border-color:#ffd99a!important;
   box-shadow:0 6px 0 #8f3e12,0 16px 38px rgba(0,0,0,.3)!important;
+}
+
+.heroActionSurprise span{
+  color:#48200c!important;
+}
+
+.heroActionFind{
+  border-color:rgba(255,138,36,.24)!important;
 }
 
 @media(max-width:760px){
@@ -48,6 +57,10 @@ body.browse-enhanced .randomBtn span{
 
   body.browse-enhanced .randomBtn span{
     display:none!important;
+  }
+
+  .heroActionSurprise{
+    grid-column:auto!important;
   }
 }
 
