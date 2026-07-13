@@ -10,6 +10,10 @@
     input.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
+  function dispatchChange(input) {
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
   function scrollToGames() {
     document.getElementById('games')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -30,7 +34,7 @@
     overlay.id = 'searchCommand';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', 'Search games');
+    overlay.setAttribute('aria-label', 'Find games');
     overlay.hidden = true;
 
     const sheet = document.createElement('div');
@@ -38,7 +42,7 @@
 
     const head = document.createElement('div');
     head.className = 'searchCommandHead';
-    head.innerHTML = '<div><b>Find a game</b><span>Search titles, genres, platforms, or setup.</span></div>';
+    head.innerHTML = '<div><b>Find games</b><span>Search by title, style, setup, or platform.</span></div>';
 
     const close = document.createElement('button');
     close.className = 'searchCommandClose';
@@ -50,11 +54,12 @@
     const shortcuts = document.createElement('div');
     shortcuts.className = 'searchShortcuts';
     [
+      ['All games', ''],
       ['Fortnite', 'fortnite'],
       ['Warzone', 'warzone'],
-      ['No Download', 'no download'],
+      ['No download', 'no download'],
       ['Party', 'party'],
-      ['2 Player', '1v1'],
+      ['2 players', '1v1'],
       ['Browser', 'browser']
     ].forEach(([label, query]) => {
       const button = document.createElement('button');
@@ -81,7 +86,16 @@
       document.body.classList.remove('search-open');
     }
 
+    function resetFilters() {
+      const platform = document.getElementById('platform');
+      const setup = document.getElementById('setup');
+      if (platform && platform.value) { platform.value = ''; dispatchChange(platform); }
+      if (setup && setup.value) { setup.value = ''; dispatchChange(setup); }
+      document.getElementById('clearBtn')?.click();
+    }
+
     function applyQuery(query) {
+      resetFilters();
       search.value = query;
       dispatchInput(search);
       closeSearch();
@@ -94,7 +108,7 @@
     const primary = document.createElement('button');
     primary.type = 'button';
     primary.className = 'heroAction heroActionPrimary';
-    primary.innerHTML = '<b>Find games</b><span>Search the library</span>';
+    primary.innerHTML = '<b>Find games</b><span>Search or filter</span>';
     primary.addEventListener('click', openSearch);
     actions.appendChild(primary);
 
@@ -112,7 +126,7 @@
       actions.appendChild(button);
     });
 
-    introCopy.appendChild(actions);
+    if (!introCopy.querySelector('.heroActions')) introCopy.appendChild(actions);
 
     close.addEventListener('click', closeSearch);
     overlay.addEventListener('click', event => {
