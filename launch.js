@@ -14,21 +14,16 @@
     if(b&&b.id)track('button_click',{id:b.id,text:(b.textContent||'').trim().slice(0,80)});
   });
 
+  // During active redesign, remove old service workers/caches instead of registering one.
+  // This prevents stale HTML/CSS/JS from making the site look broken after commits.
   if('serviceWorker' in navigator){
-    let reloading=false;
-    navigator.serviceWorker.addEventListener('controllerchange',()=>{
-      if(reloading)return;
-      reloading=true;
-      track('service_worker_updated');
-      location.reload();
-    });
     window.addEventListener('load',()=>{
-      navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'})
-        .then(registration=>{
-          track('service_worker_ready');
-          registration.update().catch(()=>{});
-        })
-        .catch(err=>track('service_worker_failed',{message:String(err)}));
+      navigator.serviceWorker.getRegistrations()
+        .then(registrations=>Promise.all(registrations.map(registration=>registration.unregister())))
+        .then(()=>window.caches?caches.keys():[])
+        .then(keys=>Promise.all((keys||[]).filter(key=>key.startsWith('eddies-basement-')).map(key=>caches.delete(key))))
+        .then(()=>track('service_worker_cache_cleared'))
+        .catch(err=>track('service_worker_cleanup_failed',{message:String(err)}));
     });
   }
 
