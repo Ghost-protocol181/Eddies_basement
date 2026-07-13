@@ -2,11 +2,11 @@
   'use strict';
 
   // Artwork policy:
-  // Keep real key art, official page previews, and site/app icons.
-  // Only reject known screenshot-service failure placeholders or empty/broken sources.
+  // Keep real key art and site/app icons.
+  // Reject brittle screenshot-preview services that return paid-account placeholders.
   // Important: do not remove app.js image event handlers. The core app needs them to try
   // the next candidate when one artwork URL fails.
-  const BAD_IMAGE = /screenshotmachine|urlbox|not authorized|paid account/i;
+  const BAD_IMAGE = /image\.thum\.io|screenshotmachine|urlbox|not authorized|paid account/i;
   const ICON_IMAGE = /google\.com\/s2\/favicons|duckduckgo\.com\/ip3|favicon/i;
 
   function srcFor(img) {
