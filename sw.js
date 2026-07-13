@@ -1,6 +1,6 @@
-const CACHE='eddies-basement-v4';
+const CACHE='eddies-basement-v5';
 const CORE=['./','./index.html','./styles.css','./randomizer.css','./launch.css','./app.js','./launch.js','./vault-data.js','./catalog-fallback.js','./previews.js','./artwork-data.js','./favicon.svg','./social-card.svg','./manifest.webmanifest','./privacy.html','./terms.html','./contact.html','./feedback.html'];
-const NETWORK_FIRST=new Set(['index.html','app.js','launch.js','vault-data.js','catalog-fallback.js','previews.js','artwork-data.js','health.json']);
+const NETWORK_FIRST=new Set(['index.html','styles.css','randomizer.css','launch.css','app.js','launch.js','vault-data.js','catalog-fallback.js','previews.js','artwork-data.js','health.json']);
 
 self.addEventListener('install',event=>{
   event.waitUntil(
