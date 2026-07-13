@@ -74,31 +74,7 @@ window.EDDIE_PREVIEWS={
 'Beyond All Reason':'https://cdn.cloudflare.steamstatic.com/steam/apps/2980300/header.jpg',
 'Mindustry':'https://cdn.cloudflare.steamstatic.com/steam/apps/1127400/header.jpg',
 'Wesnoth':'https://cdn.cloudflare.steamstatic.com/steam/apps/599390/header.jpg',
-'OpenRA':'https://cdn.cloudflare.steamstatic.com/steam/apps/2229850/header.jpg',
-'Board Game Arena':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://boardgamearena.com/',
-'Krunker':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://krunker.io/',
-'Shell Shockers':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://shellshock.io/',
-'1v1.LOL':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://1v1.lol/',
-'Smash Karts':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://smashkarts.io/',
-'Pokemon Showdown':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://play.pokemonshowdown.com/',
-'TETR.IO':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://tetr.io/',
-'Skribbl.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://skribbl.io/',
-'Gartic Phone':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://garticphone.com/',
-'Gartic.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://gartic.io/',
-'Codenames Online':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://codenames.game/',
-'Chess.com':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://www.chess.com/',
-'Lichess':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://lichess.org/',
-'Slither.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://slither.io/',
-'Agar.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://agar.io/',
-'Diep.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://diep.io/',
-'ZombsRoyale.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://zombsroyale.io/',
-'Bonk.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://bonk.io/',
-'Starblast.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://starblast.io/',
-'Territorial.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://territorial.io/',
-'PlayingCards.io':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://playingcards.io/',
-'AirConsole':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://www.airconsole.com/',
-'JKLM.fun BombParty':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://jklm.fun/',
-'Little Big Snake':'https://image.thum.io/get/width/1200/crop/675/noanimate/https://littlebigsnake.com/'
+'OpenRA':'https://cdn.cloudflare.steamstatic.com/steam/apps/2229850/header.jpg'
 };
 window.EDDIE_URLS={
 'Fortnite':'https://www.fortnite.com/','Roblox':'https://www.roblox.com/','Rocket League':'https://www.rocketleague.com/','Valorant':'https://playvalorant.com/','Marvel Rivals':'https://www.marvelrivals.com/','Apex Legends':'https://www.ea.com/games/apex-legends','Overwatch 2':'https://overwatch.blizzard.com/','Brawlhalla':'https://www.brawlhalla.com/','Warframe':'https://www.warframe.com/','Krunker':'https://krunker.io/','Skribbl.io':'https://skribbl.io/','Gartic Phone':'https://garticphone.com/','Codenames Online':'https://codenames.game/','Board Game Arena':'https://boardgamearena.com/','Pokemon Showdown':'https://play.pokemonshowdown.com/','Shell Shockers':'https://shellshock.io/','1v1.LOL':'https://1v1.lol/','Smash Karts':'https://smashkarts.io/','TETR.IO':'https://tetr.io/','Chess.com':'https://www.chess.com/','Lichess':'https://lichess.org/','Slither.io':'https://slither.io/','Agar.io':'https://agar.io/','Diep.io':'https://diep.io/','ZombsRoyale.io':'https://zombsroyale.io/','Bonk.io':'https://bonk.io/','Starblast.io':'https://starblast.io/','Territorial.io':'https://territorial.io/','PlayingCards.io':'https://playingcards.io/','AirConsole':'https://www.airconsole.com/','JKLM.fun BombParty':'https://jklm.fun/'
