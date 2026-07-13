@@ -44,12 +44,12 @@
 <main id="top">
   <section class="intro wrap">
     <div class="introCopy">
-      <span class="eyebrow">Game night starts here</span>
-      <h1>What are we playing?</h1>
-      <p>The fastest, most enjoyable way for a group to stop debating and start playing.</p>
+      <span class="eyebrow">Free multiplayer games</span>
+      <h1>Pick something to play</h1>
+      <p>Search free multiplayer games by platform, setup, style, and player count.</p>
       <div class="heroLinks" aria-label="Quick actions">
-        <a href="#games">Browse the shelf</a>
-        <a href="#quickRail">Play right now</a>
+        <a href="#games">Browse games</a>
+        <a href="#quickRail">Quick starts</a>
       </div>
     </div>
     <div class="total" aria-hidden="true"><b id="allCount">—</b><span>games</span></div>
@@ -57,8 +57,8 @@
   <div class="controlsWrap">
     <div class="wrap commandDock">
       <div class="commandIntro">
-        <span>Find a game</span>
-        <p>Search, pick a vibe, or let Eddie choose.</p>
+        <span>Search</span>
+        <p>Use search or quick filters.</p>
       </div>
       <div class="controls commandControls">
         <label class="sr" for="search">Search games</label>
@@ -86,21 +86,22 @@
   <div class="wrap catalogStatus" id="catalogStatus"><div class="stateCard"><div class="spinner"></div><strong>Getting the shelf ready…</strong></div></div>
   <section class="section wrap" id="favoritesSection" hidden><div class="sectionHead"><div><h2>Your Favorites</h2><p>Games you saved on this device.</p></div></div><div id="favoritesRail" class="rail"></div></section>
   <section class="section wrap" id="recentSection" hidden><div class="sectionHead"><div><h2>Recently Viewed</h2><p>Pick up where you left off.</p></div></div><div id="recentRail" class="rail"></div></section>
-  <section class="section wrap"><div class="sectionHead"><div><h2>Eddie’s Picks</h2><p>Start here when nobody wants another debate.</p></div></div><div id="featuredRail" class="rail"></div></section>
+  <section class="section wrap"><div class="sectionHead"><div><h2>Recommended</h2><p>Solid picks for groups.</p></div></div><div id="featuredRail" class="rail"></div></section>
   <section class="section wrap"><div class="sectionHead"><div><h2>Play Right Now</h2><p>Browser games and quick starts.</p></div></div><div id="quickRail" class="rail"></div></section>
-  <section class="section wrap"><div class="sectionHead"><div><h2>Best with Friends</h2><p>Good picks for the group chat.</p></div></div><div id="friendsRail" class="rail"></div></section>
-  <section class="section wrap" id="games"><div class="sectionHead"><div><h2>The Game Shelf</h2><p>Tap a cover to see if it fits your group.</p></div><div id="count" class="count"></div></div><div id="gamesGrid" class="games"></div></section>
+  <section class="section wrap"><div class="sectionHead"><div><h2>Best with Friends</h2><p>Good picks for group play.</p></div></div><div id="friendsRail" class="rail"></div></section>
+  <section class="section wrap" id="games"><div class="sectionHead"><div><h2>The Game Shelf</h2><p>Tap a cover for platforms, setup, and links.</p></div><div id="count" class="count"></div></div><div id="gamesGrid" class="games"></div></section>
 </main>
 <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modalCard"><div class="modalArt"><img id="modalImg" alt=""></div><div class="modalInner" id="modalInner"></div></div></div>
-<div class="randomizer" id="randomizer" role="dialog" aria-modal="true" aria-labelledby="randomizerTitle" hidden><div class="randomizerCard"><div class="randomizerHead"><div><span class="randomizerKicker">Surprise Me</span><h2 id="randomizerTitle">Let’s pick something.</h2><p>Choose a few basics, or leave it wide open.</p></div><button class="randomClose" id="randomClose" type="button" aria-label="Close randomizer">×</button></div><div class="modeGrid" id="modeGrid"><button type="button" data-mode="safe"><b>Easy Win</b><span>Simple to start, broad appeal</span></button><button type="button" data-mode="chaos"><b>Anything Goes</b><span>No rules, just pick</span></button><button type="button" data-mode="deep"><b>Hidden Gem</b><span>Something less obvious</span></button><button type="button" data-mode="twenty"><b>Quick Round</b><span>About 20 minutes</span></button><button type="button" data-mode="night"><b>Settle In</b><span>Something to stay with</span></button></div><div class="randomPrefs"><label><span>Players</span><select id="randomPlayers"><option value="">Any</option><option value="2">Two</option><option value="4">Four or more</option><option value="many">Big group</option></select></label><label><span>Platform</span><select id="randomPlatform"><option value="">Any</option></select></label><label><span>Setup</span><select id="randomSetup"><option value="">Any</option><option value="browser">Browser / no download</option><option value="download">Download is fine</option></select></label><label><span>Style</span><select id="randomStyle"><option value="">Any</option><option value="co-op">Cooperative</option><option value="competitive">Competitive</option><option value="casual">Casual</option></select></label></div><label class="savePrefs"><input id="saveRandomPrefs" type="checkbox"> Remember these choices</label><div class="randomizerActions"><button class="randomGo" id="randomGo" type="button">🎲 Pick a Game</button><button class="randomReset" id="randomReset" type="button">Reset</button></div></div></div>
+<div class="randomizer" id="randomizer" role="dialog" aria-modal="true" aria-labelledby="randomizerTitle" hidden><div class="randomizerCard"><div class="randomizerHead"><div><span class="randomizerKicker">Surprise Me</span><h2 id="randomizerTitle">Pick a game</h2><p>Set filters or leave them open.</p></div><button class="randomClose" id="randomClose" type="button" aria-label="Close randomizer">×</button></div><div class="modeGrid" id="modeGrid"><button type="button" data-mode="safe"><b>Easy Win</b><span>Simple to start, broad appeal</span></button><button type="button" data-mode="chaos"><b>Anything Goes</b><span>No rules, just pick</span></button><button type="button" data-mode="deep"><b>Hidden Gem</b><span>Something less obvious</span></button><button type="button" data-mode="twenty"><b>Quick Round</b><span>About 20 minutes</span></button><button type="button" data-mode="night"><b>Settle In</b><span>Something to stay with</span></button></div><div class="randomPrefs"><label><span>Players</span><select id="randomPlayers"><option value="">Any</option><option value="2">Two</option><option value="4">Four or more</option><option value="many">Big group</option></select></label><label><span>Platform</span><select id="randomPlatform"><option value="">Any</option></select></label><label><span>Setup</span><select id="randomSetup"><option value="">Any</option><option value="browser">Browser / no download</option><option value="download">Download is fine</option></select></label><label><span>Style</span><select id="randomStyle"><option value="">Any</option><option value="co-op">Cooperative</option><option value="competitive">Competitive</option><option value="casual">Casual</option></select></label></div><label class="savePrefs"><input id="saveRandomPrefs" type="checkbox"> Remember these choices</label><div class="randomizerActions"><button class="randomGo" id="randomGo" type="button">🎲 Pick a Game</button><button class="randomReset" id="randomReset" type="button">Reset</button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<footer><div class="wrap"><div>Eddie's Basement helps groups find something free to play together.</div><nav aria-label="Footer"><a href="feedback.html">Feedback</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><button id="installApp" type="button" hidden>Install App</button></nav></div></footer>
+<footer><div class="wrap"><div>Eddie's Basement helps people find free multiplayer games.</div><nav aria-label="Footer"><a href="feedback.html">Feedback</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><button id="installApp" type="button" hidden>Install App</button></nav></div></footer>
 <script src="catalog-fallback.js"></script>
 <script src="previews.js"></script>
 <script src="artwork-data.js"></script>
 <script src="vault-data.js"></script>
 <script src="app.js"></script>
 <script src="launch.js"></script>
+<script src="copy-cleanup.js"></script>
 <script>
 (() => {
   const rename = () => {
