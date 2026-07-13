@@ -1,45 +1,4 @@
-/* Final local asset layer: clean local logo + graphic-first card fallback. */
-
-html body.browse-enhanced header{
-  min-height:clamp(132px,12vw,188px)!important;
-  overflow:hidden!important;
-}
-
-html body.browse-enhanced .headerInner{
-  min-height:inherit!important;
-  padding:10px 18px 8px!important;
-  justify-content:center!important;
-}
-
-html body.browse-enhanced .brand{
-  position:relative!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:min(760px,88vw)!important;
-  height:clamp(106px,9.6vw,158px)!important;
-  max-width:none!important;
-  margin:0 auto!important;
-  overflow:visible!important;
-}
-
-html body.browse-enhanced .brand img{
-  position:static!important;
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
-  max-width:100%!important;
-  max-height:100%!important;
-  object-fit:contain!important;
-  transform:none!important;
-  left:auto!important;
-  top:auto!important;
-  filter:drop-shadow(0 14px 22px rgba(0,0,0,.44))!important;
-}
-
-html body.browse-enhanced .brandText{
-  display:none!important;
-}
+/* Panel fallback layer: keep cards graphic-first without overriding the Dropbox logo. */
 
 .card img[src*="panel-fallback.svg"]{
   object-fit:cover!important;
@@ -53,33 +12,4 @@ html body.browse-enhanced .brandText{
 
 .card:has(img[src*="panel-fallback.svg"]) .posterTitle h3{
   text-shadow:0 8px 20px rgba(0,0,0,.55)!important;
-}
-
-@media(min-width:1600px){
-  html body.browse-enhanced header{min-height:198px!important;}
-  html body.browse-enhanced .brand{width:min(840px,82vw)!important;height:176px!important;}
-}
-
-@media(max-width:1280px){
-  html body.browse-enhanced header{min-height:138px!important;}
-  html body.browse-enhanced .brand{width:min(660px,88vw)!important;height:126px!important;}
-}
-
-@media(max-width:980px){
-  html body.browse-enhanced header{min-height:116px!important;}
-  html body.browse-enhanced .brand{width:min(520px,86vw)!important;height:104px!important;}
-}
-
-@media(max-width:760px){
-  html body.browse-enhanced header{min-height:88px!important;}
-  html body.browse-enhanced .brand{width:min(330px,88vw)!important;height:72px!important;}
-}
-
-@media(max-width:390px){
-  html body.browse-enhanced .brand{width:min(300px,86vw)!important;height:66px!important;}
-}
-
-@media(orientation:landscape) and (max-height:680px) and (min-width:900px){
-  html body.browse-enhanced header{min-height:104px!important;}
-  html body.browse-enhanced .brand{width:min(520px,50vw)!important;height:92px!important;}
 }
