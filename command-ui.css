@@ -1,0 +1,162 @@
+/* Eddie's Basement command bar: less database toolbar, more game-night flow */
+.commandDock{
+  display:grid;
+  gap:16px;
+  padding:22px!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(255,123,36,.16),transparent 18rem),
+    radial-gradient(circle at 90% 0%,rgba(53,217,255,.13),transparent 18rem),
+    linear-gradient(180deg,rgba(9,18,34,.96),rgba(13,28,53,.92))!important;
+}
+.commandIntro{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+}
+.commandIntro span{
+  color:var(--yellow);
+  font-size:13px;
+  font-weight:950;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.commandIntro p{
+  margin:0;
+  color:var(--muted);
+  font-weight:700;
+}
+.commandControls{
+  display:grid!important;
+  grid-template-columns:minmax(260px,1fr) auto!important;
+  align-items:start!important;
+  gap:14px!important;
+}
+.commandSearch{
+  min-height:68px!important;
+  border-radius:22px!important;
+  padding:18px 22px!important;
+  font-size:18px!important;
+  box-shadow:0 8px 0 rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.8)!important;
+}
+.filterDrawer{
+  position:relative;
+  z-index:20;
+}
+.filterDrawer summary{
+  list-style:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:68px;
+  border:2px solid rgba(255,255,255,.24);
+  border-radius:22px;
+  padding:18px 24px;
+  background:linear-gradient(180deg,#2e659a,#204974);
+  color:#fff;
+  font-weight:950;
+  box-shadow:0 8px 0 rgba(0,0,0,.25);
+  cursor:pointer;
+  user-select:none;
+}
+.filterDrawer summary::-webkit-details-marker{display:none}
+.filterDrawer summary:after{
+  content:"▾";
+  margin-left:10px;
+  color:var(--yellow);
+}
+.filterDrawer[open] summary{
+  background:linear-gradient(180deg,#ffb85d,var(--orange));
+  color:#210d05;
+  border-color:#ffe4ae;
+}
+.filterDrawer[open] summary:after{content:"▴";color:#210d05}
+.filterPanel{
+  position:absolute;
+  right:0;
+  top:calc(100% + 12px);
+  width:min(92vw,520px);
+  display:grid;
+  gap:14px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:24px;
+  background:linear-gradient(180deg,#10213d,#081223);
+  box-shadow:0 28px 80px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);
+}
+.filterPanel label{
+  display:grid;
+  gap:7px;
+  color:#eef7ff;
+  font-weight:900;
+}
+.filterPanel label span{
+  color:var(--yellow);
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.filterPanel select{
+  width:100%;
+  min-height:56px!important;
+}
+.filterActions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+.filterActions button{
+  min-height:54px!important;
+}
+.vibeRow{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+}
+.vibeRow > span{
+  flex:0 0 auto;
+  color:#ffdfa3;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.vibeRow .chips{
+  padding-top:0!important;
+  flex:1 1 auto;
+  min-width:0;
+}
+.vibeRow .chip{
+  border-radius:999px!important;
+  padding:10px 16px!important;
+  background:rgba(33,66,103,.72)!important;
+  border-color:rgba(255,255,255,.18)!important;
+  box-shadow:none!important;
+}
+.vibeRow .chip:hover,
+.vibeRow .chip:focus-visible{
+  background:rgba(53,217,255,.16)!important;
+  border-color:rgba(53,217,255,.42)!important;
+}
+.vibeRow .chip.active{
+  background:linear-gradient(180deg,#fff095,var(--yellow))!important;
+  color:#251b06!important;
+  border-color:#fff2bd!important;
+}
+.activeFilters{
+  padding-top:0!important;
+}
+@media(max-width:760px){
+  .commandDock{padding:16px!important;border-radius:24px!important}
+  .commandIntro{display:block}
+  .commandIntro p{margin-top:4px;font-size:14px}
+  .commandControls{grid-template-columns:1fr!important}
+  .commandSearch{min-height:60px!important;font-size:16px!important;padding:16px 18px!important}
+  .filterDrawer summary{width:100%;min-height:58px;padding:15px 18px}
+  .filterPanel{position:static;width:100%;margin-top:12px}
+  .filterActions{grid-template-columns:1fr}
+  .vibeRow{align-items:flex-start;flex-direction:column;gap:10px}
+  .vibeRow .chips{width:100%}
+}
