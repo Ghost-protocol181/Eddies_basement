@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Eddie's Basement | Free Multiplayer Games to Play Together</title>
-<meta name="description" content="Find free and easy multiplayer games to play online. Pick no-download browser games, party games, co-op games, two-player games, and group-friendly online games fast.">
+<meta name="description" content="Find free multiplayer games fast. Search browser games, party games, co-op games, two-player picks, no-download games, and group-friendly online games.">
 <meta name="theme-color" content="#0f2440">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="index,follow">
@@ -14,12 +14,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Eddie's Basement">
 <meta property="og:title" content="Eddie's Basement | Free Multiplayer Games to Play Together">
-<meta property="og:description" content="Find free multiplayer games fast. Browse no-download games, party games, co-op games, two-player picks, and quick online games.">
+<meta property="og:description" content="Find a free multiplayer game fast. Search, filter, or hit Surprise Me.">
 <meta property="og:url" content="https://ghost-protocol181.github.io/Eddies_basement/">
 <meta property="og:image" content="https://ghost-protocol181.github.io/Eddies_basement/social-card.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Eddie's Basement | Free Multiplayer Games to Play Together">
-<meta name="twitter:description" content="Find free multiplayer games fast. Browse no-download games, party games, co-op games, two-player picks, and quick online games.">
+<meta name="twitter:description" content="Find a free multiplayer game fast. Search, filter, or hit Surprise Me.">
 <meta name="twitter:image" content="https://ghost-protocol181.github.io/Eddies_basement/social-card.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,28 +48,17 @@
   <section class="intro wrap">
     <div class="introCopy">
       <span class="eyebrow">Free multiplayer games</span>
-      <h1>Find a game fast.</h1>
-      <p>Free picks for browser, party, co-op, two-player, and group play.</p>
+      <h1>Find a free game to play.</h1>
+      <p>Search, filter, or hit Surprise Me.</p>
     </div>
     <div class="total" aria-hidden="true"><b id="allCount">—</b><span>games</span></div>
-  </section>
-
-  <section class="pickPaths wrap" aria-label="Quick ways to pick a game">
-    <div class="pathGrid">
-      <button class="pickPath primary" id="pathSurprise" type="button"><b>Surprise Me</b><small>Random pick</small></button>
-      <a class="pickPath" href="no-download-multiplayer-games.html"><b>No Download</b><small>Browser starts</small></a>
-      <a class="pickPath" href="two-player-online-games.html"><b>2 Players</b><small>Head-to-head</small></a>
-      <a class="pickPath" href="free-party-games-online.html"><b>Party</b><small>Group games</small></a>
-      <a class="pickPath" href="?tags=co-op#games"><b>Co-op</b><small>Play together</small></a>
-      <a class="pickPath" href="phone-party-games.html"><b>Phones</b><small>Everyone joins</small></a>
-    </div>
   </section>
 
   <div class="controlsWrap">
     <div class="wrap commandDock">
       <div class="commandIntro">
         <span>Search</span>
-        <p>Type or tap a filter.</p>
+        <p>Type a game, genre, platform, or setup.</p>
       </div>
       <div class="controls commandControls">
         <label class="sr" for="search">Search games</label>
@@ -88,24 +77,25 @@
         </details>
       </div>
       <div class="vibeRow" aria-label="Quick filters">
-        <span>Popular</span>
+        <span>Browse</span>
         <div class="chips" id="chips"></div>
       </div>
       <div class="activeFilters" id="activeFilters"></div>
     </div>
   </div>
-  <div class="wrap catalogStatus" id="catalogStatus"><div class="stateCard"><div class="spinner"></div><strong>Getting the shelf ready…</strong></div></div>
+
+  <div class="wrap catalogStatus" id="catalogStatus"><div class="stateCard"><div class="spinner"></div><strong>Getting the games ready…</strong></div></div>
+  <section class="section wrap"><div class="sectionHead"><div><h2>Best Picks</h2><p>Good starts for groups.</p></div></div><div id="featuredRail" class="rail"></div></section>
+  <section class="section wrap"><div class="sectionHead"><div><h2>Play Right Now</h2><p>Browser games and quick starts.</p></div></div><div id="quickRail" class="rail"></div></section>
+  <section class="section wrap"><div class="sectionHead"><div><h2>Best with Friends</h2><p>Co-op, party, and group picks.</p></div></div><div id="friendsRail" class="rail"></div></section>
+  <section class="section wrap" id="games"><div class="sectionHead"><div><h2>All Games</h2><p>Tap a cover for setup, players, and links.</p></div><div id="count" class="count"></div></div><div id="gamesGrid" class="games"></div></section>
   <section class="section wrap" id="favoritesSection" hidden><div class="sectionHead"><div><h2>Your Favorites</h2><p>Games you saved on this device.</p></div></div><div id="favoritesRail" class="rail"></div></section>
   <section class="section wrap" id="recentSection" hidden><div class="sectionHead"><div><h2>Recently Viewed</h2><p>Pick up where you left off.</p></div></div><div id="recentRail" class="rail"></div></section>
-  <section class="section wrap"><div class="sectionHead"><div><h2>Recommended</h2><p>Solid picks for groups.</p></div></div><div id="featuredRail" class="rail"></div></section>
-  <section class="section wrap"><div class="sectionHead"><div><h2>Play Right Now</h2><p>Browser games and quick starts.</p></div></div><div id="quickRail" class="rail"></div></section>
-  <section class="section wrap"><div class="sectionHead"><div><h2>Best with Friends</h2><p>Good picks for group play.</p></div></div><div id="friendsRail" class="rail"></div></section>
-  <section class="section wrap" id="games"><div class="sectionHead"><div><h2>The Game Shelf</h2><p>Tap a cover for platforms, setup, and links.</p></div><div id="count" class="count"></div></div><div id="gamesGrid" class="games"></div></section>
 </main>
 <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modalCard"><div class="modalArt"><img id="modalImg" alt=""></div><div class="modalInner" id="modalInner"></div></div></div>
 <div class="randomizer" id="randomizer" role="dialog" aria-modal="true" aria-labelledby="randomizerTitle" hidden><div class="randomizerCard"><div class="randomizerHead"><div><span class="randomizerKicker">Surprise Me</span><h2 id="randomizerTitle">Get a random pick</h2><p>Press Pick a Game now, or adjust the basics first.</p></div><button class="randomClose" id="randomClose" type="button" aria-label="Close randomizer">×</button></div><div class="modeGrid" id="modeGrid"><button type="button" data-mode="safe"><b>Easy Pick</b><span>Simple to start, broad appeal</span></button><button type="button" data-mode="chaos"><b>Anything Goes</b><span>No filters, just pick</span></button><button type="button" data-mode="deep"><b>Hidden Gem</b><span>Something less obvious</span></button><button type="button" data-mode="twenty"><b>Quick Round</b><span>About 20 minutes</span></button><button type="button" data-mode="night"><b>Longer Session</b><span>Something to stay with</span></button></div><div class="randomPrefs"><label><span>Players</span><select id="randomPlayers"><option value="">Any</option><option value="2">Two</option><option value="4">Four or more</option><option value="many">Big group</option></select></label><label><span>Platform</span><select id="randomPlatform"><option value="">Any</option></select></label><label><span>Setup</span><select id="randomSetup"><option value="">Any</option><option value="browser">Browser / no download</option><option value="download">Download is fine</option></select></label><label><span>Style</span><select id="randomStyle"><option value="">Any</option><option value="co-op">Cooperative</option><option value="competitive">Competitive</option><option value="casual">Casual</option></select></label></div><label class="savePrefs"><input id="saveRandomPrefs" type="checkbox"> Remember these choices</label><div class="randomizerActions"><button class="randomGo" id="randomGo" type="button">🎲 Pick a Game</button><button class="randomReset" id="randomReset" type="button">Reset</button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<footer><div class="wrap"><div>Eddie's Basement helps people find free and easy multiplayer games.</div><nav aria-label="Footer"><a href="browser-multiplayer-games.html">Browser games</a><a href="no-download-multiplayer-games.html">No download</a><a href="free-party-games-online.html">Party games</a><a href="feedback.html">Feedback</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><button id="installApp" type="button" hidden>Install App</button></nav></div></footer>
+<footer><div class="wrap"><div>Eddie's Basement helps people find free multiplayer games.</div><nav aria-label="Footer"><a href="browser-multiplayer-games.html">Browser games</a><a href="no-download-multiplayer-games.html">No download</a><a href="free-party-games-online.html">Party games</a><a href="feedback.html">Feedback</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a><button id="installApp" type="button" hidden>Install App</button></nav></div></footer>
 <script src="catalog-fallback.js"></script>
 <script src="previews.js"></script>
 <script src="artwork-data.js"></script>
@@ -120,8 +110,6 @@
 <script src="copy-cleanup.js"></script>
 <script>
 (() => {
-  const surprise = document.getElementById('pathSurprise');
-  surprise?.addEventListener('click', () => document.getElementById('randomBtn')?.click());
   const rename = () => {
     const more = document.getElementById('moreBtn');
     if (more && more.textContent.trim() === 'More Games') more.textContent = 'All Games';
