@@ -1,76 +1,61 @@
-/* Logo presence: make the brand anchor stronger without crowding the mobile header */
+/* Logo presence: larger clean brand mark, no decorative glow effects */
+
+body.browse-enhanced .headerInner{
+  min-height:122px!important;
+  justify-content:center!important;
+  padding:12px 0!important;
+}
 
 body.browse-enhanced .brand{
   position:relative!important;
-  isolation:isolate!important;
+  width:auto!important;
+  min-width:0!important;
+  flex:0 1 auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0 auto!important;
 }
 
-body.browse-enhanced .brand:before{
-  content:""!important;
-  position:absolute!important;
-  left:-18px!important;
-  right:-22px!important;
-  top:50%!important;
-  height:78px!important;
-  transform:translateY(-50%)!important;
-  border-radius:28px!important;
-  background:radial-gradient(circle at 22% 50%,rgba(255,138,36,.20),rgba(54,217,255,.08) 45%,transparent 72%)!important;
-  filter:blur(2px)!important;
-  opacity:.78!important;
-  z-index:-1!important;
-  pointer-events:none!important;
+body.browse-enhanced .brand:before,
+body.browse-enhanced .brand:after{
+  display:none!important;
+  content:none!important;
 }
 
 body.browse-enhanced .brand img{
-  height:104px!important;
-  max-width:min(450px,48vw)!important;
-  filter:
-    drop-shadow(0 20px 34px rgba(0,0,0,.62))
-    drop-shadow(0 0 20px rgba(255,138,36,.22))
-    drop-shadow(0 0 14px rgba(54,217,255,.10))!important;
-}
-
-body.browse-enhanced .headerInner{
-  min-height:112px!important;
+  height:118px!important;
+  width:auto!important;
+  max-width:min(540px,72vw)!important;
+  margin:0!important;
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.42))!important;
 }
 
 @media(max-width:760px){
   body.browse-enhanced .headerInner{
-    min-height:76px!important;
-    padding:7px 16px!important;
+    min-height:92px!important;
+    padding:8px 14px!important;
+    justify-content:center!important;
   }
 
   body.browse-enhanced .brand{
-    flex:1 1 auto!important;
-  }
-
-  body.browse-enhanced .brand:before{
-    left:-12px!important;
-    right:auto!important;
-    width:min(250px,68vw)!important;
-    height:62px!important;
-    border-radius:22px!important;
-    opacity:.68!important;
+    flex:0 1 auto!important;
+    margin:0 auto!important;
   }
 
   body.browse-enhanced .brand img{
-    height:62px!important;
-    max-width:min(250px,61vw)!important;
-  }
-
-  body.browse-enhanced .randomBtn{
-    opacity:.9!important;
+    height:78px!important;
+    max-width:min(330px,88vw)!important;
   }
 }
 
 @media(max-width:390px){
-  body.browse-enhanced .brand img{
-    height:56px!important;
-    max-width:min(220px,58vw)!important;
+  body.browse-enhanced .headerInner{
+    min-height:84px!important;
   }
 
-  body.browse-enhanced .brand:before{
-    width:min(220px,62vw)!important;
-    height:58px!important;
+  body.browse-enhanced .brand img{
+    height:70px!important;
+    max-width:min(292px,86vw)!important;
   }
 }
