@@ -4,6 +4,7 @@
   // When a user filters/searches, generic homepage rails should not pretend
   // they are filtered results. Keep the page focused on the actual grid.
   const GENERIC_RAIL_HEADINGS = new Set([
+    'The Hits',
     'Best Picks',
     'Recommended',
     'Play Right Now',
