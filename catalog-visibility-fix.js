@@ -2,11 +2,11 @@
   'use strict';
 
   // Functionality guard:
-  // The core app ranks and filters around whether a game has an art candidate.
-  // Missing artwork should never make the catalog feel smaller, so every title
-  // gets a safe visual fallback unless it already has curated artwork.
+  // Missing curated artwork should not shrink the catalog.
+  // Use better fallbacks in this order:
+  // 1) official page preview, 2) site/app icon, 3) generic safety fallback.
   const FALLBACK_VISUAL = 'https://www.dropbox.com/scl/fi/p7jsg38fzmdnqbeayd6b9/Cover.png?rlkey=e8ngjkrda569sy9fwqs0nl4sg&st=43zxzx1l&raw=1&visual=1';
-  const BROKEN_ART_PATTERN = /image\.thum\.io|screenshotmachine|urlbox|not authorized|paid account|data:image\/svg/i;
+  const BROKEN_ART_PATTERN = /screenshotmachine|urlbox|not authorized|paid account|data:image\/svg/i;
 
   function titlesFromRaw(raw) {
     return String(raw || '')
@@ -16,10 +16,29 @@
       .filter(Boolean);
   }
 
+  function isUsableOfficialUrl(url) {
+    const value = String(url || '').trim();
+    return /^https?:\/\//i.test(value) && !/google\.com\/search|google\.com\/url/i.test(value);
+  }
+
+  function pagePreview(url) {
+    if (!isUsableOfficialUrl(url)) return '';
+    return `https://image.thum.io/get/width/960/crop/540/noanimate/${url}`;
+  }
+
+  function siteIcon(url) {
+    if (!isUsableOfficialUrl(url)) return '';
+    return `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(url)}&sz=256`;
+  }
+
+  function unique(values) {
+    return [...new Set(values.filter(Boolean).map(String))];
+  }
+
   function resetArtworkCaches() {
     try {
       // Earlier rebuilds marked too many images as failed. Clear the failure list
-      // before app.js captures it so real art gets another chance to load.
+      // before app.js captures it so real art, previews, and icons get another chance.
       localStorage.removeItem('eb-failed-artwork');
 
       const cached = JSON.parse(localStorage.getItem('eb-working-artwork') || '{}');
@@ -39,10 +58,18 @@
   resetArtworkCaches();
 
   window.EDDIE_ARTWORK = window.EDDIE_ARTWORK || {};
+  window.EDDIE_URLS = window.EDDIE_URLS || {};
 
   titlesFromRaw(window.EDDIE_RAW).forEach(title => {
     const current = window.EDDIE_ARTWORK[title];
-    const hasCurrent = Array.isArray(current) ? current.length > 0 : Boolean(current);
-    if (!hasCurrent) window.EDDIE_ARTWORK[title] = [FALLBACK_VISUAL];
+    const existing = Array.isArray(current) ? current.filter(Boolean) : current ? [current] : [];
+    if (existing.length) return;
+
+    const official = window.EDDIE_URLS[title];
+    window.EDDIE_ARTWORK[title] = unique([
+      pagePreview(official),
+      siteIcon(official),
+      FALLBACK_VISUAL
+    ]);
   });
 })();
