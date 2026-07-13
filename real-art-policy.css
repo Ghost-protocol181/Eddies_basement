@@ -1,6 +1,7 @@
 /* Real art only: browser/no-art titles become clean link cards, not fake cover art */
 
-.card.noRealArt{
+.card.noRealArt,
+.card.qaTextCard{
   background:
     radial-gradient(circle at 12% 0%,rgba(255,138,36,.1),transparent 11rem),
     linear-gradient(180deg,rgba(15,32,58,.98),rgba(7,16,31,.98))!important;
@@ -8,12 +9,15 @@
 }
 
 .card.noRealArt:hover,
-.card.noRealArt:focus-visible{
+.card.noRealArt:focus-visible,
+.card.qaTextCard:hover,
+.card.qaTextCard:focus-visible{
   border-color:rgba(255,138,36,.42)!important;
   box-shadow:0 22px 54px rgba(0,0,0,.38),0 0 24px rgba(255,138,36,.1)!important;
 }
 
-.card.noRealArt .art{
+.card.noRealArt .art,
+.card.qaTextCard .art{
   min-height:116px!important;
   aspect-ratio:auto!important;
   background:
@@ -21,16 +25,20 @@
   border-bottom:1px solid rgba(255,255,255,.09)!important;
 }
 
-.card.noRealArt.browserTextCard .art{
+.card.noRealArt.browserTextCard .art,
+.card.qaTextCard .art{
   min-height:108px!important;
 }
 
 .card.noRealArt .art img,
-.card.noRealArt .art .skeleton{
+.card.noRealArt .art .skeleton,
+.card.qaTextCard .art img,
+.card.qaTextCard .art .skeleton{
   display:none!important;
 }
 
-.card.noRealArt .art:before{
+.card.noRealArt .art:before,
+.card.qaTextCard .art:before{
   content:""!important;
   position:absolute!important;
   left:16px!important;
@@ -42,11 +50,13 @@
   opacity:.55!important;
 }
 
-.card.noRealArt .art:after{
+.card.noRealArt .art:after,
+.card.qaTextCard .art:after{
   background:linear-gradient(180deg,rgba(3,8,20,0) 0%,rgba(3,8,20,.18) 52%,rgba(3,8,20,.7) 100%)!important;
 }
 
-.card.noRealArt .posterTitle{
+.card.noRealArt .posterTitle,
+.card.qaTextCard .posterTitle{
   position:absolute!important;
   left:0!important;
   right:0!important;
@@ -54,39 +64,46 @@
   padding:42px 16px 13px!important;
 }
 
-.card.noRealArt .posterTitle h3{
+.card.noRealArt .posterTitle h3,
+.card.qaTextCard .posterTitle h3{
   font-size:21px!important;
   line-height:1.03!important;
   max-width:92%!important;
 }
 
-.card.noRealArt .posterTitle p{
+.card.noRealArt .posterTitle p,
+.card.qaTextCard .posterTitle p{
   margin-top:6px!important;
   color:#d9e6f6!important;
   font-size:13px!important;
 }
 
-.card.noRealArt .body{
+.card.noRealArt .body,
+.card.qaTextCard .body{
   min-height:48px!important;
   padding:12px 16px!important;
   background:rgba(7,16,31,.74)!important;
 }
 
-.card.noRealArt .body span{
+.card.noRealArt .body span,
+.card.qaTextCard .body span{
   color:#c8d8ec!important;
   font-size:13px!important;
 }
 
-.card.noRealArt .favoriteBtn{
+.card.noRealArt .favoriteBtn,
+.card.qaTextCard .favoriteBtn{
   background:rgba(7,16,31,.74)!important;
 }
 
-.card.noRealArt .badges .badge{
+.card.noRealArt .badges .badge,
+.card.qaTextCard .badges .badge{
   background:rgba(7,16,31,.72)!important;
   border-color:rgba(255,255,255,.24)!important;
 }
 
-.card.noRealArt .badges .badge.easy{
+.card.noRealArt .badges .badge.easy,
+.card.qaTextCard .badges .badge.easy{
   background:#9cff5a!important;
   color:#07101f!important;
 }
@@ -102,10 +119,12 @@
 
 @media(max-width:760px){
   .card.noRealArt .art,
-  .card.noRealArt.browserTextCard .art{
+  .card.noRealArt.browserTextCard .art,
+  .card.qaTextCard .art{
     min-height:104px!important;
   }
-  .card.noRealArt .posterTitle h3{
+  .card.noRealArt .posterTitle h3,
+  .card.qaTextCard .posterTitle h3{
     font-size:20px!important;
   }
 }
