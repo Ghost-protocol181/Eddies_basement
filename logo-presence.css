@@ -1,0 +1,76 @@
+/* Logo presence: make the brand anchor stronger without crowding the mobile header */
+
+body.browse-enhanced .brand{
+  position:relative!important;
+  isolation:isolate!important;
+}
+
+body.browse-enhanced .brand:before{
+  content:""!important;
+  position:absolute!important;
+  left:-18px!important;
+  right:-22px!important;
+  top:50%!important;
+  height:78px!important;
+  transform:translateY(-50%)!important;
+  border-radius:28px!important;
+  background:radial-gradient(circle at 22% 50%,rgba(255,138,36,.20),rgba(54,217,255,.08) 45%,transparent 72%)!important;
+  filter:blur(2px)!important;
+  opacity:.78!important;
+  z-index:-1!important;
+  pointer-events:none!important;
+}
+
+body.browse-enhanced .brand img{
+  height:104px!important;
+  max-width:min(450px,48vw)!important;
+  filter:
+    drop-shadow(0 20px 34px rgba(0,0,0,.62))
+    drop-shadow(0 0 20px rgba(255,138,36,.22))
+    drop-shadow(0 0 14px rgba(54,217,255,.10))!important;
+}
+
+body.browse-enhanced .headerInner{
+  min-height:112px!important;
+}
+
+@media(max-width:760px){
+  body.browse-enhanced .headerInner{
+    min-height:76px!important;
+    padding:7px 16px!important;
+  }
+
+  body.browse-enhanced .brand{
+    flex:1 1 auto!important;
+  }
+
+  body.browse-enhanced .brand:before{
+    left:-12px!important;
+    right:auto!important;
+    width:min(250px,68vw)!important;
+    height:62px!important;
+    border-radius:22px!important;
+    opacity:.68!important;
+  }
+
+  body.browse-enhanced .brand img{
+    height:62px!important;
+    max-width:min(250px,61vw)!important;
+  }
+
+  body.browse-enhanced .randomBtn{
+    opacity:.9!important;
+  }
+}
+
+@media(max-width:390px){
+  body.browse-enhanced .brand img{
+    height:56px!important;
+    max-width:min(220px,58vw)!important;
+  }
+
+  body.browse-enhanced .brand:before{
+    width:min(220px,62vw)!important;
+    height:58px!important;
+  }
+}
