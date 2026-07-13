@@ -11,7 +11,9 @@
 .card.noRealArt:hover,
 .card.noRealArt:focus-visible,
 .card.qaTextCard:hover,
-.card.qaTextCard:focus-visible{
+.card.qaTextCard:focus-visible,
+.card.iconArtCard:hover,
+.card.iconArtCard:focus-visible{
   border-color:rgba(255,138,36,.42)!important;
   box-shadow:0 22px 54px rgba(0,0,0,.38),0 0 24px rgba(255,138,36,.1)!important;
 }
@@ -108,6 +110,58 @@
   color:#07101f!important;
 }
 
+/* Site/app icon fallback: use the real icon as a polished fallback, not a fake poster. */
+.card.iconArtCard .art{
+  min-height:150px!important;
+  aspect-ratio:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(54,217,255,.14),transparent 8rem),
+    radial-gradient(circle at 50% 60%,rgba(255,138,36,.11),transparent 9rem),
+    linear-gradient(180deg,rgba(16,34,60,.98),rgba(7,16,31,.98))!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+}
+
+.card.iconArtCard .art.iconArtwork img{
+  display:block!important;
+  width:72px!important;
+  height:72px!important;
+  max-width:72px!important;
+  max-height:72px!important;
+  object-fit:contain!important;
+  padding:12px!important;
+  border-radius:22px!important;
+  background:rgba(255,255,255,.08)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.34),0 0 22px rgba(54,217,255,.10)!important;
+}
+
+.card.iconArtCard .art .skeleton{
+  display:none!important;
+}
+
+.card.iconArtCard .posterTitle{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  padding:70px 16px 13px!important;
+}
+
+.card.iconArtCard .posterTitle h3{
+  font-size:21px!important;
+  line-height:1.03!important;
+  max-width:92%!important;
+}
+
+.card.iconArtCard .posterTitle p{
+  margin-top:6px!important;
+  color:#d9e6f6!important;
+  font-size:13px!important;
+}
+
 .modal.noRealArtModal .modalArt{
   display:none!important;
 }
@@ -117,14 +171,43 @@
   max-width:min(720px,calc(100vw - 28px))!important;
 }
 
+.modal.iconArtModal .modalArt.iconArtwork{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(54,217,255,.16),transparent 10rem),
+    linear-gradient(180deg,rgba(16,34,60,.98),rgba(7,16,31,.98))!important;
+}
+
+.modal.iconArtModal .modalArt.iconArtwork img{
+  width:120px!important;
+  height:120px!important;
+  object-fit:contain!important;
+  padding:18px!important;
+  border-radius:30px!important;
+  background:rgba(255,255,255,.08)!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+}
+
 @media(max-width:760px){
   .card.noRealArt .art,
   .card.noRealArt.browserTextCard .art,
   .card.qaTextCard .art{
     min-height:104px!important;
   }
+  .card.iconArtCard .art{
+    min-height:130px!important;
+  }
+  .card.iconArtCard .art.iconArtwork img{
+    width:58px!important;
+    height:58px!important;
+    max-width:58px!important;
+    max-height:58px!important;
+  }
   .card.noRealArt .posterTitle h3,
-  .card.qaTextCard .posterTitle h3{
+  .card.qaTextCard .posterTitle h3,
+  .card.iconArtCard .posterTitle h3{
     font-size:20px!important;
   }
 }
