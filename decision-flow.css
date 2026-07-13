@@ -1,96 +1,66 @@
 /* Eddie's Basement decision flow
-   Product clarity layer: quick paths, trust copy, and SEO category pages. */
+   Compact product layer: quick paths and SEO category pages. */
 
-.intro h1 strong{color:inherit}
+.intro{
+  padding-bottom:14px!important;
+}
+
+.intro h1{
+  max-width:860px!important;
+}
+
+.intro p{
+  max-width:680px!important;
+}
+
+.heroLinks{display:none!important}
 
 .pickPaths{
-  padding:18px 0 10px!important;
+  padding:0 0 10px!important;
 }
 
-.pickPathsHead{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:14px;
-}
-
-.pickPathsHead h2{
-  margin:0;
-  color:#fff3d4;
-  font-size:clamp(25px,2.4vw,36px);
-  line-height:1;
-  letter-spacing:-.04em;
-}
-
-.pickPathsHead p{
-  margin:7px 0 0;
-  max-width:640px;
-  color:#9fb4cf;
-  font-weight:750;
-  line-height:1.45;
-}
+.pickPathsHead{display:none!important}
 
 .pathGrid{
   display:grid;
   grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:12px;
+  gap:10px;
 }
 
 .pickPath{
   display:flex;
-  min-height:132px;
+  min-height:96px;
   flex-direction:column;
-  justify-content:space-between;
-  gap:16px;
-  padding:18px;
-  border-radius:24px;
+  justify-content:center;
+  gap:8px;
+  padding:15px 16px;
+  border-radius:22px;
   text-decoration:none;
   color:#fff3d4;
-  border:1px solid rgba(255,243,212,.17);
-  background:
-    radial-gradient(circle at 18% 0%,rgba(255,138,36,.12),transparent 12rem),
-    linear-gradient(180deg,rgba(20,38,66,.94),rgba(8,19,34,.98));
-  box-shadow:0 16px 42px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.06);
+  border:1px solid rgba(255,243,212,.16);
+  background:linear-gradient(180deg,rgba(20,38,66,.92),rgba(8,19,34,.98));
+  box-shadow:0 12px 30px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.06);
   cursor:pointer;
   text-align:left;
   font:inherit;
-  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;
 }
 
 .pickPath:hover,.pickPath:focus-visible{
-  transform:translateY(-3px);
+  transform:translateY(-2px);
   outline:none;
-  border-color:rgba(255,138,36,.58);
-  box-shadow:0 22px 58px rgba(0,0,0,.34),0 0 28px rgba(255,138,36,.12),inset 0 1px 0 rgba(255,255,255,.08);
+  border-color:rgba(255,138,36,.52);
+  box-shadow:0 18px 44px rgba(0,0,0,.32),0 0 22px rgba(255,138,36,.1),inset 0 1px 0 rgba(255,255,255,.08);
 }
 
 .pickPath.primary{
-  background:
-    radial-gradient(circle at 20% 0%,rgba(255,212,104,.42),transparent 13rem),
-    linear-gradient(180deg,#ffad4b,#ff7e1d);
+  background:linear-gradient(180deg,#ffbd5f,#ff8a24);
   color:#07101f;
   border-color:#ffd99a;
-  box-shadow:0 8px 0 #8f3e12,0 18px 48px rgba(0,0,0,.34),0 0 34px rgba(255,138,36,.22);
+  box-shadow:0 7px 0 #8f3e12,0 16px 38px rgba(0,0,0,.32),0 0 24px rgba(255,138,36,.2);
 }
 
-.pickPath span{
-  width:max-content;
-  max-width:100%;
-  padding:7px 10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  color:#cfe0f4;
-  font-size:10px;
-  font-weight:950;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-}
-
-.pickPath.primary span{
-  background:rgba(7,16,31,.15);
-  color:#07101f;
-}
+.pickPath span{display:none!important}
 
 .pickPath b{
   display:block;
@@ -102,40 +72,22 @@
 
 .pickPath small{
   display:block;
-  margin-top:7px;
   color:#a9bfd9;
   font-size:13px;
-  line-height:1.3;
-  font-weight:800;
+  line-height:1.2;
+  font-weight:850;
 }
 
 .pickPath.primary small{color:rgba(7,16,31,.76)}
 
-.trustStrip{
-  margin:12px auto 8px!important;
-  display:grid;
-  grid-template-columns:1.2fr .8fr .8fr;
-  gap:10px;
+.trustStrip{display:none!important}
+
+.controlsWrap{
+  margin-top:8px!important;
 }
 
-.trustStrip div{
-  border:1px solid rgba(255,255,255,.11);
-  background:rgba(255,255,255,.045);
-  border-radius:18px;
-  padding:14px 16px;
-  color:#c8d8ec;
-  font-size:13px;
-  line-height:1.35;
-  font-weight:760;
-}
-
-.trustStrip b{
-  display:block;
-  margin-bottom:3px;
-  color:#fff3d4;
-  font-size:12px;
-  letter-spacing:.1em;
-  text-transform:uppercase;
+.commandIntro p{
+  margin-top:2px!important;
 }
 
 .categoryHero{
@@ -197,16 +149,15 @@
 }
 
 @media(max-width:760px){
-  .pickPaths{padding-top:10px!important}
-  .pickPathsHead{display:block}
-  .pathGrid{grid-template-columns:1fr 1fr;gap:10px}
-  .pickPath{min-height:126px;padding:15px;border-radius:20px}
-  .pickPath b{font-size:18px}
-  .trustStrip{grid-template-columns:1fr}
+  .intro{padding-top:24px!important;padding-bottom:8px!important}
+  .pathGrid{grid-template-columns:1fr 1fr;gap:9px}
+  .pickPath{min-height:82px;padding:13px;border-radius:18px}
+  .pickPath b{font-size:17px}
+  .pickPath small{font-size:12px}
   .categoryLinks{grid-template-columns:1fr}
 }
 
 @media(max-width:430px){
-  .pathGrid{grid-template-columns:1fr}
-  .pickPath{min-height:108px}
+  .pathGrid{grid-template-columns:1fr 1fr}
+  .pickPath{min-height:74px}
 }
