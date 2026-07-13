@@ -99,11 +99,21 @@
       search.value = query;
       dispatchInput(search);
       closeSearch();
+      if (!query) history.replaceState(null, '', `${location.pathname}#top`);
       scrollToGames();
     }
 
     function openRandomizer() {
-      document.getElementById('randomBtn')?.click();
+      const trigger = document.getElementById('randomBtn');
+      if (trigger) {
+        trigger.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        return;
+      }
+      const randomizer = document.getElementById('randomizer');
+      if (randomizer) {
+        randomizer.hidden = false;
+        randomizer.querySelector('button,select')?.focus?.({ preventScroll: true });
+      }
     }
 
     const actions = document.createElement('div');
