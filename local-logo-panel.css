@@ -1,15 +1,107 @@
-/* Panel fallback layer: keep cards graphic-first without overriding the Dropbox logo. */
+/* Quality-first artwork layer: keep Dropbox logo untouched; make no-real-art cards intentional. */
 
-.card img[src*="panel-fallback.svg"]{
-  object-fit:cover!important;
-  object-position:center!important;
-  filter:saturate(1.04) contrast(1.03)!important;
+.card.noRealArt .art,
+.card.browserTextCard .art,
+.modal.noRealArtModal .modalArt{
+  display:none!important;
 }
 
-.card:has(img[src*="panel-fallback.svg"]){
-  border-color:rgba(255,255,255,.15)!important;
+.card.noRealArt,
+.card.browserTextCard{
+  min-height:148px!important;
+  background:
+    radial-gradient(circle at 88% 12%,rgba(255,138,36,.13),transparent 8rem),
+    linear-gradient(180deg,rgba(18,35,60,.98),rgba(7,15,29,.99))!important;
+  border-color:rgba(255,255,255,.16)!important;
 }
 
-.card:has(img[src*="panel-fallback.svg"]) .posterTitle h3{
-  text-shadow:0 8px 20px rgba(0,0,0,.55)!important;
+.card.noRealArt .posterTitle,
+.card.browserTextCard .posterTitle{
+  position:relative!important;
+  inset:auto!important;
+  padding:46px 18px 10px!important;
+  background:none!important;
+  text-shadow:none!important;
+}
+
+.card.noRealArt .posterTitle h3,
+.card.browserTextCard .posterTitle h3{
+  font-size:clamp(18px,2.6vw,24px)!important;
+  line-height:1.05!important;
+  letter-spacing:-.035em!important;
+  color:#fff7df!important;
+  text-shadow:none!important;
+}
+
+.card.noRealArt .posterTitle p,
+.card.browserTextCard .posterTitle p{
+  margin-top:6px!important;
+  color:rgba(216,230,247,.80)!important;
+}
+
+.card.noRealArt .body,
+.card.browserTextCard .body{
+  border-top:1px solid rgba(255,255,255,.08)!important;
+  background:rgba(6,14,27,.62)!important;
+}
+
+.modal.noRealArtModal .modalCard{
+  grid-template-columns:1fr!important;
+  max-width:min(640px,calc(100vw - 28px))!important;
+}
+
+.modal.noRealArtModal .modalInner{
+  padding:28px!important;
+}
+
+@media(max-width:760px){
+  .games,
+  #gamesGrid{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+
+  .rail{
+    gap:12px!important;
+    scroll-padding-left:16px!important;
+  }
+
+  .card{
+    border-radius:18px!important;
+  }
+
+  .card:not(.noRealArt):not(.browserTextCard) .art{
+    aspect-ratio:16/9!important;
+    min-height:0!important;
+  }
+
+  .card.noRealArt,
+  .card.browserTextCard{
+    min-height:118px!important;
+    border-radius:17px!important;
+  }
+
+  .card.noRealArt .posterTitle,
+  .card.browserTextCard .posterTitle{
+    padding:38px 15px 8px!important;
+  }
+
+  .card.noRealArt .posterTitle h3,
+  .card.browserTextCard .posterTitle h3{
+    font-size:20px!important;
+  }
+
+  .modalCard{
+    width:calc(100vw - 18px)!important;
+    max-height:calc(100vh - 18px)!important;
+    border-radius:20px!important;
+  }
+
+  .modalArt{
+    max-height:36vh!important;
+  }
+
+  .modalInner{
+    padding:20px!important;
+  }
 }
