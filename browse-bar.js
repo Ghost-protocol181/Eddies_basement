@@ -16,28 +16,14 @@
 
   ready(() => {
     const dock = document.querySelector('.commandDock');
-    const vibe = document.querySelector('.vibeRow');
     const controls = document.querySelector('.commandControls');
     const search = document.getElementById('search');
     const filter = document.querySelector('.filterDrawer');
-    if (!dock || !vibe || !controls || !search || !filter || dock.dataset.browseBar === 'ready') return;
+    const introCopy = document.querySelector('.introCopy');
+    if (!dock || !controls || !search || !filter || !introCopy || dock.dataset.browseBar === 'ready') return;
 
     dock.dataset.browseBar = 'ready';
-    document.body.classList.add('browse-enhanced');
-
-    const tools = document.createElement('div');
-    tools.className = 'browseTools';
-
-    const searchButton = document.createElement('button');
-    searchButton.className = 'browseSearchToggle';
-    searchButton.type = 'button';
-    searchButton.setAttribute('aria-controls', 'searchCommand');
-    searchButton.setAttribute('aria-expanded', 'false');
-    searchButton.innerHTML = '<span aria-hidden="true">⌕</span> Search';
-
-    tools.appendChild(searchButton);
-    tools.appendChild(filter);
-    vibe.appendChild(tools);
+    document.body.classList.add('browse-enhanced', 'hero-action-mode');
 
     const overlay = document.createElement('div');
     overlay.className = 'searchCommand';
@@ -74,12 +60,7 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.textContent = label;
-      button.addEventListener('click', () => {
-        search.value = query;
-        dispatchInput(search);
-        closeSearch();
-        scrollToGames();
-      });
+      button.addEventListener('click', () => applyQuery(query));
       shortcuts.appendChild(button);
     });
 
@@ -89,32 +70,53 @@
     overlay.appendChild(sheet);
     document.body.appendChild(overlay);
 
-    function hasQuery() {
-      return Boolean(String(search.value || '').trim());
-    }
-
     function openSearch() {
       overlay.hidden = false;
       document.body.classList.add('search-open');
-      searchButton.setAttribute('aria-expanded', 'true');
       requestAnimationFrame(() => search.focus({ preventScroll: true }));
     }
 
     function closeSearch() {
       overlay.hidden = true;
       document.body.classList.remove('search-open');
-      searchButton.setAttribute('aria-expanded', 'false');
     }
 
-    searchButton.addEventListener('click', openSearch);
+    function applyQuery(query) {
+      search.value = query;
+      dispatchInput(search);
+      closeSearch();
+      scrollToGames();
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'heroActions';
+
+    const primary = document.createElement('button');
+    primary.type = 'button';
+    primary.className = 'heroAction heroActionPrimary';
+    primary.innerHTML = '<b>Find games</b><span>Search the library</span>';
+    primary.addEventListener('click', openSearch);
+    actions.appendChild(primary);
+
+    [
+      ['No download', 'browser starts', 'no download'],
+      ['Party', 'group games', 'party'],
+      ['2 players', 'head-to-head', '1v1'],
+      ['Co-op', 'play together', 'co-op']
+    ].forEach(([label, sub, query]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'heroAction';
+      button.innerHTML = `<b>${label}</b><span>${sub}</span>`;
+      button.addEventListener('click', () => applyQuery(query));
+      actions.appendChild(button);
+    });
+
+    introCopy.appendChild(actions);
+
     close.addEventListener('click', closeSearch);
     overlay.addEventListener('click', event => {
       if (event.target === overlay) closeSearch();
-    });
-
-    search.addEventListener('input', () => {
-      if (hasQuery()) searchButton.classList.add('hasQuery');
-      else searchButton.classList.remove('hasQuery');
     });
 
     search.addEventListener('keydown', event => {
@@ -135,6 +137,6 @@
     });
 
     const params = new URLSearchParams(location.search);
-    if (params.get('q') || hasQuery()) searchButton.classList.add('hasQuery');
+    if (params.get('q')) search.value = params.get('q');
   });
 })();
