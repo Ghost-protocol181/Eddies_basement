@@ -1,4 +1,4 @@
-const CACHE='eddies-basement-v27';
+const CACHE='eddies-basement-v28';
 const CORE=['./','./index.html','./styles.css','./randomizer.css','./launch.css','./polish.css','./command-ui.css','./app-flow.css','./experience.css','./brand-polish.css','./copy-cleanup.js','./app.js','./safety-filter.js','./catalog-vetted-expansion.js','./image-reliability.js','./library-expansion.js','./launch.js','./vault-data.js','./catalog-fallback.js','./previews.js','./artwork-data.js','./favicon.svg','./social-card.svg','./manifest.webmanifest','./privacy.html','./terms.html','./contact.html','./feedback.html'];
 const NETWORK_FIRST=new Set(['index.html','styles.css','randomizer.css','launch.css','polish.css','command-ui.css','app-flow.css','experience.css','brand-polish.css','copy-cleanup.js','app.js','safety-filter.js','catalog-vetted-expansion.js','image-reliability.js','library-expansion.js','launch.js','vault-data.js','catalog-fallback.js','previews.js','artwork-data.js','health.json']);
 
