@@ -1,7 +1,37 @@
-/* Streamlined browse controller */
+/* Streamlined browse controller + command search */
+
+body.browse-enhanced header{
+  background:
+    radial-gradient(circle at 7% 4%,rgba(255,138,36,.18),transparent 26rem),
+    linear-gradient(180deg,rgba(4,10,19,.98),rgba(7,16,31,.92))!important;
+}
+
+body.browse-enhanced .headerInner{
+  min-height:106px!important;
+  padding:10px 0!important;
+}
+
+body.browse-enhanced .brand img{
+  height:92px!important;
+  width:auto!important;
+  max-width:min(390px,42vw)!important;
+  filter:drop-shadow(0 18px 30px rgba(0,0,0,.58)) drop-shadow(0 0 18px rgba(255,138,36,.2))!important;
+}
+
+body.browse-enhanced .randomBtn{
+  min-height:54px!important;
+  padding:0 28px!important;
+  border-radius:18px!important;
+  font-size:18px!important;
+}
+
+body.browse-enhanced .intro{
+  padding-top:18px!important;
+  padding-bottom:8px!important;
+}
 
 body.browse-enhanced .controlsWrap{
-  margin-top:4px!important;
+  margin-top:0!important;
 }
 
 body.browse-enhanced .commandDock{
@@ -18,11 +48,11 @@ body.browse-enhanced .vibeRow{
   gap:10px!important;
   align-items:center!important;
   margin:0!important;
-  padding:10px!important;
-  border-radius:22px!important;
-  background:linear-gradient(180deg,rgba(13,29,51,.84),rgba(8,18,33,.78))!important;
-  border:1px solid rgba(255,255,255,.11)!important;
-  box-shadow:0 12px 34px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.055)!important;
+  padding:8px 0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
 }
 
 body.browse-enhanced .vibeRow>span{
@@ -38,17 +68,25 @@ body.browse-enhanced .chips{
   overflow-x:auto!important;
   scrollbar-width:none!important;
   -webkit-overflow-scrolling:touch!important;
-  padding:2px!important;
+  padding:2px 0!important;
 }
 
 body.browse-enhanced .chips::-webkit-scrollbar{display:none!important}
 
 body.browse-enhanced .chips button{
   flex:0 0 auto!important;
-  min-height:36px!important;
-  padding:8px 14px!important;
+  min-height:38px!important;
+  padding:8px 15px!important;
   border-radius:999px!important;
   white-space:nowrap!important;
+  background:rgba(11,43,64,.7)!important;
+  border-color:rgba(54,217,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+
+body.browse-enhanced .chips button:hover{
+  background:rgba(255,138,36,.12)!important;
+  border-color:rgba(255,138,36,.42)!important;
 }
 
 body.browse-enhanced .browseTools{
@@ -64,6 +102,7 @@ body.browse-enhanced .filterDrawer summary{
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
+  gap:7px!important;
   padding:0 15px!important;
   border-radius:999px!important;
   border:1px solid rgba(255,255,255,.16)!important;
@@ -82,7 +121,7 @@ body.browse-enhanced .filterDrawer summary:hover{
   background:rgba(255,138,36,.1)!important;
 }
 
-body.browse-enhanced.search-open .browseSearchToggle,
+body.browse-enhanced .browseSearchToggle.hasQuery,
 body.browse-enhanced .filterDrawer[open] summary{
   background:linear-gradient(180deg,#ffbd5f,#ff8a24)!important;
   color:#07101f!important;
@@ -90,24 +129,28 @@ body.browse-enhanced .filterDrawer[open] summary{
 }
 
 body.browse-enhanced .commandControls{
-  display:none!important;
-}
-
-body.browse-enhanced.search-open .commandControls{
   display:grid!important;
-  grid-template-columns:minmax(0,420px)!important;
-  margin-top:8px!important;
-  width:min(420px,100%)!important;
+  grid-template-columns:1fr!important;
+  gap:0!important;
+  width:100%!important;
 }
 
 body.browse-enhanced .commandSearch{
-  min-height:42px!important;
-  max-width:420px!important;
-  border-radius:16px!important;
-  font-size:15px!important;
-  padding:0 16px!important;
-  background:rgba(255,255,255,.075)!important;
-  border:1px solid rgba(255,255,255,.12)!important;
+  min-height:64px!important;
+  width:100%!important;
+  max-width:none!important;
+  border-radius:22px!important;
+  font-size:24px!important;
+  font-weight:850!important;
+  padding:0 22px!important;
+  background:rgba(255,255,255,.09)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  color:#fff3d4!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 46px rgba(0,0,0,.22)!important;
+}
+
+body.browse-enhanced .commandSearch::placeholder{
+  color:rgba(200,216,236,.62)!important;
 }
 
 body.browse-enhanced .filterDrawer{
@@ -122,35 +165,134 @@ body.browse-enhanced .filterPanel{
 }
 
 body.browse-enhanced .activeFilters{
-  margin-top:8px!important;
+  margin-top:6px!important;
 }
 
 body.browse-enhanced .section:first-of-type{
-  padding-top:22px!important;
+  padding-top:18px!important;
+}
+
+.searchCommand[hidden]{display:none!important}
+
+.searchCommand{
+  position:fixed!important;
+  inset:0!important;
+  z-index:9999!important;
+  display:grid!important;
+  place-items:start center!important;
+  padding:clamp(82px,10vh,130px) 18px 24px!important;
+  background:rgba(3,8,20,.76)!important;
+  backdrop-filter:blur(16px)!important;
+}
+
+.searchCommandSheet{
+  width:min(760px,100%)!important;
+  padding:18px!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(255,138,36,.2),transparent 20rem),
+    linear-gradient(180deg,rgba(17,31,56,.98),rgba(7,16,31,.98))!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:0 34px 100px rgba(0,0,0,.58),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+
+.searchCommandHead{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+  margin-bottom:14px!important;
+}
+
+.searchCommandHead b{
+  display:block!important;
+  color:#fff3d4!important;
+  font-size:24px!important;
+  line-height:1!important;
+  letter-spacing:-.035em!important;
+}
+
+.searchCommandHead span{
+  display:block!important;
+  margin-top:5px!important;
+  color:#9fb4cf!important;
+  font-size:14px!important;
+  font-weight:780!important;
+}
+
+.searchCommandClose{
+  width:42px!important;
+  height:42px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  background:rgba(255,255,255,.07)!important;
+  color:#fff3d4!important;
+  font-size:28px!important;
+  line-height:1!important;
+  cursor:pointer!important;
+}
+
+.searchShortcuts{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  margin-top:14px!important;
+}
+
+.searchShortcuts button{
+  min-height:36px!important;
+  padding:8px 13px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(54,217,255,.22)!important;
+  background:rgba(54,217,255,.08)!important;
+  color:#fff3d4!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+}
+
+.searchShortcuts button:hover{
+  border-color:rgba(255,138,36,.42)!important;
+  background:rgba(255,138,36,.12)!important;
 }
 
 @media(max-width:760px){
+  body.browse-enhanced .headerInner{
+    min-height:86px!important;
+    padding:8px 0!important;
+  }
+  body.browse-enhanced .brand img{
+    height:66px!important;
+    max-width:225px!important;
+  }
+  body.browse-enhanced .randomBtn{
+    min-height:46px!important;
+    padding:0 16px!important;
+    font-size:15px!important;
+  }
   body.browse-enhanced .vibeRow{
-    align-items:flex-start!important;
     gap:8px!important;
-    padding:9px!important;
+    padding:8px 0!important;
   }
-  body.browse-enhanced .chips{
-    order:2!important;
-    width:100%!important;
+  body.browse-enhanced .chips button,
+  body.browse-enhanced .browseSearchToggle,
+  body.browse-enhanced .filterDrawer summary{
+    min-height:36px!important;
+    padding:0 12px!important;
+    font-size:12px!important;
   }
-  body.browse-enhanced .browseTools{
-    order:1!important;
-    margin-left:auto!important;
+  .searchCommand{
+    padding:76px 12px 18px!important;
+    place-items:start stretch!important;
   }
-  body.browse-enhanced .vibeRow{
-    flex-wrap:wrap!important;
-  }
-  body.browse-enhanced.search-open .commandControls{
-    width:100%!important;
-    grid-template-columns:1fr!important;
+  .searchCommandSheet{
+    border-radius:24px!important;
+    padding:14px!important;
   }
   body.browse-enhanced .commandSearch{
-    max-width:none!important;
+    min-height:58px!important;
+    font-size:20px!important;
+    border-radius:19px!important;
   }
+  .searchCommandHead b{font-size:21px!important}
+  .searchCommandHead span{font-size:13px!important}
 }
