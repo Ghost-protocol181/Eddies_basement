@@ -1,7 +1,10 @@
 (() => {
   'use strict';
 
-  const BAD_IMAGE = /image\.thum\.io|screenshotmachine|urlbox|not authorized|paid account/i;
+  // Keep the shelf looking like a game library, not a wall of website screenshots.
+  // Real key art/store headers stay. Website screenshots/previews become Eddie covers.
+  const PREVIEW_IMAGE = /image\.thum\.io|screenshotmachine|urlbox|not authorized|paid account/i;
+  const REAL_ART = /steamstatic\.com|store_item_assets|steamcdn-a\.akamaihd\.net|cdn2\.unrealengine\.com|images\.contentstack\.io|fastcdn\.hoyoverse\.com|ctfassets\.net/i;
 
   const esc = value => String(value || '').replace(/[&<>"']/g, s => ({
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
@@ -68,14 +71,27 @@
       || 'Multiplayer';
   }
 
+  function srcFor(img) {
+    return img ? String(img.currentSrc || img.getAttribute('src') || img.src || '') : '';
+  }
+
+  function shouldReplaceImage(img, art) {
+    if (!img) return true;
+    const src = srcFor(img);
+    if (!src) return true;
+    if (img.dataset.localCover === 'true') return false;
+    if (PREVIEW_IMAGE.test(src)) return true;
+    if (art?.classList.contains('imageUnavailable')) return true;
+    return false;
+  }
+
   function coverCard(card) {
     const art = card?.querySelector('.art');
     if (!art) return;
     const title = titleFromCard(card);
     const subtitle = subtitleFromCard(card);
     let img = art.querySelector('img');
-    const shouldReplace = !img || !img.getAttribute('src') || BAD_IMAGE.test(img.getAttribute('src')) || art.classList.contains('imageUnavailable');
-    if (!shouldReplace) return;
+    if (!shouldReplaceImage(img, art)) return;
     if (!img) {
       img = document.createElement('img');
       img.alt = `${title} game artwork`;
@@ -98,8 +114,8 @@
     const subtitle = modal.querySelector('.modalInner .facts span')?.textContent?.trim() || 'Multiplayer';
     const img = document.getElementById('modalImg');
     if (!img) return;
-    const src = img.getAttribute('src') || '';
-    if (!src || BAD_IMAGE.test(src) || img.closest('.modalArt')?.classList.contains('imageUnavailable')) {
+    const src = srcFor(img);
+    if (!src || PREVIEW_IMAGE.test(src) || img.closest('.modalArt')?.classList.contains('imageUnavailable')) {
       img.src = localCover(title, subtitle);
       img.dataset.localCover = 'true';
       img.onload = null;
@@ -109,9 +125,6 @@
 
   function run() {
     document.querySelectorAll('.card').forEach(coverCard);
-    document.querySelectorAll('.card img').forEach(img => {
-      if (BAD_IMAGE.test(img.currentSrc || img.src || '')) coverCard(img.closest('.card'));
-    });
     coverModal();
   }
 
@@ -122,5 +135,5 @@
     const img = event.target;
     if (img instanceof HTMLImageElement) coverCard(img.closest('.card'));
   }, true);
-  setInterval(run, 1200);
+  setInterval(run, 900);
 })();
