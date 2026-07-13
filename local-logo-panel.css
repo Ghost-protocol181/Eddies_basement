@@ -2,30 +2,61 @@
 
 .card.noRealArt .art,
 .card.browserTextCard .art,
+.card.qaTextCard .art{
+  display:block!important;
+  position:relative!important;
+  min-height:116px!important;
+  background:
+    radial-gradient(circle at 88% 12%,rgba(255,138,36,.14),transparent 8rem),
+    radial-gradient(circle at 12% 22%,rgba(54,217,255,.10),transparent 9rem),
+    linear-gradient(180deg,rgba(18,35,60,.98),rgba(7,15,29,.99))!important;
+}
+
+.card.noRealArt .art img,
+.card.browserTextCard .art img,
+.card.qaTextCard .art img,
+.card.noRealArt .skeleton,
+.card.browserTextCard .skeleton,
+.card.qaTextCard .skeleton{
+  display:none!important;
+}
+
 .modal.noRealArtModal .modalArt{
   display:none!important;
 }
 
 .card.noRealArt,
-.card.browserTextCard{
+.card.browserTextCard,
+.card.qaTextCard{
   min-height:148px!important;
-  background:
-    radial-gradient(circle at 88% 12%,rgba(255,138,36,.13),transparent 8rem),
-    linear-gradient(180deg,rgba(18,35,60,.98),rgba(7,15,29,.99))!important;
+  background:linear-gradient(180deg,rgba(18,35,60,.98),rgba(7,15,29,.99))!important;
   border-color:rgba(255,255,255,.16)!important;
 }
 
+.card.noRealArt .badges,
+.card.browserTextCard .badges,
+.card.qaTextCard .badges{
+  position:absolute!important;
+  top:12px!important;
+  left:14px!important;
+  right:14px!important;
+  z-index:3!important;
+}
+
 .card.noRealArt .posterTitle,
-.card.browserTextCard .posterTitle{
+.card.browserTextCard .posterTitle,
+.card.qaTextCard .posterTitle{
   position:relative!important;
   inset:auto!important;
-  padding:46px 18px 10px!important;
+  padding:52px 18px 14px!important;
   background:none!important;
   text-shadow:none!important;
+  z-index:2!important;
 }
 
 .card.noRealArt .posterTitle h3,
-.card.browserTextCard .posterTitle h3{
+.card.browserTextCard .posterTitle h3,
+.card.qaTextCard .posterTitle h3{
   font-size:clamp(18px,2.6vw,24px)!important;
   line-height:1.05!important;
   letter-spacing:-.035em!important;
@@ -34,13 +65,15 @@
 }
 
 .card.noRealArt .posterTitle p,
-.card.browserTextCard .posterTitle p{
+.card.browserTextCard .posterTitle p,
+.card.qaTextCard .posterTitle p{
   margin-top:6px!important;
   color:rgba(216,230,247,.80)!important;
 }
 
 .card.noRealArt .body,
-.card.browserTextCard .body{
+.card.browserTextCard .body,
+.card.qaTextCard .body{
   border-top:1px solid rgba(255,255,255,.08)!important;
   background:rgba(6,14,27,.62)!important;
 }
@@ -70,24 +103,33 @@
     border-radius:18px!important;
   }
 
-  .card:not(.noRealArt):not(.browserTextCard) .art{
+  .card:not(.noRealArt):not(.browserTextCard):not(.qaTextCard) .art{
     aspect-ratio:16/9!important;
     min-height:0!important;
   }
 
   .card.noRealArt,
-  .card.browserTextCard{
-    min-height:118px!important;
+  .card.browserTextCard,
+  .card.qaTextCard{
+    min-height:124px!important;
     border-radius:17px!important;
   }
 
+  .card.noRealArt .art,
+  .card.browserTextCard .art,
+  .card.qaTextCard .art{
+    min-height:104px!important;
+  }
+
   .card.noRealArt .posterTitle,
-  .card.browserTextCard .posterTitle{
-    padding:38px 15px 8px!important;
+  .card.browserTextCard .posterTitle,
+  .card.qaTextCard .posterTitle{
+    padding:46px 15px 10px!important;
   }
 
   .card.noRealArt .posterTitle h3,
-  .card.browserTextCard .posterTitle h3{
+  .card.browserTextCard .posterTitle h3,
+  .card.qaTextCard .posterTitle h3{
     font-size:20px!important;
   }
 
