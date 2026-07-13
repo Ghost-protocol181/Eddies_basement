@@ -13,7 +13,25 @@
     const b=e.target.closest('button');
     if(b&&b.id)track('button_click',{id:b.id,text:(b.textContent||'').trim().slice(0,80)});
   });
-  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(()=>track('service_worker_ready')).catch(err=>track('service_worker_failed',{message:String(err)})));}
+
+  if('serviceWorker' in navigator){
+    let reloading=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(reloading)return;
+      reloading=true;
+      track('service_worker_updated');
+      location.reload();
+    });
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'})
+        .then(registration=>{
+          track('service_worker_ready');
+          registration.update().catch(()=>{});
+        })
+        .catch(err=>track('service_worker_failed',{message:String(err)}));
+    });
+  }
+
   let installPrompt=null;
   const install=document.getElementById('installApp');
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;if(install)install.hidden=false;});
