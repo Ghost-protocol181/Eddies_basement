@@ -1,4 +1,4 @@
-/* Streamlined browse controller + command search */
+/* Clean hero actions + command search */
 
 body.browse-enhanced header{
   background:
@@ -7,15 +7,15 @@ body.browse-enhanced header{
 }
 
 body.browse-enhanced .headerInner{
-  min-height:106px!important;
+  min-height:104px!important;
   padding:10px 0!important;
 }
 
 body.browse-enhanced .brand img{
-  height:92px!important;
+  height:94px!important;
   width:auto!important;
-  max-width:min(390px,42vw)!important;
-  filter:drop-shadow(0 18px 30px rgba(0,0,0,.58)) drop-shadow(0 0 18px rgba(255,138,36,.2))!important;
+  max-width:min(410px,44vw)!important;
+  filter:drop-shadow(0 18px 30px rgba(0,0,0,.58)) drop-shadow(0 0 20px rgba(255,138,36,.2))!important;
 }
 
 body.browse-enhanced .randomBtn{
@@ -25,151 +25,82 @@ body.browse-enhanced .randomBtn{
   font-size:18px!important;
 }
 
-body.browse-enhanced .intro{
-  padding-top:18px!important;
-  padding-bottom:8px!important;
+body.hero-action-mode .intro{
+  padding-top:22px!important;
+  padding-bottom:6px!important;
 }
 
-body.browse-enhanced .controlsWrap{
-  margin-top:0!important;
+body.hero-action-mode .intro h1{
+  max-width:760px!important;
+  font-size:clamp(48px,5.6vw,76px)!important;
 }
 
-body.browse-enhanced .commandDock{
-  display:block!important;
-  padding:0!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
+body.hero-action-mode .intro p{
+  margin-top:8px!important;
+  max-width:560px!important;
 }
 
-body.browse-enhanced .vibeRow{
-  display:flex!important;
-  flex-wrap:nowrap!important;
-  gap:10px!important;
-  align-items:center!important;
-  margin:0!important;
-  padding:8px 0!important;
-  border-radius:0!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
-}
-
-body.browse-enhanced .vibeRow>span{
+body.hero-action-mode .controlsWrap{
   display:none!important;
 }
 
-body.browse-enhanced .chips{
-  flex:1 1 auto!important;
+.heroActions{
   display:flex!important;
-  flex-wrap:nowrap!important;
-  gap:8px!important;
-  min-width:0!important;
-  overflow-x:auto!important;
-  scrollbar-width:none!important;
-  -webkit-overflow-scrolling:touch!important;
-  padding:2px 0!important;
+  flex-wrap:wrap!important;
+  gap:10px!important;
+  margin-top:20px!important;
+  max-width:980px!important;
 }
 
-body.browse-enhanced .chips::-webkit-scrollbar{display:none!important}
-
-body.browse-enhanced .chips button{
-  flex:0 0 auto!important;
-  min-height:38px!important;
-  padding:8px 15px!important;
-  border-radius:999px!important;
-  white-space:nowrap!important;
-  background:rgba(11,43,64,.7)!important;
-  border-color:rgba(54,217,255,.22)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
-}
-
-body.browse-enhanced .chips button:hover{
-  background:rgba(255,138,36,.12)!important;
-  border-color:rgba(255,138,36,.42)!important;
-}
-
-body.browse-enhanced .browseTools{
-  flex:0 0 auto!important;
-  display:flex!important;
-  gap:8px!important;
-  align-items:center!important;
-}
-
-body.browse-enhanced .browseSearchToggle,
-body.browse-enhanced .filterDrawer summary{
-  min-height:38px!important;
-  display:inline-flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:7px!important;
-  padding:0 15px!important;
-  border-radius:999px!important;
-  border:1px solid rgba(255,255,255,.16)!important;
-  background:rgba(255,255,255,.07)!important;
+.heroAction{
+  min-width:132px!important;
+  min-height:58px!important;
+  padding:12px 16px!important;
+  border-radius:18px!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  background:linear-gradient(180deg,rgba(15,32,58,.92),rgba(7,16,31,.96))!important;
   color:#fff3d4!important;
-  font-size:13px!important;
-  font-weight:900!important;
-  letter-spacing:.01em!important;
-  box-shadow:none!important;
+  text-align:left!important;
   cursor:pointer!important;
+  box-shadow:0 13px 32px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.06)!important;
 }
 
-body.browse-enhanced .browseSearchToggle:hover,
-body.browse-enhanced .filterDrawer summary:hover{
-  border-color:rgba(255,138,36,.42)!important;
-  background:rgba(255,138,36,.1)!important;
+.heroAction:hover,
+.heroAction:focus-visible{
+  transform:translateY(-2px)!important;
+  border-color:rgba(255,138,36,.48)!important;
+  box-shadow:0 20px 48px rgba(0,0,0,.34),0 0 26px rgba(255,138,36,.12)!important;
 }
 
-body.browse-enhanced .browseSearchToggle.hasQuery,
-body.browse-enhanced .filterDrawer[open] summary{
+.heroAction b{
+  display:block!important;
+  font-size:15px!important;
+  line-height:1.05!important;
+  letter-spacing:-.02em!important;
+}
+
+.heroAction span{
+  display:block!important;
+  margin-top:5px!important;
+  color:#9fb4cf!important;
+  font-size:12px!important;
+  font-weight:850!important;
+}
+
+.heroActionPrimary{
+  min-width:190px!important;
   background:linear-gradient(180deg,#ffbd5f,#ff8a24)!important;
   color:#07101f!important;
   border-color:#ffd99a!important;
+  box-shadow:0 7px 0 #8f3e12,0 18px 44px rgba(0,0,0,.34)!important;
 }
 
-body.browse-enhanced .commandControls{
-  display:grid!important;
-  grid-template-columns:1fr!important;
-  gap:0!important;
-  width:100%!important;
+.heroActionPrimary span{
+  color:#48200c!important;
 }
 
-body.browse-enhanced .commandSearch{
-  min-height:64px!important;
-  width:100%!important;
-  max-width:none!important;
-  border-radius:22px!important;
-  font-size:24px!important;
-  font-weight:850!important;
-  padding:0 22px!important;
-  background:rgba(255,255,255,.09)!important;
-  border:1px solid rgba(255,255,255,.16)!important;
-  color:#fff3d4!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 46px rgba(0,0,0,.22)!important;
-}
-
-body.browse-enhanced .commandSearch::placeholder{
-  color:rgba(200,216,236,.62)!important;
-}
-
-body.browse-enhanced .filterDrawer{
-  position:relative!important;
-}
-
-body.browse-enhanced .filterPanel{
-  right:0!important;
-  left:auto!important;
-  min-width:min(520px,calc(100vw - 32px))!important;
-  margin-top:8px!important;
-}
-
-body.browse-enhanced .activeFilters{
-  margin-top:6px!important;
-}
-
-body.browse-enhanced .section:first-of-type{
-  padding-top:18px!important;
+body.hero-action-mode .section:first-of-type{
+  padding-top:22px!important;
 }
 
 .searchCommand[hidden]{display:none!important}
@@ -181,8 +112,8 @@ body.browse-enhanced .section:first-of-type{
   display:grid!important;
   place-items:start center!important;
   padding:clamp(82px,10vh,130px) 18px 24px!important;
-  background:rgba(3,8,20,.76)!important;
-  backdrop-filter:blur(16px)!important;
+  background:rgba(3,8,20,.78)!important;
+  backdrop-filter:blur(18px)!important;
 }
 
 .searchCommandSheet{
@@ -232,19 +163,44 @@ body.browse-enhanced .section:first-of-type{
   cursor:pointer!important;
 }
 
+body.browse-enhanced .commandControls{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:0!important;
+  width:100%!important;
+}
+
+body.browse-enhanced .commandSearch{
+  min-height:64px!important;
+  width:100%!important;
+  max-width:none!important;
+  border-radius:22px!important;
+  font-size:24px!important;
+  font-weight:850!important;
+  padding:0 22px!important;
+  background:rgba(255,255,255,.09)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  color:#fff3d4!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 46px rgba(0,0,0,.22)!important;
+}
+
+body.browse-enhanced .commandSearch::placeholder{
+  color:rgba(200,216,236,.62)!important;
+}
+
 .searchShortcuts{
   display:flex!important;
   flex-wrap:wrap!important;
   gap:8px!important;
-  margin-top:14px!important;
+  margin-top:12px!important;
 }
 
 .searchShortcuts button{
-  min-height:36px!important;
+  min-height:38px!important;
   padding:8px 13px!important;
   border-radius:999px!important;
-  border:1px solid rgba(54,217,255,.22)!important;
-  background:rgba(54,217,255,.08)!important;
+  border:1px solid rgba(54,217,255,.18)!important;
+  background:rgba(54,217,255,.07)!important;
   color:#fff3d4!important;
   font-weight:900!important;
   cursor:pointer!important;
@@ -255,44 +211,17 @@ body.browse-enhanced .section:first-of-type{
   background:rgba(255,138,36,.12)!important;
 }
 
+body.browse-enhanced .filterDrawer{
+  display:none!important;
+}
+
 @media(max-width:760px){
-  body.browse-enhanced .headerInner{
-    min-height:86px!important;
-    padding:8px 0!important;
-  }
-  body.browse-enhanced .brand img{
-    height:66px!important;
-    max-width:225px!important;
-  }
-  body.browse-enhanced .randomBtn{
-    min-height:46px!important;
-    padding:0 16px!important;
-    font-size:15px!important;
-  }
-  body.browse-enhanced .vibeRow{
-    gap:8px!important;
-    padding:8px 0!important;
-  }
-  body.browse-enhanced .chips button,
-  body.browse-enhanced .browseSearchToggle,
-  body.browse-enhanced .filterDrawer summary{
-    min-height:36px!important;
-    padding:0 12px!important;
-    font-size:12px!important;
-  }
-  .searchCommand{
-    padding:76px 12px 18px!important;
-    place-items:start stretch!important;
-  }
-  .searchCommandSheet{
-    border-radius:24px!important;
-    padding:14px!important;
-  }
-  body.browse-enhanced .commandSearch{
-    min-height:58px!important;
-    font-size:20px!important;
-    border-radius:19px!important;
-  }
-  .searchCommandHead b{font-size:21px!important}
-  .searchCommandHead span{font-size:13px!important}
+  body.browse-enhanced .headerInner{min-height:86px!important}
+  body.browse-enhanced .brand img{height:66px!important;max-width:230px!important}
+  body.hero-action-mode .intro h1{font-size:clamp(40px,12vw,58px)!important}
+  .heroActions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:16px!important}
+  .heroAction{min-width:0!important;min-height:54px!important;padding:11px 13px!important}
+  .heroActionPrimary{grid-column:1 / -1!important}
+  .searchCommand{padding-top:76px!important}
+  body.browse-enhanced .commandSearch{min-height:58px!important;font-size:20px!important}
 }
