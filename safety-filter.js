@@ -2,11 +2,16 @@
   'use strict';
 
   // Eddie's Basement should stay focused on low-friction group games,
-  // not open-ended kid/social UGC platforms that add safety and moderation baggage.
+  // not open-ended kid/social UGC platforms, adult party clones,
+  // or search placeholders that are not actual game picks.
   const BLOCKED_TITLE_KEYS = new Set([
     'roblox',
     'vrchat',
-    'recroom'
+    'recroom',
+    'pretendyourexyzzy',
+    'jackboxstylefreefangames',
+    'itchiofreemultiplayersearch',
+    'steamfreemultiplayersearch'
   ]);
 
   const CATALOG_CACHE_KEY = 'eb-catalog-cache-v2';
