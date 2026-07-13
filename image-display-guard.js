@@ -2,11 +2,11 @@
   'use strict';
 
   // Artwork policy:
-  // Keep real key art, store/header art, and generated/local panels.
-  // Reject brittle live screenshot services, paid placeholders, blocked pages, and tiny icons
-  // as full-card art. Do not remove app.js image event handlers; the core app needs them
-  // to try the next candidate when one artwork URL fails.
-  const BAD_IMAGE = /image\.thum\.io|screenshotmachine|urlbox|s\.wordpress\.com\/mshots|mshots\/v1|not authorized|paid account/i;
+  // Keep real key art and store/header art only.
+  // Reject brittle live screenshot services, paid placeholders, generated SVG panels,
+  // fallback panels, and tiny icons as full-card art. Do not remove app.js image
+  // event handlers; the core app needs them to try the next candidate when one URL fails.
+  const BAD_IMAGE = /image\.thum\.io|screenshotmachine|urlbox|s\.wordpress\.com\/mshots|mshots\/v1|not authorized|paid account|panel-fallback\.svg|\/Cover\.png|Cover\.png\?|data:image\/svg/i;
   const ICON_IMAGE = /google\.com\/s2\/favicons|duckduckgo\.com\/ip3|favicon/i;
 
   function srcFor(img) {
