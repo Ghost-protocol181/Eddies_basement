@@ -2,8 +2,8 @@
   'use strict';
 
   // Artwork policy:
-  // Keep real key art and site/app icons.
-  // Reject brittle screenshot-preview services that return paid-account placeholders.
+  // Keep real key art, store/header art, site screenshots, and the polished panel fallback.
+  // Reject brittle paid screenshot placeholders and tiny favicon/icon sources as full-card art.
   // Important: do not remove app.js image event handlers. The core app needs them to try
   // the next candidate when one artwork URL fails.
   const BAD_IMAGE = /image\.thum\.io|screenshotmachine|urlbox|not authorized|paid account/i;
@@ -29,20 +29,6 @@
 
   function isIconImage(img) {
     return ICON_IMAGE.test(srcFor(img));
-  }
-
-  function markIconArt(card) {
-    const art = card?.querySelector('.art');
-    const img = art?.querySelector('img');
-    if (!card || !art || !img) return;
-    card.classList.remove('noRealArt', 'browserTextCard', 'qaTextCard');
-    card.classList.add('iconArtCard');
-    art.classList.remove('noRealArt', 'imageUnavailable', 'qaTextCard');
-    art.classList.add('iconArtwork');
-    delete card.dataset.artPolicy;
-    art.querySelector('.skeleton')?.remove();
-    img.hidden = false;
-    delete img.dataset.rejectedArtwork;
   }
 
   function markNoRealArt(card, reason = 'no-real-art') {
@@ -80,13 +66,12 @@
     }
   }
 
-  function shouldRejectImage(img, art) {
+  function shouldRejectImage(img) {
     if (!img) return true;
     const src = srcFor(img);
     if (!src) return true;
-    if (isIconImage(img)) return false;
+    if (isIconImage(img)) return true;
     if (BAD_IMAGE.test(src)) return true;
-    if (art?.classList.contains('imageUnavailable') && !src.includes('/Cover.png')) return true;
     return false;
   }
 
@@ -94,8 +79,7 @@
     const art = card?.querySelector('.art');
     if (!art) return;
     const img = art.querySelector('img');
-    if (img && isIconImage(img) && !shouldRejectImage(img, art)) markIconArt(card);
-    else if (shouldRejectImage(img, art)) markNoRealArt(card, 'missing-or-broken-art');
+    if (shouldRejectImage(img)) markNoRealArt(card, 'missing-or-broken-art');
     else markRealArt(card);
   }
 
@@ -105,17 +89,9 @@
     const img = document.getElementById('modalImg');
     if (!modal || !modalArt || !modal.classList.contains('open')) return;
 
-    if (img && isIconImage(img)) {
-      modal.classList.remove('noRealArtModal');
-      modal.classList.add('iconArtModal');
-      modalArt.classList.add('iconArtwork');
-      img.hidden = false;
-      return;
-    }
-
     modal.classList.remove('iconArtModal');
     modalArt.classList.remove('iconArtwork');
-    if (!img || shouldRejectImage(img, modalArt)) {
+    if (!img || shouldRejectImage(img)) {
       modal.classList.add('noRealArtModal');
       if (img) img.hidden = true;
     } else {
@@ -124,29 +100,7 @@
     }
   }
 
-  function allowIconLoadedHandler() {
-    const originalLoaded = window.ebImgLoaded;
-    if (!originalLoaded || originalLoaded.__iconAware) return;
-
-    const patched = function(img, id) {
-      if (img && isIconImage(img)) {
-        const art = img.closest('.art,.modalArt');
-        art?.querySelector('.skeleton')?.remove();
-        art?.classList.remove('imageUnavailable', 'noRealArt');
-        art?.classList.add('iconArtwork');
-        img.hidden = false;
-        delete img.dataset.rejectedArtwork;
-        requestAnimationFrame(run);
-        return;
-      }
-      return originalLoaded.call(this, img, id);
-    };
-    patched.__iconAware = true;
-    window.ebImgLoaded = patched;
-  }
-
   function run() {
-    allowIconLoadedHandler();
     document.querySelectorAll('.card').forEach(checkCard);
     checkModal();
   }
@@ -157,7 +111,8 @@
       if (!cached || typeof cached !== 'object') return;
       let changed = false;
       Object.keys(cached).forEach(title => {
-        if (BAD_IMAGE.test(String(cached[title] || ''))) {
+        const url = String(cached[title] || '');
+        if (BAD_IMAGE.test(url) || ICON_IMAGE.test(url)) {
           delete cached[title];
           changed = true;
         }
