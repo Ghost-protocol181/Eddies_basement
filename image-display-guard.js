@@ -1,11 +1,10 @@
 (() => {
   'use strict';
 
-  // Real-art policy:
-  // - Keep real key art / store art.
-  // - Do not display generated SVG covers, webpage previews, paid screenshot placeholders, or generic fallback covers.
-  // - Cards without real art become clean app/link cards instead of fake cover cards.
-  const BAD_IMAGE = /image\.thum\.io|screenshotmachine|urlbox|not authorized|paid account|data:image\/svg|\/Cover\.png|Cover\.png\?/i;
+  // Artwork policy:
+  // Keep real key art and allow the safe visual fallback so the catalog does not look broken.
+  // Only reject known screenshot-service failure placeholders or empty/broken sources.
+  const BAD_IMAGE = /screenshotmachine|urlbox|not authorized|paid account/i;
 
   function srcFor(img) {
     return img ? String(img.currentSrc || img.getAttribute('src') || img.src || '') : '';
@@ -35,7 +34,7 @@
     if (isBrowserLike(card)) card.classList.add('browserTextCard');
 
     art.querySelector('.skeleton')?.remove();
-    art.classList.remove('imageUnavailable', 'usingFallback');
+    art.classList.remove('usingFallback');
 
     const img = art.querySelector('img');
     if (img) {
@@ -51,10 +50,13 @@
     const art = card?.querySelector('.art');
     if (!card || !art) return;
     card.classList.remove('noRealArt', 'browserTextCard');
-    art.classList.remove('noRealArt');
+    art.classList.remove('noRealArt', 'imageUnavailable');
     delete card.dataset.artPolicy;
     const img = art.querySelector('img');
-    if (img) img.hidden = false;
+    if (img) {
+      img.hidden = false;
+      delete img.dataset.rejectedArtwork;
+    }
   }
 
   function shouldRejectImage(img, art) {
@@ -62,9 +64,7 @@
     const src = srcFor(img);
     if (!src) return true;
     if (BAD_IMAGE.test(src)) return true;
-    if (img.dataset.localCover === 'true') return true;
-    if (img.dataset.rejectedArtwork === 'true') return true;
-    if (art?.classList.contains('imageUnavailable')) return true;
+    if (art?.classList.contains('imageUnavailable') && !src.includes('/Cover.png')) return true;
     return false;
   }
 
@@ -72,7 +72,7 @@
     const art = card?.querySelector('.art');
     if (!art) return;
     const img = art.querySelector('img');
-    if (shouldRejectImage(img, art)) markNoRealArt(card, 'missing-or-generated-art');
+    if (shouldRejectImage(img, art)) markNoRealArt(card, 'missing-or-broken-art');
     else markRealArt(card);
   }
 
@@ -100,7 +100,7 @@
     checkModal();
   }
 
-  function clearOldGeneratedCache() {
+  function clearOverzealousCache() {
     try {
       const cached = JSON.parse(localStorage.getItem('eb-working-artwork') || '{}');
       if (!cached || typeof cached !== 'object') return;
@@ -115,7 +115,7 @@
     } catch {}
   }
 
-  clearOldGeneratedCache();
+  clearOverzealousCache();
 
   const observer = new MutationObserver(() => requestAnimationFrame(run));
   observer.observe(document.documentElement, { childList:true, subtree:true, attributes:true, attributeFilter:['src','class','hidden'] });
