@@ -49,13 +49,36 @@
     history.replaceState(null, '', `${location.pathname}#top`);
   }
 
-  function enableAllGamesWhenNeeded() {
-    const gridCount = cards().length;
+  function currentTotalCount() {
+    const allCount = document.getElementById('allCount')?.textContent || '';
+    const total = Number(String(allCount).replace(/[^0-9]/g, ''));
+    return Number.isFinite(total) && total > 0 ? total : 0;
+  }
+
+  function moreButtonIsShowingLimitedMode(more) {
+    if (!more) return false;
+    const label = String(more.textContent || '').trim().toLowerCase();
+    return label === 'all games' || label === 'more games';
+  }
+
+  function forceAllGamesOnNormalBrowse() {
+    if (hasActiveSearchState()) return;
+
     const more = document.getElementById('moreBtn');
-    const filtered = hasActiveSearchState();
-    if (!filtered && more && !more.classList.contains('active') && gridCount > 0 && gridCount < MIN_REASONABLE_GRID) {
+    const gridCount = cards().length;
+    const total = currentTotalCount();
+
+    // Core app.js still limits the default grid by artwork quality. That is wrong:
+    // missing artwork should only change presentation, never catalog visibility.
+    if (more && moreButtonIsShowingLimitedMode(more) && gridCount > 0) {
       more.click();
-      log('enabled_all_games', { before: gridCount });
+      log('forced_all_games_for_visibility', { before: gridCount, total });
+      return;
+    }
+
+    if (more && total && gridCount > 0 && gridCount < Math.min(total, MIN_REASONABLE_GRID)) {
+      more.click();
+      log('enabled_all_games_low_count', { before: gridCount, total });
     }
   }
 
@@ -75,7 +98,7 @@
     }
 
     const more = document.getElementById('moreBtn');
-    if (more && !more.classList.contains('active')) {
+    if (more && moreButtonIsShowingLimitedMode(more)) {
       more.click();
       log('clicked_all_games_for_empty_grid');
     }
@@ -89,13 +112,17 @@
 
       art.querySelector('.skeleton')?.remove();
 
-      const hasUsableImage = img && !img.hidden && (img.currentSrc || img.getAttribute('src'));
+      const src = img ? String(img.currentSrc || img.getAttribute('src') || img.src || '') : '';
+      const badFallback = /panel-fallback\.svg|\/Cover\.png|Cover\.png\?|data:image\/svg|image\.thum\.io|s\.wordpress\.com\/mshots|mshots\/v1|google\.com\/s2\/favicons|favicon/i.test(src);
+      const hasUsableImage = img && !img.hidden && src && !badFallback;
+
       card.classList.toggle('qaTextCard', !hasUsableImage);
       art.classList.toggle('qaTextCard', !hasUsableImage);
 
       if (!hasUsableImage) {
         const title = card.querySelector('.posterTitle h3')?.textContent || 'Game';
         art.setAttribute('data-title', title);
+        if (img) img.hidden = true;
       }
     });
   }
@@ -141,7 +168,7 @@
     queued = true;
     requestAnimationFrame(() => {
       queued = false;
-      enableAllGamesWhenNeeded();
+      forceAllGamesOnNormalBrowse();
       recoverEmptyGrid();
       repairCardArtwork();
       repairRandomizer();
@@ -150,9 +177,10 @@
   }
 
   window.addEventListener('load', () => {
-    setTimeout(run, 400);
-    setTimeout(run, 1200);
-    setTimeout(run, 2600);
+    setTimeout(run, 250);
+    setTimeout(run, 700);
+    setTimeout(run, 1400);
+    setTimeout(run, 2800);
   });
 
   document.addEventListener('click', event => {
