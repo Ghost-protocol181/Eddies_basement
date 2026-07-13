@@ -4,6 +4,8 @@
   // Artwork policy:
   // Keep real key art and allow the safe visual fallback so the catalog does not look broken.
   // Only reject known screenshot-service failure placeholders or empty/broken sources.
+  // Important: do not remove app.js image event handlers. The core app needs them to try
+  // the next candidate when one artwork URL fails.
   const BAD_IMAGE = /screenshotmachine|urlbox|not authorized|paid account/i;
 
   function srcFor(img) {
@@ -41,8 +43,6 @@
       img.hidden = true;
       img.removeAttribute('srcset');
       img.dataset.rejectedArtwork = 'true';
-      img.onload = null;
-      img.onerror = null;
     }
   }
 
@@ -84,11 +84,7 @@
 
     if (!img || shouldRejectImage(img, modalArt)) {
       modal.classList.add('noRealArtModal');
-      if (img) {
-        img.hidden = true;
-        img.onload = null;
-        img.onerror = null;
-      }
+      if (img) img.hidden = true;
     } else {
       modal.classList.remove('noRealArtModal');
       img.hidden = false;
@@ -122,7 +118,7 @@
 
   window.addEventListener('load', run);
   document.addEventListener('error', event => {
-    if (event.target instanceof HTMLImageElement) markNoRealArt(event.target.closest('.card'), 'image-error');
+    if (event.target instanceof HTMLImageElement) setTimeout(run, 80);
   }, true);
   setInterval(run, 1200);
 })();
