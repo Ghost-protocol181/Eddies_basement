@@ -102,15 +102,26 @@
       scrollToGames();
     }
 
+    function openRandomizer() {
+      document.getElementById('randomBtn')?.click();
+    }
+
     const actions = document.createElement('div');
     actions.className = 'heroActions';
 
-    const primary = document.createElement('button');
-    primary.type = 'button';
-    primary.className = 'heroAction heroActionPrimary';
-    primary.innerHTML = '<b>Find games</b><span>Search or filter</span>';
-    primary.addEventListener('click', openSearch);
-    actions.appendChild(primary);
+    const surprise = document.createElement('button');
+    surprise.type = 'button';
+    surprise.className = 'heroAction heroActionPrimary heroActionSurprise';
+    surprise.innerHTML = '<b>Surprise Me</b><span>random pick</span>';
+    surprise.addEventListener('click', openRandomizer);
+    actions.appendChild(surprise);
+
+    const find = document.createElement('button');
+    find.type = 'button';
+    find.className = 'heroAction heroActionFind';
+    find.innerHTML = '<b>Find games</b><span>search or filter</span>';
+    find.addEventListener('click', openSearch);
+    actions.appendChild(find);
 
     [
       ['No download', 'browser starts', 'no download'],
