@@ -3,50 +3,35 @@
   position:fixed;
   inset:0;
   z-index:120;
-  background:
-    radial-gradient(circle at 18% 8%,rgba(255,138,36,.16),transparent 28rem),
-    radial-gradient(circle at 84% 12%,rgba(54,217,255,.12),transparent 30rem),
-    rgba(2,6,14,.84);
-  backdrop-filter:blur(18px) saturate(1.05);
   display:grid;
   place-items:center;
   padding:22px;
+  background:
+    radial-gradient(circle at 18% 8%,rgba(255,138,36,.13),transparent 28rem),
+    radial-gradient(circle at 84% 12%,rgba(54,217,255,.10),transparent 30rem),
+    rgba(2,6,14,.84);
+  backdrop-filter:blur(18px) saturate(1.04);
 }
 .randomizerCard{
-  width:min(980px,100%);
+  width:min(960px,100%);
   max-height:92vh;
   overflow:auto;
   border:1px solid rgba(255,255,255,.16);
   border-radius:34px;
-  background:
-    linear-gradient(135deg,rgba(255,138,36,.08),transparent 30%),
-    radial-gradient(circle at 92% 8%,rgba(54,217,255,.11),transparent 20rem),
-    linear-gradient(180deg,#10213d 0%,#091526 52%,#060d18 100%);
-  box-shadow:0 48px 150px rgba(0,0,0,.78),inset 0 1px 0 rgba(255,255,255,.08);
-  padding:26px;
+  padding:28px;
   display:grid;
-  gap:20px;
+  gap:22px;
+  background:
+    linear-gradient(135deg,rgba(255,138,36,.075),transparent 30%),
+    radial-gradient(circle at 96% 0%,rgba(54,217,255,.12),transparent 18rem),
+    linear-gradient(180deg,#10213d 0%,#091526 56%,#060d18 100%);
+  box-shadow:0 48px 150px rgba(0,0,0,.78),inset 0 1px 0 rgba(255,255,255,.08);
 }
 .randomizerHead{
   display:grid;
   grid-template-columns:1fr auto;
-  gap:18px;
+  gap:20px;
   align-items:start;
-}
-.randomizerHead h2{
-  margin:7px 0 8px;
-  font-size:clamp(38px,5.7vw,68px);
-  line-height:.98;
-  letter-spacing:-.045em;
-  color:#fff3d4;
-}
-.randomizerHead p{
-  margin:0;
-  color:#c8d8ec;
-  font-size:18px;
-  line-height:1.45;
-  max-width:620px;
-  font-weight:650;
 }
 .randomizerKicker{
   display:inline-flex;
@@ -60,16 +45,31 @@
 }
 .randomizerKicker:before{
   content:"";
-  width:30px;
-  height:5px;
+  width:28px;
+  height:4px;
   border-radius:999px;
   background:#ff8a24;
-  box-shadow:0 0 18px rgba(255,138,36,.55);
+  box-shadow:0 0 16px rgba(255,138,36,.48);
+}
+.randomizerHead h2{
+  margin:7px 0 8px;
+  color:#fff3d4;
+  font-size:clamp(38px,5.7vw,68px);
+  line-height:.98;
+  letter-spacing:-.045em;
+}
+.randomizerHead p{
+  margin:0;
+  max-width:620px;
+  color:#c8d8ec;
+  font-size:18px;
+  line-height:1.45;
+  font-weight:650;
 }
 .randomClose{
   width:50px;
   height:50px;
-  border-radius:18px;
+  border-radius:16px;
   border:1px solid rgba(255,255,255,.18);
   background:rgba(255,255,255,.08);
   color:#fff3d4;
@@ -83,44 +83,26 @@
 }
 .randomizerActions{
   order:1;
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:16px;
+  display:flex;
   align-items:center;
-  padding:18px;
-  border:1px solid rgba(255,255,255,.13);
-  border-radius:28px;
-  background:
-    radial-gradient(circle at 12% 20%,rgba(156,255,90,.09),transparent 16rem),
-    linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 18px 42px rgba(0,0,0,.22);
+  justify-content:flex-start;
+  gap:12px;
+  padding:0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
 }
-.randomizerActions:before{
-  content:"Instant pick";
-  color:#fff3d4;
-  font-weight:950;
-  font-size:20px;
-  letter-spacing:-.02em;
-}
-.randomizerActions:after{
-  content:"Use the selected type below, or leave everything open.";
-  grid-column:1;
-  margin-top:-8px;
-  color:#8ea7c5;
-  font-weight:750;
-  font-size:13px;
-}
+.randomizerActions:before,
+.randomizerActions:after{content:none}
 .randomGo,.randomReset{
-  min-height:60px;
+  min-height:62px;
   border-radius:20px;
-  padding:16px 24px;
+  padding:17px 26px;
   font-weight:950;
-  font-size:17px;
+  font-size:18px;
   cursor:pointer;
 }
 .randomGo{
-  grid-row:1 / span 2;
-  grid-column:2;
   border:3px solid #ffd99a;
   background:linear-gradient(180deg,#ffbd5f,#ff8a24);
   color:#07101f;
@@ -131,9 +113,7 @@
   box-shadow:0 10px 0 #9d4513,0 0 50px rgba(255,138,36,.52),0 30px 62px rgba(0,0,0,.42);
   outline:none;
 }
-.randomReset{
-  display:none;
-}
+.randomReset{display:none}
 .modeGrid{
   order:2;
   position:relative;
@@ -141,7 +121,7 @@
   grid-template-columns:repeat(5,minmax(0,1fr));
   gap:13px;
   margin:0;
-  padding-top:34px;
+  padding-top:32px;
 }
 .modeGrid:before{
   content:"Pick type";
@@ -156,16 +136,15 @@
 }
 .modeGrid button{
   position:relative;
-  min-height:126px;
+  min-height:124px;
   border:1px solid rgba(255,255,255,.14);
   border-radius:24px;
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));
+  background:rgba(255,255,255,.055);
   color:#fff3d4;
   padding:18px;
   text-align:left;
   cursor:pointer;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 16px 30px rgba(0,0,0,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 14px 28px rgba(0,0,0,.16);
   overflow:hidden;
 }
 .modeGrid button:before{
@@ -176,45 +155,30 @@
   top:14px;
   height:4px;
   border-radius:999px;
-  background:rgba(54,217,255,.28);
+  background:rgba(54,217,255,.26);
 }
-.modeGrid button:hover,
-.modeGrid button:focus-visible{
+.modeGrid button:hover,.modeGrid button:focus-visible{
   border-color:rgba(54,217,255,.58);
-  background:linear-gradient(180deg,rgba(54,217,255,.13),rgba(255,255,255,.045));
+  background:rgba(54,217,255,.10);
   outline:none;
   transform:translateY(-2px);
 }
 .modeGrid button.active{
-  border:2px solid #9cff5a;
+  border-color:#9cff5a;
   background:
-    radial-gradient(circle at 85% 0%,rgba(156,255,90,.30),transparent 8rem),
-    linear-gradient(180deg,rgba(156,255,90,.20),rgba(54,217,255,.08));
-  box-shadow:0 0 0 4px rgba(156,255,90,.11),0 20px 46px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.14);
+    radial-gradient(circle at 86% 0%,rgba(156,255,90,.24),transparent 8rem),
+    linear-gradient(180deg,rgba(156,255,90,.18),rgba(54,217,255,.075));
+  box-shadow:0 0 0 4px rgba(156,255,90,.10),0 20px 46px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.14);
   transform:translateY(-3px);
 }
 .modeGrid button.active:before{
   background:#9cff5a;
   box-shadow:0 0 18px rgba(156,255,90,.55);
 }
-.modeGrid button.active:after{
-  content:"Selected";
-  position:absolute;
-  right:14px;
-  top:14px;
-  border-radius:999px;
-  padding:6px 9px;
-  background:#9cff5a;
-  color:#07101f;
-  font-size:10px;
-  font-weight:950;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-}
+.modeGrid button.active:after{content:none}
 .modeGrid b{
   display:block;
   margin-top:20px;
-  max-width:calc(100% - 72px);
   font-size:17px;
   line-height:1.12;
   letter-spacing:-.01em;
@@ -232,10 +196,10 @@
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:12px;
-  padding:18px;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:24px;
-  background:rgba(255,255,255,.035);
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
 }
 .randomPrefs:before{
   content:"Optional filters";
@@ -312,22 +276,18 @@
 @keyframes shuffleFlash{0%{filter:brightness(1)}45%{filter:brightness(1.6) saturate(1.3);transform:scale(.985)}100%{filter:brightness(1);transform:scale(1)}}
 @media(max-width:760px){
   .randomizer{padding:0;align-items:end}
-  .randomizerCard{border-radius:28px 28px 0 0;max-height:92vh;padding:18px;gap:16px}
+  .randomizerCard{border-radius:28px 28px 0 0;max-height:92vh;padding:20px;gap:18px}
   .randomizerHead h2{font-size:38px}
   .randomizerHead p{font-size:15px}
-  .randomClose{width:44px;height:44px;flex:0 0 auto;border-radius:15px}
-  .randomizerActions{grid-template-columns:1fr;padding:16px;position:sticky;top:0;z-index:3;background:linear-gradient(180deg,#10213d,#07101f)}
-  .randomizerActions:before{text-align:center;font-size:18px}
-  .randomizerActions:after{grid-column:1;text-align:center;margin-top:-4px}
-  .randomGo{grid-column:1;grid-row:auto;width:100%}
+  .randomClose{width:44px;height:44px;border-radius:15px}
+  .randomizerActions{position:sticky;top:0;z-index:3;padding:0 0 4px;background:linear-gradient(180deg,#10213d 55%,rgba(16,33,61,0))}
+  .randomGo{width:100%}
   .modeGrid{grid-template-columns:1fr 1fr;gap:10px}
   .modeGrid button{min-height:108px;border-radius:20px}
-  .modeGrid button.active:after{top:11px;right:11px}
-  .randomPrefs{grid-template-columns:1fr 1fr;padding:15px}
+  .randomPrefs{grid-template-columns:1fr 1fr}
 }
 @media(max-width:420px){
   .modeGrid{grid-template-columns:1fr}
   .randomPrefs{grid-template-columns:1fr}
-  .modeGrid b{max-width:none;padding-right:88px}
 }
 @media(prefers-reduced-motion:reduce){.shuffleFlash{animation:none}.randomGo:hover,.randomGo:focus-visible,.modeGrid button:hover,.modeGrid button:focus-visible,.modeGrid button.active{transform:none}}
