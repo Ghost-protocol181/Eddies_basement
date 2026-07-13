@@ -1,0 +1,59 @@
+/* CTA balance: keep Surprise Me available, but stop making it the loudest thing */
+
+body.browse-enhanced .randomBtn{
+  min-height:42px!important;
+  padding:0 18px!important;
+  border-radius:14px!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  background:linear-gradient(180deg,rgba(16,33,58,.86),rgba(7,16,31,.92))!important;
+  color:#fff3d4!important;
+  font-size:14px!important;
+  font-weight:900!important;
+  letter-spacing:.01em!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 8px 22px rgba(0,0,0,.22)!important;
+}
+
+body.browse-enhanced .randomBtn:hover,
+body.browse-enhanced .randomBtn:focus-visible{
+  border-color:rgba(255,138,36,.42)!important;
+  background:linear-gradient(180deg,rgba(22,45,76,.92),rgba(9,22,39,.96))!important;
+  box-shadow:0 12px 30px rgba(0,0,0,.28),0 0 18px rgba(255,138,36,.08)!important;
+}
+
+body.browse-enhanced .randomBtn span{
+  font-size:14px!important;
+  opacity:.72!important;
+  margin-right:4px!important;
+}
+
+.heroActionPrimary{
+  background:linear-gradient(180deg,#ffbd5f,#ff8a24)!important;
+  color:#07101f!important;
+  border-color:#ffd99a!important;
+  box-shadow:0 6px 0 #8f3e12,0 16px 38px rgba(0,0,0,.3)!important;
+}
+
+@media(max-width:760px){
+  body.browse-enhanced .headerInner{
+    gap:10px!important;
+  }
+
+  body.browse-enhanced .randomBtn{
+    min-height:36px!important;
+    padding:0 10px!important;
+    border-radius:12px!important;
+    font-size:12px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 6px 14px rgba(0,0,0,.18)!important;
+  }
+
+  body.browse-enhanced .randomBtn span{
+    display:none!important;
+  }
+}
+
+@media(max-width:390px){
+  body.browse-enhanced .randomBtn{
+    padding:0 9px!important;
+    font-size:11.5px!important;
+  }
+}
