@@ -1,4 +1,4 @@
-const CACHE='eddies-basement-v9';
+const CACHE='eddies-basement-v10';
 const CORE=['./','./index.html','./styles.css','./randomizer.css','./launch.css','./polish.css','./app.js','./launch.js','./vault-data.js','./catalog-fallback.js','./previews.js','./artwork-data.js','./favicon.svg','./social-card.svg','./manifest.webmanifest','./privacy.html','./terms.html','./contact.html','./feedback.html'];
 const NETWORK_FIRST=new Set(['index.html','styles.css','randomizer.css','launch.css','polish.css','app.js','launch.js','vault-data.js','catalog-fallback.js','previews.js','artwork-data.js','health.json']);
 
