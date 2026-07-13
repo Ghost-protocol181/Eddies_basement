@@ -195,7 +195,7 @@
   order:3;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:12px;
+  gap:14px;
   padding:0;
   border:0;
   border-radius:0;
@@ -210,28 +210,58 @@
   letter-spacing:.14em;
   text-transform:uppercase;
 }
+.randomPrefs label{
+  position:relative;
+  display:grid;
+  gap:7px;
+  min-width:0;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
 .randomPrefs label span{
   display:block;
   color:#c8d8ec;
   font-size:11px;
   font-weight:950;
-  margin:0 0 7px;
+  margin:0;
   text-transform:uppercase;
   letter-spacing:.08em;
 }
+.randomPrefs label:after{
+  content:"";
+  position:absolute;
+  right:18px;
+  bottom:21px;
+  width:8px;
+  height:8px;
+  border-right:2px solid rgba(255,243,212,.78);
+  border-bottom:2px solid rgba(255,243,212,.78);
+  transform:rotate(45deg);
+  pointer-events:none;
+}
 .randomPrefs select{
+  appearance:none;
+  -webkit-appearance:none;
   width:100%;
-  min-height:56px;
-  border:1px solid rgba(255,255,255,.16);
-  background:rgba(255,255,255,.08);
-  color:#fff3d4;
-  border-radius:16px;
-  padding:14px;
+  min-height:58px;
+  border:1px solid rgba(255,255,255,.13)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.055))!important;
+  color:#fff3d4!important;
+  border-radius:18px!important;
+  padding:0 48px 0 18px!important;
   font-weight:850;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 24px rgba(0,0,0,.16)!important;
+  outline:none!important;
+}
+.randomPrefs select:hover{
+  border-color:rgba(54,217,255,.36)!important;
+  background:linear-gradient(180deg,rgba(54,217,255,.11),rgba(255,255,255,.06))!important;
 }
 .randomPrefs select:focus{
-  outline:3px solid rgba(54,217,255,.20);
-  border-color:rgba(54,217,255,.55);
+  border-color:rgba(54,217,255,.70)!important;
+  box-shadow:0 0 0 3px rgba(54,217,255,.18),inset 0 1px 0 rgba(255,255,255,.10),0 10px 24px rgba(0,0,0,.18)!important;
 }
 .randomPrefs select option{background:#07101f;color:#fff3d4}
 .savePrefs{
@@ -284,7 +314,7 @@
   .randomGo{width:100%}
   .modeGrid{grid-template-columns:1fr 1fr;gap:10px}
   .modeGrid button{min-height:108px;border-radius:20px}
-  .randomPrefs{grid-template-columns:1fr 1fr}
+  .randomPrefs{grid-template-columns:1fr 1fr;gap:12px}
 }
 @media(max-width:420px){
   .modeGrid{grid-template-columns:1fr}
