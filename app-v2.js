@@ -224,7 +224,10 @@
     cardEl?.classList.add('noRealArt', 'qaTextCard');
     img.closest('.art')?.querySelector('.skeleton')?.remove();
     img.remove();
-    if (cardEl?.closest('#featuredRail,#quickRail,#friendsRail')) cardEl.remove();
+    if (cardEl?.closest('#featuredRail,#quickRail,#friendsRail')) {
+      cardEl.remove();
+      setTimeout(renderRails, 0);
+    }
   }
 
   function tryNextImage(img) {
@@ -260,8 +263,8 @@
 
   function wireImages(root) {
     root?.querySelectorAll('.card .art img').forEach(img => {
-      img.addEventListener('load', () => imageLoaded(img), { once:true });
-      img.addEventListener('error', () => tryNextImage(img), { once:true });
+      img.onload = () => imageLoaded(img);
+      img.onerror = () => tryNextImage(img);
     });
   }
 
