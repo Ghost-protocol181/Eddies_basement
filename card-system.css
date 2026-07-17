@@ -1,0 +1,267 @@
+/* Eddie's Basement — single source of truth for cards, artwork fallbacks, and mobile modals. */
+
+.card .art{
+  position:relative;
+  overflow:hidden;
+}
+
+.card .art img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.card.noRealArt,
+.card.qaTextCard{
+  min-height:166px;
+  background:
+    radial-gradient(circle at 88% 12%,rgba(255,138,36,.14),transparent 9rem),
+    radial-gradient(circle at 10% 18%,rgba(54,217,255,.10),transparent 10rem),
+    linear-gradient(180deg,rgba(17,35,60,.99),rgba(7,15,29,.99));
+  border-color:rgba(255,255,255,.16);
+}
+
+.card.noRealArt .art,
+.card.qaTextCard .art{
+  display:block;
+  min-height:116px;
+  aspect-ratio:auto;
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0));
+  border-bottom:1px solid rgba(255,255,255,.09);
+}
+
+.card.noRealArt .art img,
+.card.qaTextCard .art img,
+.card.noRealArt .skeleton,
+.card.qaTextCard .skeleton{
+  display:none!important;
+}
+
+.card.noRealArt .art::before,
+.card.qaTextCard .art::before{
+  content:"";
+  position:absolute;
+  left:16px;
+  right:16px;
+  top:48px;
+  height:1px;
+  background:linear-gradient(90deg,rgba(255,138,36,.52),rgba(54,217,255,.20),transparent);
+}
+
+.card.noRealArt .badges,
+.card.qaTextCard .badges{
+  position:absolute;
+  top:12px;
+  left:14px;
+  right:14px;
+  z-index:3;
+}
+
+.card.noRealArt .posterTitle,
+.card.qaTextCard .posterTitle{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:40px 16px 14px;
+  background:linear-gradient(180deg,transparent,rgba(3,8,20,.82));
+  text-shadow:none;
+  z-index:2;
+}
+
+.card.noRealArt .posterTitle h3,
+.card.qaTextCard .posterTitle h3{
+  max-width:92%;
+  color:#fff7df;
+  font-size:21px;
+  line-height:1.04;
+  letter-spacing:-.03em;
+  text-shadow:none;
+}
+
+.card.noRealArt .posterTitle p,
+.card.qaTextCard .posterTitle p{
+  margin-top:6px;
+  color:#d9e6f6;
+  font-size:13px;
+}
+
+.card.noRealArt .body,
+.card.qaTextCard .body{
+  min-height:48px;
+  padding:12px 16px;
+  background:rgba(7,16,31,.74);
+  border-top:0;
+}
+
+.card.noRealArt:hover,
+.card.noRealArt:focus-visible,
+.card.qaTextCard:hover,
+.card.qaTextCard:focus-visible{
+  border-color:rgba(255,138,36,.46);
+  box-shadow:0 22px 54px rgba(0,0,0,.38),0 0 26px rgba(255,138,36,.10);
+}
+
+.modal.noRealArtModal .modalArt{
+  display:none!important;
+}
+
+.modal.noRealArtModal .modalCard{
+  grid-template-columns:1fr!important;
+  max-width:min(720px,calc(100vw - 28px));
+}
+
+.favoriteBtn,
+.detailsBtn,
+.action,
+.close,
+.randomClose{
+  min-height:44px;
+  min-width:44px;
+  touch-action:manipulation;
+}
+
+@media(max-width:760px){
+  .games,
+  #gamesGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+
+  .rail{
+    gap:12px!important;
+    scroll-padding-inline:14px!important;
+    overscroll-behavior-inline:contain;
+  }
+
+  .rail > .card{
+    flex:0 0 min(78vw,320px)!important;
+    scroll-snap-align:start;
+  }
+
+  .card{
+    border-radius:17px!important;
+  }
+
+  .card:not(.noRealArt):not(.qaTextCard) .art{
+    aspect-ratio:16/10!important;
+    min-height:0!important;
+  }
+
+  .card.noRealArt,
+  .card.qaTextCard{
+    min-height:148px!important;
+  }
+
+  .card.noRealArt .art,
+  .card.qaTextCard .art{
+    min-height:100px!important;
+  }
+
+  .card.noRealArt .posterTitle,
+  .card.qaTextCard .posterTitle{
+    padding:36px 12px 11px!important;
+  }
+
+  .card.noRealArt .posterTitle h3,
+  .card.qaTextCard .posterTitle h3{
+    font-size:18px!important;
+  }
+
+  .card.noRealArt .posterTitle p,
+  .card.qaTextCard .posterTitle p{
+    font-size:12px!important;
+  }
+
+  .card .body{
+    min-height:48px!important;
+    padding:10px 12px!important;
+    gap:8px!important;
+  }
+
+  .detailsBtn{
+    min-height:40px!important;
+    padding-inline:12px!important;
+  }
+
+  .modal{
+    align-items:flex-end!important;
+    padding:0!important;
+  }
+
+  .modalCard{
+    width:100%!important;
+    max-width:none!important;
+    max-height:94dvh!important;
+    grid-template-columns:1fr!important;
+    border-radius:24px 24px 0 0!important;
+    overflow:auto!important;
+    overscroll-behavior:contain;
+  }
+
+  .modalArt{
+    aspect-ratio:16/9!important;
+    max-height:34dvh!important;
+  }
+
+  .modalArt img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+  }
+
+  .modalInner{
+    padding:18px 16px calc(18px + env(safe-area-inset-bottom))!important;
+  }
+
+  .modalHead{
+    position:sticky;
+    top:-18px;
+    z-index:8;
+    margin:-18px -16px 14px!important;
+    padding:16px!important;
+    background:linear-gradient(180deg,rgba(7,15,29,.99),rgba(7,15,29,.94));
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+
+  .facts{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .actions{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+
+  .actions .action{
+    width:100%!important;
+    min-height:48px!important;
+    margin:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+  }
+
+  .actions .action.play{
+    grid-column:1 / -1!important;
+  }
+
+  .randomizerCard{
+    width:calc(100vw - 14px)!important;
+    max-height:94dvh!important;
+    overflow:auto!important;
+    border-radius:22px!important;
+    padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;
+  }
+}
+
+@media(max-width:360px){
+  .games,
+  #gamesGrid{
+    grid-template-columns:1fr!important;
+  }
+}
