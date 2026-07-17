@@ -12,6 +12,32 @@
   object-position:center;
 }
 
+/* Generic safety artwork is never presentation artwork. */
+.card .art img[src*="panel-fallback.svg"],
+.modalArt img[src*="panel-fallback.svg"]{
+  display:none!important;
+}
+
+.modalArt[hidden],
+.modalArt:has(img[src*="panel-fallback.svg"]){
+  display:none!important;
+}
+
+.modalCard:has(.modalArt img[src*="panel-fallback.svg"]){
+  grid-template-columns:1fr!important;
+  max-width:min(720px,calc(100vw - 28px));
+}
+
+/* The three discovery rails are premium shelves: real artwork only. */
+#featuredRail .noRealArt,
+#featuredRail .qaTextCard,
+#quickRail .noRealArt,
+#quickRail .qaTextCard,
+#friendsRail .noRealArt,
+#friendsRail .qaTextCard{
+  display:none!important;
+}
+
 .card.noRealArt,
 .card.qaTextCard{
   min-height:166px;
