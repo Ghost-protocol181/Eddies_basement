@@ -54,6 +54,19 @@
   add('Goose Goose Duck', steam('1568590'), 'https://www.goosegooseduck.com/');
   add('Unturned', steam('304930'), 'https://smartlydressedgames.com/');
 
+  // Reliable Steam artwork for open-source and long-tail games seen in the recorded QA pass.
+  add('DDraceNetwork', steam('412220'), 'https://ddnet.org/');
+  add('Warzone 2100', steam('1241950'), 'https://wz2100.net/');
+  add('Zero-K', steam('334920'), 'https://zero-k.info/');
+  add('Ryzom', steam('373720'), 'https://ryzom.com/');
+  add('OpenTTD', steam('1536610'), 'https://www.openttd.org/');
+  add('0 A.D.', steam('2190340'), 'https://play0ad.com/');
+  add('Beyond All Reason', steam('2980300'), 'https://www.beyondallreason.info/');
+  add('Mindustry', steam('1127400'), 'https://mindustrygame.github.io/');
+  add('Wesnoth', steam('599390'), 'https://www.wesnoth.org/');
+  add('Teeworlds', steam('380840'), 'https://www.teeworlds.com/');
+  add('OpenArena', steam('7650'), 'https://openarena.ws/');
+
   // Official mobile / cross-platform key art.
   add('Brawl Stars', [
     'https://supercell.com/images/1a5b69311180a4a1c374e10556941f05/hero_bg_brawlstars.a385872a.jpg'
